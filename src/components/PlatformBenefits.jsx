@@ -24,7 +24,7 @@ const PlatformBenefits = () => {
     <section className="py-24 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">Platform <span className="text-blue-600">Benefits</span></h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">Platform <span className="text-purple-600">Benefits</span></h2>
           <p className="text-lg text-slate-600">See how CampusBazar solves everyday student marketplace problems.</p>
         </div>
 
@@ -49,7 +49,7 @@ const PlatformBenefits = () => {
           </div>
 
           {/* CampusBazar Solutions */}
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-8 shadow-xl relative overflow-hidden text-white">
+          <div className="bg-gradient-to-br from-purple-600 to-fuchsia-700 rounded-3xl p-8 shadow-xl relative overflow-hidden text-white">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
             <h3 className="text-2xl font-bold mb-8 flex items-center gap-3 relative z-10">
               <span className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm">
@@ -59,7 +59,7 @@ const PlatformBenefits = () => {
             </h3>
             <ul className="space-y-5 relative z-10">
               {solutions.map((solution, index) => (
-                <li key={index} className="flex items-center gap-3 text-blue-50 text-lg">
+                <li key={index} className="flex items-center gap-3 text-purple-50 text-lg">
                   <CheckCircle className="w-5 h-5 text-green-300 flex-shrink-0" />
                   {solution}
                 </li>

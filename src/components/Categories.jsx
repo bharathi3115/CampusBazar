@@ -2,7 +2,7 @@ import React from 'react';
 import { BookOpen, Calculator, Shirt, Bike, Laptop, PenTool, Coffee, Grid } from 'lucide-react';
 
 const categories = [
-  { name: 'Academic Books', desc: 'Engineering, BCA, BSc, MBA, and semester textbooks.', count: '1200+ Listings', icon: <BookOpen className="w-8 h-8" />, color: 'text-blue-600', bg: 'bg-blue-50', border: 'hover:border-blue-200', shadow: 'hover:shadow-blue-500/10' },
+  { name: 'Academic Books', desc: 'Engineering, BCA, BSc, MBA, and semester textbooks.', count: '1200+ Listings', icon: <BookOpen className="w-8 h-8" />, color: 'text-purple-600', bg: 'bg-purple-50', border: 'hover:border-purple-200', shadow: 'hover:shadow-purple-500/10' },
   { name: 'Calculators', desc: 'Scientific and programmable calculators.', count: '450+ Listings', icon: <Calculator className="w-8 h-8" />, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'hover:border-emerald-200', shadow: 'hover:shadow-emerald-500/10' },
   { name: 'Lab Coats', desc: 'Chemistry, biology, and medical aprons.', count: '320+ Listings', icon: <Shirt className="w-8 h-8" />, color: 'text-purple-600', bg: 'bg-purple-50', border: 'hover:border-purple-200', shadow: 'hover:shadow-purple-500/10' },
   { name: 'Cycles', desc: 'Campus commute bicycles and gear.', count: '180+ Listings', icon: <Bike className="w-8 h-8" />, color: 'text-orange-600', bg: 'bg-orange-50', border: 'hover:border-orange-200', shadow: 'hover:shadow-orange-500/10' },
@@ -17,7 +17,7 @@ const Categories = () => {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Featured <span className="text-blue-600">Categories</span></h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Featured <span className="text-purple-600">Categories</span></h2>
           <p className="text-lg text-slate-600">Browse thousands of academic resources organized for easy discovery.</p>
         </div>
 
@@ -32,7 +32,7 @@ const Categories = () => {
               </div>
               <h3 className="font-bold text-slate-900 text-xl mb-2">{category.name}</h3>
               <p className="text-sm text-slate-600 mb-6 leading-relaxed flex-grow">{category.desc}</p>
-              <div className="mt-auto inline-flex px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg w-max group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+              <div className="mt-auto inline-flex px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg w-max group-hover:bg-purple-50 group-hover:text-purple-600 transition-colors">
                 {category.count}
               </div>
             </div>

@@ -11,14 +11,14 @@ const features = [
   {
     title: 'Product Management System',
     description: 'Students can easily add, edit, update, and remove product listings.',
-    icon: <LayoutList className="w-6 h-6 text-blue-600" />,
-    bg: 'bg-blue-50'
+    icon: <LayoutList className="w-6 h-6 text-purple-600" />,
+    bg: 'bg-purple-50'
   },
   {
     title: 'Advanced Search & Filters',
     description: 'Search products using keywords, categories, price ranges, and item conditions.',
-    icon: <Search className="w-6 h-6 text-indigo-600" />,
-    bg: 'bg-indigo-50'
+    icon: <Search className="w-6 h-6 text-fuchsia-600" />,
+    bg: 'bg-fuchsia-50'
   },
   {
     title: 'Integrated Chat System',
@@ -57,7 +57,7 @@ const WhyChooseUs = () => {
     <section className="py-24 bg-slate-900 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">Why Choose <span className="text-blue-400">CampusBazar</span></h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">Why Choose <span className="text-purple-400">CampusBazar</span></h2>
           <p className="text-lg text-slate-300">A comprehensive suite of features designed to build a safe, efficient, and sustainable marketplace.</p>
         </div>
 

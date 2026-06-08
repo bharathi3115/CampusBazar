@@ -4,48 +4,48 @@ import { Heart, User } from 'lucide-react';
 const listings = [
   {
     id: 1,
-    title: 'Data Structures Using C',
-    price: '₹250',
-    condition: 'Good',
-    seller: 'Rahul Sharma',
-    image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-    tag: 'Academic Books'
-  },
-  {
-    id: 2,
     title: 'Scientific Calculator FX-991ES',
     price: '₹450',
     condition: 'Excellent',
     seller: 'Priya Patel',
-    image: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    image: '/realistic_calculator.png',
     tag: 'Calculators'
   },
   {
-    id: 3,
-    title: 'Engineering Lab Coat',
-    price: '₹150',
+    id: 2,
+    title: 'Used Smartphone - 128GB',
+    price: '₹12000',
     condition: 'Good',
-    seller: 'Akash Verma',
-    image: 'https://images.unsplash.com/photo-1618331835717-801e976710b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-    tag: 'Lab Coats'
+    seller: 'Rahul Sharma',
+    image: '/realistic_phone.png',
+    tag: 'Electronics'
+  },
+  {
+    id: 3,
+    title: 'Academic Textbooks Bundle',
+    price: '₹800',
+    condition: 'Like New',
+    seller: 'Arjun Kumar',
+    image: '/realistic_books.png',
+    tag: 'Academic Books'
   },
   {
     id: 4,
+    title: 'Student Laptop - i5 8GB RAM',
+    price: '₹25000',
+    condition: 'Good',
+    seller: 'Akash Verma',
+    image: '/realistic_laptop.png',
+    tag: 'Electronics'
+  },
+  {
+    id: 5,
     title: 'Mountain Bicycle',
     price: '₹3500',
     condition: 'Fair',
     seller: 'Sneha Reddy',
-    image: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    image: '/realistic_cycle.png',
     tag: 'Cycles'
-  },
-  {
-    id: 5,
-    title: 'Programming Fundamentals Book Set',
-    price: '₹600',
-    condition: 'Like New',
-    seller: 'Arjun Kumar',
-    image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-    tag: 'Academic Books'
   }
 ];
 
@@ -55,10 +55,10 @@ const Listings = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 gap-4">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Latest <span className="text-blue-600">Marketplace Listings</span></h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Latest <span className="text-purple-600">Marketplace Listings</span></h2>
             <p className="text-lg text-slate-600 max-w-2xl">Discover second-hand academic and personal items posted by verified students.</p>
           </div>
-          <button className="hidden md:flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-800 transition-colors">
+          <button className="hidden md:flex items-center gap-2 text-purple-600 font-semibold hover:text-purple-800 transition-colors">
             View All Listings &rarr;
           </button>
         </div>
@@ -87,8 +87,8 @@ const Listings = () => {
               
               {/* Content Section */}
               <div className="p-5 flex flex-col flex-grow">
-                <div className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-1.5">{item.tag}</div>
-                <h3 className="font-bold text-slate-900 text-base leading-tight mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                <div className="text-[10px] font-bold text-purple-600 uppercase tracking-wider mb-1.5">{item.tag}</div>
+                <h3 className="font-bold text-slate-900 text-base leading-tight mb-2 line-clamp-2 group-hover:text-purple-600 transition-colors">
                   {item.title}
                 </h3>
                 
@@ -103,7 +103,7 @@ const Listings = () => {
                   <span className="font-medium truncate">{item.seller}</span>
                 </div>
                 
-                <button className="w-full mt-4 bg-slate-50 text-slate-900 text-sm font-bold py-2.5 rounded-lg hover:bg-blue-600 hover:text-white transition-all border border-slate-200 hover:border-blue-600 shadow-sm">
+                <button className="w-full mt-4 bg-slate-50 text-slate-900 text-sm font-bold py-2.5 rounded-lg hover:bg-purple-600 hover:text-white transition-all border border-slate-200 hover:border-purple-600 shadow-sm">
                   View Details
                 </button>
               </div>

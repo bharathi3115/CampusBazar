@@ -6,15 +6,15 @@ const steps = [
     id: 1,
     title: 'Student Registration',
     description: 'Students create accounts using college credentials and become verified users.',
-    icon: <ShieldCheck className="w-8 h-8 text-blue-600" />,
-    color: 'bg-blue-100',
+    icon: <ShieldCheck className="w-8 h-8 text-purple-600" />,
+    color: 'bg-purple-100',
   },
   {
     id: 2,
     title: 'Post or Browse Listings',
     description: 'Students upload products with images, descriptions, pricing, and condition details or browse available listings.',
-    icon: <CloudUpload className="w-8 h-8 text-indigo-600" />,
-    color: 'bg-indigo-100',
+    icon: <CloudUpload className="w-8 h-8 text-fuchsia-600" />,
+    color: 'bg-fuchsia-100',
   },
   {
     id: 3,
@@ -30,13 +30,13 @@ const HowItWorks = () => {
     <section className="py-24 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">How <span className="text-blue-600">CampusBazar</span> Works</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">How <span className="text-purple-600">CampusBazar</span> Works</h2>
           <p className="text-lg text-slate-600">Your campus marketplace journey in three simple steps.</p>
         </div>
 
         <div className="relative">
           {/* Connecting Line for desktop */}
-          <div className="hidden lg:block absolute top-24 left-[15%] right-[15%] h-1 bg-gradient-to-r from-blue-200 via-indigo-200 to-purple-200 -z-10 rounded-full"></div>
+          <div className="hidden lg:block absolute top-24 left-[15%] right-[15%] h-1 bg-gradient-to-r from-purple-200 via-fuchsia-200 to-purple-200 -z-10 rounded-full"></div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8">
             {steps.map((step, index) => (
@@ -58,7 +58,7 @@ const HowItWorks = () => {
                 
                 {/* Mobile connecting arrow */}
                 {index < steps.length - 1 && (
-                  <div className="lg:hidden w-1 h-16 bg-gradient-to-b from-blue-200 to-indigo-200 my-8 rounded-full"></div>
+                  <div className="lg:hidden w-1 h-16 bg-gradient-to-b from-purple-200 to-fuchsia-200 my-8 rounded-full"></div>
                 )}
               </div>
             ))}
