@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Accounts for the fixed navbar height */
+  }
   body {
     @apply bg-white text-slate-900;
   }

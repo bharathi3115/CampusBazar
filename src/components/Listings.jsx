@@ -51,11 +51,11 @@ const listings = [
 
 const Listings = () => {
   return (
-    <section className="py-20 bg-slate-50">
+    <section className="py-20 bg-slate-50" id="items">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 gap-4">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Latest <span className="text-purple-600">Marketplace Listings</span></h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Find Your <span className="text-purple-600">Item</span></h2>
             <p className="text-lg text-slate-600 max-w-2xl">Discover second-hand academic and personal items posted by verified students.</p>
           </div>
           <button className="hidden md:flex items-center gap-2 text-purple-600 font-semibold hover:text-purple-800 transition-colors">
@@ -74,15 +74,7 @@ const Listings = () => {
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                 />
                 
-                {/* Condition Badge */}
-                <div className="absolute top-3 left-3">
-                  <span className="bg-white/95 text-slate-800 text-xs font-bold px-2.5 py-1 rounded-md shadow-sm border border-slate-100">
-                    {item.condition}
-                  </span>
-                </div>
-                <button className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm text-slate-400 hover:text-red-500 hover:bg-white transition-all z-10">
-                  <Heart className="w-4 h-4" />
-                </button>
+
               </div>
               
               {/* Content Section */}
@@ -103,9 +95,7 @@ const Listings = () => {
                   <span className="font-medium truncate">{item.seller}</span>
                 </div>
                 
-                <button className="w-full mt-4 bg-slate-50 text-slate-900 text-sm font-bold py-2.5 rounded-lg hover:bg-purple-600 hover:text-white transition-all border border-slate-200 hover:border-purple-600 shadow-sm">
-                  View Details
-                </button>
+
               </div>
             </div>
           ))}

@@ -21,7 +21,7 @@ const solutions = [
 
 const PlatformBenefits = () => {
   return (
-    <section className="py-24 bg-slate-50">
+    <section className="py-24 bg-slate-50" id="benefits">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">Platform <span className="text-purple-600">Benefits</span></h2>
@@ -30,18 +30,18 @@ const PlatformBenefits = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {/* Current Problems */}
-          <div className="bg-white rounded-3xl p-8 border border-red-100 shadow-lg shadow-red-500/5 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full -mr-8 -mt-8"></div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-3">
-              <span className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+          <div className="bg-red-100 rounded-3xl p-8 border border-red-200 shadow-lg shadow-red-500/10 relative overflow-hidden text-slate-900">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-red-200/50 rounded-full blur-3xl -mr-20 -mt-20"></div>
+            <h3 className="text-2xl font-bold mb-8 flex items-center gap-3 relative z-10">
+              <span className="w-10 h-10 rounded-full bg-red-200 flex items-center justify-center text-red-600 backdrop-blur-sm">
                 <XCircle className="w-6 h-6" />
               </span>
               Current Problems
             </h3>
             <ul className="space-y-5 relative z-10">
               {problems.map((problem, index) => (
-                <li key={index} className="flex items-center gap-3 text-slate-600 text-lg">
-                  <XCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+                <li key={index} className="flex items-center gap-3 text-slate-800 text-lg">
+                  <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
                   {problem}
                 </li>
               ))}
@@ -49,18 +49,18 @@ const PlatformBenefits = () => {
           </div>
 
           {/* CampusBazar Solutions */}
-          <div className="bg-gradient-to-br from-purple-600 to-fuchsia-700 rounded-3xl p-8 shadow-xl relative overflow-hidden text-white">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+          <div className="bg-emerald-100 rounded-3xl p-8 border border-emerald-200 shadow-lg shadow-emerald-500/10 relative overflow-hidden text-slate-900">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-200/50 rounded-full blur-3xl -mr-20 -mt-20"></div>
             <h3 className="text-2xl font-bold mb-8 flex items-center gap-3 relative z-10">
-              <span className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm">
+              <span className="w-10 h-10 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-700 backdrop-blur-sm">
                 <CheckCircle className="w-6 h-6" />
               </span>
               CampusBazar Solutions
             </h3>
             <ul className="space-y-5 relative z-10">
               {solutions.map((solution, index) => (
-                <li key={index} className="flex items-center gap-3 text-purple-50 text-lg">
-                  <CheckCircle className="w-5 h-5 text-green-300 flex-shrink-0" />
+                <li key={index} className="flex items-center gap-3 text-slate-800 text-lg">
+                  <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
                   {solution}
                 </li>
               ))}
