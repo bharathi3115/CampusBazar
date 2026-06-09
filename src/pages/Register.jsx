@@ -70,7 +70,7 @@ const Register = () => {
         <div className="md:w-5/12 bg-theme-dark-maroon text-white flex flex-col justify-end relative overflow-hidden group">
           {/* Background Image */}
           <div 
-            className="absolute inset-0 z-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+            className="absolute inset-0 z-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${authIllustration})` }}
           ></div>
           {/* Gradient Overlay */}

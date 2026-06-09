@@ -70,8 +70,8 @@ const Navbar = () => {
                 onClick={(e) => scrollToSection(e, item.id)}
                 className={`px-1 py-6 transition-all relative font-medium
                   ${activeSection === item.id 
-                    ? 'text-theme-maroon border-b-2 border-theme-maroon font-semibold' 
-                    : 'text-slate-600 hover:text-theme-dark-maroon after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-theme-maroon after:transition-all after:duration-300'
+                    ? 'text-theme-maroon font-semibold' 
+                    : 'text-slate-600 hover:text-theme-dark-maroon'
                   }`}
               >
                 {item.label}
@@ -84,9 +84,9 @@ const Navbar = () => {
             <Link to="/register" className="flex items-center gap-2 bg-theme-maroon text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-0.5 shadow-md shadow-theme-maroon/30">
               User
             </Link>
-            <button className="flex items-center gap-2 bg-theme-maroon text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-0.5 shadow-md shadow-theme-maroon/30">
+            <Link to="/admin/login" className="flex items-center gap-2 bg-theme-maroon text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-0.5 shadow-md shadow-theme-maroon/30">
               Admin
-            </button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -121,7 +121,7 @@ const Navbar = () => {
             ))}
             <div className="pt-4 flex gap-3">
                <Link to="/register" className="flex-1 text-center bg-theme-maroon text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-theme-dark-maroon transition-colors">User</Link>
-               <button className="flex-1 bg-theme-maroon text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-theme-dark-maroon transition-colors">Admin</button>
+               <Link to="/admin/login" className="flex-1 text-center bg-theme-maroon text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-theme-dark-maroon transition-colors">Admin</Link>
             </div>
           </div>
         </div>

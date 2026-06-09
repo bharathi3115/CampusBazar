@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const CTA = () => {
   return (
@@ -20,10 +21,10 @@ const CTA = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button className="bg-white text-theme-maroon px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-50 transition-colors shadow-xl flex items-center justify-center gap-2 transform hover:-translate-y-1">
+              <Link to="/login" className="bg-white text-theme-maroon px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-50 transition-colors shadow-xl flex items-center justify-center gap-2 transform hover:-translate-y-1">
                 Get Started
                 <ArrowRight className="w-5 h-5" />
-              </button>
+              </Link>
               <button className="bg-transparent text-white border-2 border-white/50 px-8 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
                 <ShoppingBag className="w-5 h-5" />
                 Browse Marketplace
