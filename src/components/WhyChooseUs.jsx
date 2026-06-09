@@ -5,50 +5,50 @@ const features = [
   {
     title: 'Verified Student Community',
     description: 'Only registered students can access the marketplace, creating trust and safety.',
-    icon: <ShieldCheck className="w-6 h-6 text-emerald-600" />,
-    bg: 'bg-emerald-50'
+    icon: <ShieldCheck className="w-6 h-6 text-theme-maroon" />,
+    bg: 'bg-theme-maroon/20'
   },
   {
     title: 'Product Management System',
     description: 'Students can easily add, edit, update, and remove product listings.',
-    icon: <LayoutList className="w-6 h-6 text-purple-600" />,
-    bg: 'bg-purple-50'
+    icon: <LayoutList className="w-6 h-6 text-theme-dark-maroon" />,
+    bg: 'bg-theme-dark-maroon/20'
   },
   {
     title: 'Advanced Search & Filters',
     description: 'Search products using keywords, categories, price ranges, and item conditions.',
-    icon: <Search className="w-6 h-6 text-fuchsia-600" />,
-    bg: 'bg-fuchsia-50'
+    icon: <Search className="w-6 h-6 text-theme-burgundy" />,
+    bg: 'bg-theme-burgundy/20'
   },
   {
     title: 'Integrated Chat System',
     description: 'Buyers and sellers can communicate directly before making purchases.',
-    icon: <MessageSquare className="w-6 h-6 text-purple-600" />,
-    bg: 'bg-purple-50'
+    icon: <MessageSquare className="w-6 h-6 text-theme-wine" />,
+    bg: 'bg-theme-wine/20'
   },
   {
     title: 'Wishlist Functionality',
     description: 'Save interesting products for future purchase consideration.',
-    icon: <Heart className="w-6 h-6 text-rose-600" />,
-    bg: 'bg-rose-50'
+    icon: <Heart className="w-6 h-6 text-theme-maroon" />,
+    bg: 'bg-theme-maroon/20'
   },
   {
     title: 'Ratings & Reviews',
     description: 'Students can rate and review sellers after successful transactions.',
-    icon: <Star className="w-6 h-6 text-amber-600" />,
-    bg: 'bg-amber-50'
+    icon: <Star className="w-6 h-6 text-theme-dark-maroon" />,
+    bg: 'bg-theme-dark-maroon/20'
   },
   {
     title: 'Affordable Student Marketplace',
     description: 'Students can purchase required resources at significantly lower prices.',
-    icon: <Tag className="w-6 h-6 text-cyan-600" />,
-    bg: 'bg-cyan-50'
+    icon: <Tag className="w-6 h-6 text-theme-burgundy" />,
+    bg: 'bg-theme-burgundy/20'
   },
   {
     title: 'Eco-Friendly Resource Reuse',
     description: 'Promotes sustainability by reducing waste and encouraging reuse.',
-    icon: <Leaf className="w-6 h-6 text-green-600" />,
-    bg: 'bg-green-50'
+    icon: <Leaf className="w-6 h-6 text-theme-wine" />,
+    bg: 'bg-theme-wine/20'
   }
 ];
 
@@ -57,7 +57,7 @@ const WhyChooseUs = () => {
     <section className="py-24 bg-slate-900 relative overflow-hidden" id="why-us">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">Why Choose <span className="text-purple-400">CampusBazar</span></h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">Why Choose <span className="text-theme-maroon">CampusBazar</span></h2>
           <p className="text-lg text-slate-300">A comprehensive suite of features designed to build a safe, efficient, and sustainable marketplace.</p>
         </div>
 

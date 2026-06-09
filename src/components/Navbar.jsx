@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const NAV_ITEMS = [
   { label: 'Home', id: 'home' },
   { label: 'About Us', id: 'about-us' },
   { label: 'Categories', id: 'categories' },
-  { label: 'Items', id: 'items' },
   { label: 'How It Works', id: 'how-it-works' },
   { label: 'Why Us', id: 'why-us' },
   { label: 'Benefits', id: 'benefits' },
@@ -55,10 +55,10 @@ const Navbar = () => {
             className="flex-shrink-0 flex items-center gap-2 cursor-pointer group"
             onClick={(e) => scrollToSection(e, 'home')}
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-fuchsia-800 rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-purple-500/30">
+            <div className="w-10 h-10 bg-theme-maroon rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-theme-maroon/30">
               <ShoppingCart className="text-white w-6 h-6" />
             </div>
-            <span className="font-extrabold text-2xl text-slate-900 tracking-tight">Campus<span className="text-purple-600">Bazar</span></span>
+            <span className="font-extrabold text-2xl text-slate-900 tracking-tight">Campus<span className="text-theme-maroon">Bazar</span></span>
           </div>
 
           {/* Desktop Menu */}
@@ -70,8 +70,8 @@ const Navbar = () => {
                 onClick={(e) => scrollToSection(e, item.id)}
                 className={`px-1 py-6 transition-all relative font-medium
                   ${activeSection === item.id 
-                    ? 'text-purple-600 border-b-2 border-purple-600 font-semibold' 
-                    : 'text-slate-600 hover:text-purple-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-purple-600 after:transition-all after:duration-300'
+                    ? 'text-theme-maroon border-b-2 border-theme-maroon font-semibold' 
+                    : 'text-slate-600 hover:text-theme-dark-maroon after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-theme-maroon after:transition-all after:duration-300'
                   }`}
               >
                 {item.label}
@@ -81,11 +81,11 @@ const Navbar = () => {
 
           {/* Actions */}
           <div className="hidden lg:flex items-center space-x-4">
-            <button className="flex items-center gap-2 text-slate-600 font-medium hover:text-purple-600 transition-colors">
-              Login
-            </button>
-            <button className="flex items-center gap-2 bg-purple-600 text-white px-5 py-2.5 rounded-full font-medium hover:bg-purple-700 transition-all transform hover:-translate-y-0.5 shadow-md shadow-purple-500/30">
-              Sign Up
+            <Link to="/register" className="flex items-center gap-2 bg-theme-maroon text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-0.5 shadow-md shadow-theme-maroon/30">
+              User
+            </Link>
+            <button className="flex items-center gap-2 bg-theme-maroon text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-0.5 shadow-md shadow-theme-maroon/30">
+              Admin
             </button>
           </div>
 
@@ -93,7 +93,7 @@ const Navbar = () => {
           <div className="lg:hidden flex items-center gap-4">
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-slate-500 hover:text-purple-600 rounded-md transition-colors"
+              className="p-2 text-slate-500 hover:text-theme-dark-maroon rounded-md transition-colors"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -112,16 +112,16 @@ const Navbar = () => {
                 onClick={(e) => scrollToSection(e, item.id)}
                 className={`block px-3 py-3 text-base font-medium rounded-lg transition-colors
                   ${activeSection === item.id 
-                    ? 'text-purple-600 bg-purple-50' 
-                    : 'text-slate-600 hover:text-purple-600 hover:bg-slate-50'
+                    ? 'text-theme-maroon bg-theme-maroon/10' 
+                    : 'text-slate-600 hover:text-theme-dark-maroon hover:bg-slate-50'
                   }`}
               >
                 {item.label}
               </a>
             ))}
             <div className="pt-4 flex gap-3">
-               <button className="flex-1 border border-purple-200 text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-purple-50">Login</button>
-               <button className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg font-medium shadow-md">Sign Up</button>
+               <Link to="/register" className="flex-1 text-center bg-theme-maroon text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-theme-dark-maroon transition-colors">User</Link>
+               <button className="flex-1 bg-theme-maroon text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-theme-dark-maroon transition-colors">Admin</button>
             </div>
           </div>
         </div>

@@ -15,25 +15,25 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center gap-2 cursor-pointer">
-              <div className="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-theme-maroon shadow-lg shadow-theme-maroon/20 rounded-xl flex items-center justify-center">
                 <ShoppingCart className="text-white w-6 h-6" />
               </div>
-              <span className="font-extrabold text-2xl text-white tracking-tight">Campus<span className="text-purple-500">Bazar</span></span>
+              <span className="font-extrabold text-2xl text-white tracking-tight">Campus<span className="text-theme-maroon">Bazar</span></span>
             </div>
             <p className="text-slate-400 max-w-sm leading-relaxed">
               A college-exclusive marketplace platform where students can buy, sell, and exchange academic and personal items safely and affordably.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-purple-600 hover:text-white transition-all transform hover:-translate-y-1">
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-theme-maroon hover:text-white transition-all transform hover:-translate-y-1">
                 <FacebookIcon />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-purple-600 hover:text-white transition-all transform hover:-translate-y-1">
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-theme-maroon hover:text-white transition-all transform hover:-translate-y-1">
                 <InstagramIcon />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-purple-600 hover:text-white transition-all transform hover:-translate-y-1">
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-theme-maroon hover:text-white transition-all transform hover:-translate-y-1">
                 <LinkedinIcon />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-purple-600 hover:text-white transition-all transform hover:-translate-y-1">
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-theme-maroon hover:text-white transition-all transform hover:-translate-y-1">
                 <TwitterIcon />
               </a>
             </div>
@@ -43,10 +43,10 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold text-lg mb-6">Quick Links</h3>
             <ul className="space-y-4">
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Home</a></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Categories</a></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Browse Products</a></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Sell Item</a></li>
+              <li><a href="#" className="hover:text-theme-maroon transition-colors">Home</a></li>
+              <li><a href="#" className="hover:text-theme-maroon transition-colors">Categories</a></li>
+              <li><a href="#" className="hover:text-theme-maroon transition-colors">Browse Products</a></li>
+              <li><a href="#" className="hover:text-theme-maroon transition-colors">Sell Item</a></li>
             </ul>
           </div>
 
@@ -54,9 +54,9 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold text-lg mb-6">Resources</h3>
             <ul className="space-y-4">
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">FAQs</a></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Student Guidelines</a></li>
+              <li><a href="#" className="hover:text-theme-maroon transition-colors">Help Center</a></li>
+              <li><a href="#" className="hover:text-theme-maroon transition-colors">FAQs</a></li>
+              <li><a href="#" className="hover:text-theme-maroon transition-colors">Student Guidelines</a></li>
             </ul>
           </div>
 
@@ -64,10 +64,10 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold text-lg mb-6">Legal & Contact</h3>
             <ul className="space-y-4">
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Terms & Conditions</a></li>
-              <li className="pt-2"><a href="#" className="hover:text-purple-400 transition-colors">Email Support</a></li>
-              <li><a href="#" className="hover:text-purple-400 transition-colors">Campus Support Team</a></li>
+              <li><a href="#" className="hover:text-theme-maroon transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-theme-maroon transition-colors">Terms & Conditions</a></li>
+              <li className="pt-2"><a href="#" className="hover:text-theme-maroon transition-colors">Email Support</a></li>
+              <li><a href="#" className="hover:text-theme-maroon transition-colors">Campus Support Team</a></li>
             </ul>
           </div>
         </div>

@@ -5,8 +5,8 @@ const Hero = () => {
   return (
     <div className="relative overflow-hidden bg-slate-50" id="home">
       {/* Dynamic Background Gradients */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-purple-100/40 via-fuchsia-100/40 to-purple-100/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-cyan-100/40 to-purple-50/40 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-theme-light-maroon via-theme-maroon/5 to-theme-burgundy/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-theme-wine/10 to-theme-light-maroon rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
       
 
 
@@ -19,7 +19,7 @@ const Hero = () => {
             <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
               Buy, Sell & <br/>
               Exchange <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-fuchsia-600">Student Essentials</span><br/>
+              <span className="text-theme-maroon">Student Essentials</span><br/>
               Within Your Campus
             </h1>
             
@@ -28,11 +28,11 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4">
-              <button className="bg-slate-900 text-white px-8 py-3.5 rounded-full font-semibold hover:bg-slate-800 transition-all transform hover:-translate-y-1 shadow-xl shadow-slate-900/20 flex items-center gap-2">
+              <button className="bg-theme-maroon text-white px-8 py-3.5 rounded-full font-semibold hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-1 shadow-xl shadow-theme-maroon/30 flex items-center gap-2">
                 Browse Products
                 <ArrowRight className="w-5 h-5" />
               </button>
-              <button className="bg-white text-purple-600 border-2 border-purple-100 px-8 py-3.5 rounded-full font-semibold hover:border-purple-600 hover:bg-purple-50 transition-all transform hover:-translate-y-1 shadow-sm flex items-center gap-2">
+              <button className="bg-white text-theme-maroon border-2 border-theme-maroon/20 px-8 py-3.5 rounded-full font-semibold hover:border-theme-maroon hover:bg-theme-maroon/5 transition-all transform hover:-translate-y-1 shadow-sm flex items-center gap-2">
                 <Tag className="w-5 h-5" />
                 Sell an Item
               </button>
@@ -44,7 +44,7 @@ const Hero = () => {
           {/* Illustration/Image Side */}
           <div className="hidden lg:flex justify-center relative">
             <div className="relative w-full max-w-xl aspect-square">
-              <div className="absolute inset-0 bg-gradient-to-tr from-purple-400 to-fuchsia-500 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] opacity-20 blur-xl"></div>
+              <div className="absolute inset-0 bg-theme-maroon rounded-[40%_60%_70%_30%/40%_50%_60%_50%] opacity-20 blur-xl"></div>
               
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-[550px] h-[550px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white relative z-10 bg-slate-100">

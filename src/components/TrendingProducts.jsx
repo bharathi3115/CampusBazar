@@ -42,14 +42,14 @@ const TrendingProducts = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-12">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Trending <span className="text-purple-600">Products</span></h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Trending <span className="text-theme-maroon">Products</span></h2>
             <p className="text-slate-600 text-lg">Most viewed and requested items this week.</p>
           </div>
           <div className="hidden md:flex gap-3">
-            <button className="w-12 h-12 rounded-full border-2 border-slate-200 flex items-center justify-center text-slate-600 hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50 transition-all">
+            <button className="w-12 h-12 rounded-full border-2 border-slate-200 flex items-center justify-center text-slate-600 hover:border-theme-maroon hover:text-theme-maroon hover:bg-theme-maroon/10 transition-all">
               <ChevronLeft className="w-6 h-6" />
             </button>
-            <button className="w-12 h-12 rounded-full border-2 border-slate-200 flex items-center justify-center text-slate-600 hover:border-purple-600 hover:text-purple-600 hover:bg-purple-50 transition-all">
+            <button className="w-12 h-12 rounded-full border-2 border-slate-200 flex items-center justify-center text-slate-600 hover:border-theme-maroon hover:text-theme-maroon hover:bg-theme-maroon/10 transition-all">
               <ChevronRight className="w-6 h-6" />
             </button>
           </div>
@@ -58,7 +58,7 @@ const TrendingProducts = () => {
         {/* Simple grid mimicking a carousel for now */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {trendingProducts.map((product) => (
-            <div key={product.id} className="bg-white rounded-2xl border border-slate-100 p-4 hover:shadow-xl hover:border-purple-100 transition-all duration-300 group">
+            <div key={product.id} className="bg-white rounded-2xl border border-slate-100 p-4 hover:shadow-xl hover:border-theme-maroon/30 transition-all duration-300 group">
               <div className="relative h-48 rounded-xl overflow-hidden mb-4 bg-slate-100">
                 <img src={product.image} alt={product.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
@@ -69,7 +69,7 @@ const TrendingProducts = () => {
               </div>
               <div className="space-y-2">
                 <div className="text-xs font-bold text-slate-500 uppercase">{product.category}</div>
-                <h3 className="font-bold text-slate-900 leading-tight line-clamp-1 group-hover:text-purple-600 transition-colors">{product.title}</h3>
+                <h3 className="font-bold text-slate-900 leading-tight line-clamp-1 group-hover:text-theme-maroon transition-colors">{product.title}</h3>
                 <div className="flex justify-between items-center">
                   <span className="font-extrabold text-xl text-slate-900">{product.price}</span>
                   <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded text-amber-700 text-sm font-bold">

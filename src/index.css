@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --color-theme-maroon: #550000;
+  --color-theme-dark-maroon: #3D0000;
+  --color-theme-burgundy: #6D0000;
+  --color-theme-wine: #7A0019;
+  --color-theme-light-maroon: #F8EAEA;
+  --color-theme-dark: #0F172A;
+  --color-theme-gray: #334155;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -7,5 +17,14 @@
   }
   body {
     @apply bg-white text-slate-900;
+  }
+}
+
+@layer utilities {
+  .bg-primary-gradient {
+    background-color: var(--color-theme-maroon);
+  }
+  .text-primary-gradient {
+    color: var(--color-theme-maroon);
   }
 }

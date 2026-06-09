@@ -1,15 +1,60 @@
 import React from 'react';
-import { BookOpen, Calculator, Shirt, Bike, Laptop, PenTool, Coffee, Grid } from 'lucide-react';
+import laptopImage from '../assets/electronics-laptop.png';
+import labCoatImage from '../assets/lab-coat.png';
+import stationeryImage from '../assets/stationery.png';
+import hostelImage from '../assets/hostel-essentials.png';
+import academicBooksImage from '../assets/academic-books.png';
+import otherResourcesImage from '../assets/other-resources.png';
 
 const categories = [
-  { name: 'Academic Books', desc: 'Engineering, BCA, BSc, MBA, and semester textbooks.', count: '1200+ Listings', icon: <BookOpen className="w-8 h-8" />, color: 'text-purple-600', bg: 'bg-purple-50', border: 'hover:border-purple-200', shadow: 'hover:shadow-purple-500/10' },
-  { name: 'Calculators', desc: 'Scientific and programmable calculators.', count: '450+ Listings', icon: <Calculator className="w-8 h-8" />, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'hover:border-emerald-200', shadow: 'hover:shadow-emerald-500/10' },
-  { name: 'Lab Coats', desc: 'Chemistry, biology, and medical aprons.', count: '320+ Listings', icon: <Shirt className="w-8 h-8" />, color: 'text-purple-600', bg: 'bg-purple-50', border: 'hover:border-purple-200', shadow: 'hover:shadow-purple-500/10' },
-  { name: 'Cycles', desc: 'Campus commute bicycles and gear.', count: '180+ Listings', icon: <Bike className="w-8 h-8" />, color: 'text-orange-600', bg: 'bg-orange-50', border: 'hover:border-orange-200', shadow: 'hover:shadow-orange-500/10' },
-  { name: 'Electronics', desc: 'Laptops, tablets, headphones, and parts.', count: '600+ Listings', icon: <Laptop className="w-8 h-8" />, color: 'text-rose-600', bg: 'bg-rose-50', border: 'hover:border-rose-200', shadow: 'hover:shadow-rose-500/10' },
-  { name: 'Stationery', desc: 'Drafters, drawing boards, and kits.', count: '890+ Listings', icon: <PenTool className="w-8 h-8" />, color: 'text-cyan-600', bg: 'bg-cyan-50', border: 'hover:border-cyan-200', shadow: 'hover:shadow-cyan-500/10' },
-  { name: 'Hostel Essentials', desc: 'Mattresses, lamps, and organizers.', count: '540+ Listings', icon: <Coffee className="w-8 h-8" />, color: 'text-amber-600', bg: 'bg-amber-50', border: 'hover:border-amber-200', shadow: 'hover:shadow-amber-500/10' },
-  { name: 'Other Resources', desc: 'Project components and miscellaneous items.', count: '300+ Listings', icon: <Grid className="w-8 h-8" />, color: 'text-slate-600', bg: 'bg-slate-100', border: 'hover:border-slate-300', shadow: 'hover:shadow-slate-500/10' },
+  { 
+    name: 'Academic Books', 
+    desc: 'Engineering, BCA, BSc, MBA, and semester textbooks.', 
+    count: '1200+ Listings', 
+    image: academicBooksImage, 
+  },
+  { 
+    name: 'Calculators', 
+    desc: 'Scientific and programmable calculators.', 
+    count: '450+ Listings', 
+    image: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?auto=format&fit=crop&q=80&w=600', 
+  },
+  { 
+    name: 'Lab Coats', 
+    desc: 'Chemistry, biology, and medical aprons.', 
+    count: '320+ Listings', 
+    image: labCoatImage, 
+  },
+  { 
+    name: 'Cycles', 
+    desc: 'Campus commute bicycles and gear.', 
+    count: '180+ Listings', 
+    image: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&q=80&w=600', 
+  },
+  { 
+    name: 'Electronics', 
+    desc: 'Laptops, tablets, headphones, and parts.', 
+    count: '600+ Listings', 
+    image: laptopImage, 
+  },
+  { 
+    name: 'Stationery', 
+    desc: 'Drafters, drawing boards, and kits.', 
+    count: '890+ Listings', 
+    image: stationeryImage, 
+  },
+  { 
+    name: 'Hostel Essentials', 
+    desc: 'Mattresses, lamps, and organizers.', 
+    count: '540+ Listings', 
+    image: hostelImage, 
+  },
+  { 
+    name: 'Other Resources', 
+    desc: 'Project components and miscellaneous items.', 
+    count: '300+ Listings', 
+    image: otherResourcesImage, 
+  },
 ];
 
 const Categories = () => {
@@ -17,7 +62,7 @@ const Categories = () => {
     <section className="py-20 bg-white" id="categories">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Featured <span className="text-purple-600">Categories</span></h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Featured <span className="text-theme-maroon">Categories</span></h2>
           <p className="text-lg text-slate-600">Browse thousands of academic resources organized for easy discovery.</p>
         </div>
 
@@ -25,14 +70,18 @@ const Categories = () => {
           {categories.map((category, index) => (
             <div 
               key={index} 
-              className={`flex flex-col p-8 rounded-3xl bg-white border-2 border-slate-100 transition-all duration-300 transform hover:-translate-y-2 cursor-pointer ${category.border} ${category.shadow} hover:shadow-xl group`}
+              className={`flex flex-col p-6 rounded-3xl bg-white border-2 border-slate-100 transition-all duration-300 transform hover:-translate-y-2 cursor-pointer hover:border-theme-maroon/30 hover:shadow-xl hover:shadow-theme-maroon/10 group`}
             >
-              <div className={`${category.bg} ${category.color} w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 shadow-sm`}>
-                {category.icon}
+              <div className="w-full h-48 mb-6 overflow-hidden rounded-2xl shadow-sm">
+                <img 
+                  src={category.image} 
+                  alt={category.name} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
               </div>
-              <h3 className="font-bold text-slate-900 text-xl mb-2">{category.name}</h3>
+              <h3 className="font-bold text-slate-900 text-xl mb-2 group-hover:text-theme-maroon transition-colors">{category.name}</h3>
               <p className="text-sm text-slate-600 mb-6 leading-relaxed flex-grow">{category.desc}</p>
-              <div className="mt-auto inline-flex px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg w-max group-hover:bg-purple-50 group-hover:text-purple-600 transition-colors">
+              <div className="mt-auto inline-flex px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg w-max group-hover:bg-theme-maroon/10 group-hover:text-theme-maroon transition-colors">
                 {category.count}
               </div>
             </div>
@@ -44,3 +93,4 @@ const Categories = () => {
 };
 
 export default Categories;
+
