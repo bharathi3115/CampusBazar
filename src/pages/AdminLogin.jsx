@@ -48,7 +48,7 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-8 font-sans text-slate-900">
-      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
         {/* Left Panel */}
         <div className="md:w-5/12 bg-theme-dark-maroon text-white flex flex-col justify-end relative overflow-hidden group">
           {/* Background Image */}
@@ -57,12 +57,14 @@ const AdminLogin = () => {
             style={{ backgroundImage: `url(${adminIllustration})` }}
           ></div>
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+          <div className="absolute inset-0 z-0"></div>
 
-          <div className="relative z-10 p-8 lg:p-12 pt-0 mt-auto w-full flex items-center justify-between gap-4">
-            <Link to="/" className="text-sm font-bold text-white/90 hover:text-white flex items-center gap-1 w-max transition-colors uppercase tracking-wider drop-shadow-md">
-              &larr; BACK TO HOME
-            </Link>
+          <div className="relative z-10 px-8 lg:px-12 pb-6 lg:pb-8 pt-0 mt-auto w-full flex items-center justify-between gap-4">
+            <div className="bg-theme-dark-maroon/80 px-5 py-3 rounded-xl backdrop-blur-md border border-white/20 shadow-xl w-max">
+              <Link to="/" className="text-lg font-bold hover:text-theme-light-maroon transition-colors flex items-center gap-2 w-max">
+                Back to Home <span>&rarr;</span>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -150,7 +152,7 @@ const AdminLogin = () => {
 
               <button
                 type="submit"
-                className="w-full bg-theme-dark-maroon text-white font-bold py-3.5 px-4 rounded-xl shadow-md hover:bg-theme-maroon hover:shadow-lg hover:shadow-theme-maroon/30 transition-all flex justify-center items-center gap-2 mt-4"
+                className="w-full bg-theme-dark-maroon text-white font-bold py-3.5 px-4 rounded-xl shadow-md hover:bg-theme-maroon hover:shadow-lg hover:shadow-theme-maroon/30 transition-all flex justify-center items-center gap-2 mt-8"
               >
                 ADMIN LOGIN <span>&rarr;</span>
               </button>
