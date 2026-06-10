@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Home, Search, PlusCircle, Bell, MessageSquare, Heart, 
   ShoppingBag, Settings, LogOut, ChevronRight, TrendingUp,
-  Tag, MapPin, Eye, Star, Clock, CheckCircle, Package, User
+  Tag, MapPin, Eye, Star, Clock, CheckCircle, Package, User, ShoppingCart
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -25,11 +25,11 @@ const Dashboard = () => {
       {/* Sidebar Navigation */}
       <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col flex-shrink-0">
         <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-theme-maroon flex items-center justify-center text-white font-bold text-xl">
-              C
+          <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer group">
+            <div className="w-10 h-10 bg-theme-maroon rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-theme-maroon/30">
+              <ShoppingCart className="text-white w-6 h-6" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-theme-maroon">CampusBazaar</span>
+            <span className="font-extrabold text-2xl text-slate-900 tracking-tight">Campus<span className="text-theme-maroon">Bazar</span></span>
           </div>
         </div>
         
