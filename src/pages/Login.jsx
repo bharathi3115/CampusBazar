@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
 import authIllustration from '../assets/auth-illustration.png';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -40,8 +42,10 @@ const Login = () => {
       return;
     }
 
-    // Success -> Redirect to Dashboard
-    navigate('/dashboard');
+    // Success -> Redirect to Choose Role
+    login({ email: formData.email });
+    // In a real app, you'd get the user data from the backend here.
+    navigate('/choose-role');
   };
 
   return (

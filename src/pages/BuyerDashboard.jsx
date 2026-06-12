@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { 
   Home, Search, PlusCircle, Bell, MessageSquare, Heart, 
   ShoppingBag, Settings, LogOut, ChevronRight, TrendingUp,
-  Tag, MapPin, Eye, Star, Clock, CheckCircle, Package, User, ShoppingCart
+  Tag, MapPin, Eye, Star, Clock, CheckCircle, Package, User, ShoppingCart, ChevronDown
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
-const Dashboard = () => {
+const BuyerDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showRoleMenu, setShowRoleMenu] = useState(false);
+  const { user, role, logout, switchRole } = useAuth();
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: Home },
-    { id: 'browse', label: 'Browse Items', icon: Search },
-    { id: 'listings', label: 'My Listings', icon: Package },
+    { id: 'dashboard', label: 'Dashboard Overview', icon: Home },
+    { id: 'browse', label: 'Browse Marketplace', icon: Search },
     { id: 'wishlist', label: 'Wishlist', icon: Heart },
-    { id: 'messages', label: 'Messages', icon: MessageSquare, badge: 3 },
     { id: 'purchases', label: 'My Purchases', icon: ShoppingBag },
+    { id: 'messages', label: 'Messages', icon: MessageSquare, badge: 3 },
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
@@ -62,7 +64,9 @@ const Dashboard = () => {
         </nav>
         
         <div className="p-4 border-t border-slate-100">
-          <button className="w-full flex items-center gap-3 p-3 rounded-xl font-medium text-slate-500 hover:bg-red-50 hover:text-red-600 transition-all">
+          <button 
+            onClick={logout}
+            className="w-full flex items-center gap-3 p-3 rounded-xl font-medium text-slate-500 hover:bg-red-50 hover:text-red-600 transition-all">
             <LogOut className="w-5 h-5" />
             <span>Logout</span>
           </button>
@@ -96,16 +100,41 @@ const Dashboard = () => {
               <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
             </button>
             
-            <div className="flex items-center gap-3 pl-2 sm:pl-4 sm:border-l border-slate-200 cursor-pointer">
-              <img 
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" 
-                alt="Profile" 
-                className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200"
-              />
-              <div className="hidden sm:block">
-                <p className="text-sm font-bold text-slate-900">John Doe</p>
-                <p className="text-xs text-slate-500 font-medium">Computer Science</p>
+            <div className="relative pl-2 sm:pl-4 sm:border-l border-slate-200">
+              <div 
+                className="flex items-center gap-3 cursor-pointer group"
+                onClick={() => setShowRoleMenu(!showRoleMenu)}
+              >
+                <img 
+                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email || 'John'}`} 
+                  alt="Profile" 
+                  className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200"
+                />
+                <div className="hidden sm:block">
+                  <p className="text-sm font-bold text-slate-900">{user?.email || 'John Doe'}</p>
+                  <p className="text-xs text-slate-500 font-medium capitalize flex items-center gap-1">
+                    Role: {role || 'Buyer'} <ChevronDown className="w-3 h-3" />
+                  </p>
+                </div>
               </div>
+              
+              {showRoleMenu && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-xl py-2 z-50">
+                  <p className="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Switch Role</p>
+                  <button 
+                    onClick={() => { switchRole('buyer'); setShowRoleMenu(false); }}
+                    className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-theme-maroon transition-colors bg-theme-maroon/5 text-theme-maroon font-bold"
+                  >
+                    Buyer
+                  </button>
+                  <button 
+                    onClick={() => { switchRole('seller'); setShowRoleMenu(false); }}
+                    className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-theme-maroon transition-colors"
+                  >
+                    Seller
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>
@@ -328,4 +357,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default BuyerDashboard;
