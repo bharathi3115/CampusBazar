@@ -1,0 +1,97 @@
+import React from 'react';
+import { Heart, Eye, MessageSquare, Flag, Share2, ShieldCheck, MapPin, Clock } from 'lucide-react';
+
+const ProductCard = ({ product, onViewDetails, onWishlist }) => {
+  return (
+    <div 
+      onClick={() => onViewDetails(product)}
+      className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col"
+    >
+      {/* Image Container */}
+      <div className="relative aspect-square overflow-hidden bg-slate-100">
+        <img 
+          src={product.img || `https://source.unsplash.com/400x400/?${product.category}`} 
+          alt={product.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {product.condition === 'New' && (
+            <span className="bg-green-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow-sm">
+              New
+            </span>
+          )}
+          {product.originalPrice && (
+            <span className="bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow-sm">
+              Price Drop
+            </span>
+          )}
+        </div>
+        {/* Quick Actions (Hover) */}
+        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2">
+          <button 
+            onClick={(e) => { e.stopPropagation(); onWishlist(product._id); }}
+            className="p-2 bg-white/90 backdrop-blur-sm text-slate-400 hover:text-rose-500 rounded-full shadow-sm hover:shadow-md transition-all"
+          >
+            <Heart className="w-4 h-4" />
+          </button>
+          <button 
+            onClick={(e) => { e.stopPropagation(); }}
+            className="p-2 bg-white/90 backdrop-blur-sm text-slate-400 hover:text-blue-500 rounded-full shadow-sm hover:shadow-md transition-all"
+          >
+            <Share2 className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 sm:p-5 flex flex-col flex-1">
+        <div className="flex justify-between items-start mb-1">
+          <p className="text-xs font-bold text-theme-maroon uppercase tracking-wider">{product.category}</p>
+          <div className="flex items-center gap-1 text-xs font-medium text-slate-400">
+            <Eye className="w-3.5 h-3.5" /> {product.views}
+          </div>
+        </div>
+        
+        <h3 className="font-bold text-slate-900 text-base leading-tight mb-2 line-clamp-2 group-hover:text-theme-maroon transition-colors">
+          {product.title}
+        </h3>
+        
+        <div className="flex items-end gap-2 mb-4">
+          <span className="text-xl font-black text-slate-900">₹{product.price}</span>
+          {product.originalPrice && (
+            <span className="text-sm font-medium text-slate-400 line-through mb-0.5">₹{product.originalPrice}</span>
+          )}
+        </div>
+
+        {/* Seller Info */}
+        <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <img 
+              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${product.seller?.name}`} 
+              className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200" 
+              alt="" 
+            />
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-slate-900 flex items-center gap-1">
+                {product.seller?.name}
+                {product.seller?.verified && <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />}
+              </span>
+              <div className="flex items-center gap-1 text-[10px] font-medium text-slate-500">
+                <Clock className="w-3 h-3" /> {new Date(product.createdAt).toLocaleDateString()}
+              </div>
+            </div>
+          </div>
+          <button 
+            onClick={(e) => { e.stopPropagation(); }}
+            className="p-2 text-theme-maroon bg-theme-maroon/5 hover:bg-theme-maroon hover:text-white rounded-lg transition-colors"
+          >
+            <MessageSquare className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProductCard;
