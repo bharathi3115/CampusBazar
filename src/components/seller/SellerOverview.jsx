@@ -89,36 +89,7 @@ const SellerOverview = ({ setActiveTab }) => {
               </div>
             </div>
 
-            {/* Seller Performance (Mini) */}
-            <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-2xl shadow-lg text-white">
-              <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-green-400" /> Seller Performance
-              </h2>
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wider font-bold mb-1">Estimated Revenue</p>
-                  <p className="text-2xl font-black text-white">₹12,450</p>
-                </div>
-                <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wider font-bold mb-1">Conversion Rate</p>
-                  <p className="text-2xl font-black text-white">3.4%</p>
-                </div>
-              </div>
-              <div className="space-y-3 pt-3 border-t border-slate-700">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-slate-300">Revenue This Month</span>
-                  <span className="font-bold text-green-400">+₹4,200</span>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-slate-300">Revenue This Week</span>
-                  <span className="font-bold text-green-400">+₹850</span>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-slate-300">Avg. Product Views</span>
-                  <span className="font-bold text-white">234/listing</span>
-                </div>
-              </div>
-            </div>
+
           </div>
 
           {/* Sales Analytics Overview (Charts Placeholder) */}
@@ -264,74 +235,11 @@ const SellerOverview = ({ setActiveTab }) => {
         {/* Right Column - 1/3 width Sidebar */}
         <div className="space-y-8">
           
-          {/* Listing Inventory Overview */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <Box className="w-5 h-5 text-slate-500" /> Inventory Overview
-            </h2>
-            <div className="space-y-3">
-              {[
-                { label: 'Active Listings', count: 18, color: 'bg-green-500' },
-                { label: 'Sold Listings', count: 45, color: 'bg-blue-500' },
-                { label: 'Drafts', count: 3, color: 'bg-slate-400' },
-                { label: 'Expired', count: 2, color: 'bg-red-400' },
-                { label: 'Pending Approval', count: 0, color: 'bg-amber-500' },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2.5 h-2.5 rounded-full ${item.color}`}></div>
-                    <span className="text-sm font-bold text-slate-700">{item.label}</span>
-                  </div>
-                  <span className="font-black text-slate-900 bg-white px-2 py-0.5 rounded shadow-sm border border-slate-100">{item.count}</span>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Seller Achievements */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <Award className="w-5 h-5 text-amber-500" /> Seller Achievements
-            </h2>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col items-center justify-center p-3 text-center bg-amber-50 border border-amber-100 rounded-xl">
-                <span className="text-2xl mb-1">🏆</span>
-                <span className="text-xs font-bold text-amber-700 leading-tight">Top Seller</span>
-              </div>
-              <div className="flex flex-col items-center justify-center p-3 text-center bg-green-50 border border-green-100 rounded-xl">
-                <span className="text-2xl mb-1">⚡</span>
-                <span className="text-xs font-bold text-green-700 leading-tight">Fast Responder</span>
-              </div>
-              <div className="flex flex-col items-center justify-center p-3 text-center bg-blue-50 border border-blue-100 rounded-xl">
-                <span className="text-2xl mb-1">⭐</span>
-                <span className="text-xs font-bold text-blue-700 leading-tight">Highly Rated</span>
-              </div>
-              <div className="flex flex-col items-center justify-center p-3 text-center bg-purple-50 border border-purple-100 rounded-xl">
-                <span className="text-2xl mb-1">📦</span>
-                <span className="text-xs font-bold text-purple-700 leading-tight">25+ Sold</span>
-              </div>
-            </div>
-          </div>
 
-          {/* Recent Seller Activity */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-theme-maroon" /> Recent Activity
-            </h2>
-            <div className="space-y-4 relative before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent pl-6">
-              {recentActivity.map((act, i) => (
-                <div key={i} className="relative">
-                  <div className={`absolute -left-[30px] p-1 rounded-full bg-white border border-slate-200 ${act.color}`}>
-                    <act.icon className="w-3 h-3" />
-                  </div>
-                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                    <p className="text-xs font-bold text-slate-800 mb-1 leading-tight">{act.text}</p>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{act.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+
+
+
 
           {/* Marketplace Insights (Compact) */}
           <div className="bg-gradient-to-br from-theme-dark-maroon to-theme-maroon p-6 rounded-2xl shadow-lg shadow-theme-maroon/20 text-white relative overflow-hidden group">

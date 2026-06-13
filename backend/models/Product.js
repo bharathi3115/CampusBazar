@@ -5,10 +5,18 @@ const productSchema = new mongoose.Schema({
   description: { type: String },
   price: { type: Number, required: true },
   originalPrice: { type: Number }, // For price drop alerts
+  negotiable: { type: Boolean, default: false },
   category: { type: String, required: true },
   condition: { type: String, required: true }, // New, Like New, Good, Fair
   department: { type: String },
   img: { type: String },
+  images: [{ type: String }], // Array of base64 image strings
+  pickupDetails: {
+    college: { type: String },
+    hostel: { type: String },
+    location: { type: String },
+    meetingPoint: { type: String }
+  },
   seller: {
     name: { type: String, required: true },
     rating: { type: Number, default: 0 },

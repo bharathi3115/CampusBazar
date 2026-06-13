@@ -1,6 +1,14 @@
 import express from 'express';
 import { Product } from '../models/Product.js';
 import { User } from '../models/User.js';
+import { v2 as cloudinary } from 'cloudinary';
+
+// Configure Cloudinary
+cloudinary.config({ 
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET 
+});
 
 const router = express.Router();
 
@@ -48,6 +56,44 @@ router.get('/products', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// Create a new product listing
+router.post('/products', async (req, res) => {
+  try {
+    const productData = { ...req.body };
+    
+    // Upload base64 images to Cloudinary if configured and images exist
+    if (productData.images && productData.images.length > 0) {
+      if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+        const uploadPromises = productData.images.map(async (imgBase64) => {
+          // If it's already a URL, skip upload
+          if (imgBase64.startsWith('http')) return imgBase64;
+          
+          try {
+            const uploadResponse = await cloudinary.uploader.upload(imgBase64, {
+              folder: 'campusbazaar_products'
+            });
+            return uploadResponse.secure_url;
+          } catch (uploadErr) {
+            console.error('Cloudinary upload error:', uploadErr);
+            return imgBase64; // Fallback to base64 if upload fails
+          }
+        });
+        productData.images = await Promise.all(uploadPromises);
+      }
+    }
+
+    const newProduct = new Product(productData);
+    // If images are provided, set the first one as 'img' for backward compatibility
+    if (newProduct.images && newProduct.images.length > 0) {
+      newProduct.img = newProduct.images[0];
+    }
+    const savedProduct = await newProduct.save();
+    res.status(201).json(savedProduct);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 });
 
