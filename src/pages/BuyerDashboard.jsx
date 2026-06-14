@@ -82,24 +82,17 @@ const BuyerDashboard = () => {
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         
         {/* Top Navigation Bar */}
-        <header className="h-20 bg-white border-b border-slate-200 px-6 sm:px-8 flex items-center justify-between flex-shrink-0">
-          <div className="flex items-center gap-4 flex-1">
-            <div className="relative w-full max-w-md hidden sm:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <input 
-                type="text" 
-                placeholder="Search campus marketplace..." 
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-100 border-transparent focus:bg-white focus:border-theme-maroon focus:ring-2 focus:ring-theme-maroon/20 rounded-xl transition-all outline-none font-medium text-sm"
-              />
+        <header className="py-4 bg-white border-b-2 border-slate-200 px-6 sm:px-8 flex flex-col sm:flex-row sm:items-center justify-between flex-shrink-0 gap-4">
+          <div className="flex flex-col items-center justify-center gap-1 flex-1">
+            <div className="flex items-center justify-center gap-2">
+              <ShoppingBag className="w-7 h-7 text-theme-maroon" />
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-theme-maroon tracking-tight">Buyer Dashboard</h1>
             </div>
+            <p className="text-sm font-medium text-slate-500 text-center">Discover items, track purchases, and chat with sellers.</p>
           </div>
           
           <div className="flex items-center gap-3 sm:gap-5">
-            <button className="hidden md:flex items-center gap-2 bg-theme-maroon text-white px-5 py-2.5 rounded-xl font-bold hover:bg-theme-dark-maroon shadow-lg shadow-theme-maroon/20 transition-all text-sm">
-              <PlusCircle className="w-5 h-5" />
-              <span>Post Listing</span>
-            </button>
-            
+
             <button className="relative p-2 text-slate-400 hover:text-slate-900 transition-colors">
               <Bell className="w-6 h-6" />
               <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>

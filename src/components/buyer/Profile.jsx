@@ -187,14 +187,6 @@ const Profile = () => {
             </div>
           </div>
           
-          <div className="bg-slate-900 rounded-3xl p-6 text-white overflow-hidden relative">
-            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-            <h3 className="font-black text-lg mb-2 relative z-10">CampusBazaar Pro</h3>
-            <p className="text-sm text-slate-400 mb-4 relative z-10">Upgrade to Pro to post unlimited listings and get priority support.</p>
-            <button className="w-full py-2.5 bg-white text-slate-900 font-bold rounded-xl hover:bg-slate-100 transition-colors relative z-10">
-              Upgrade Now
-            </button>
-          </div>
         </div>
 
       </div>

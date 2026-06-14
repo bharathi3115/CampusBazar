@@ -40,10 +40,7 @@ const SellerOverview = ({ setActiveTab }) => {
     <div className="max-w-7xl mx-auto space-y-8">
       
       {/* 1. Header & Welcome */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 mb-1">Seller Dashboard</h1>
-        <p className="text-slate-500 font-medium mb-6">Track your listings, monitor performance, and engage with buyers.</p>
-        
+      <div>        
         {/* Top Overview Statistics */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {overviewStats.map((stat, i) => (

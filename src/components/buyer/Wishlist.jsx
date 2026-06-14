@@ -43,45 +43,6 @@ const Wishlist = () => {
         <p className="text-slate-500 font-medium text-lg">Keep track of products you're interested in.</p>
       </div>
 
-      {/* Top Statistics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-          <div className="p-4 bg-rose-100 text-rose-600 rounded-xl">
-            <Heart className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-2xl font-black text-slate-900">12</p>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Items</p>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-          <div className="p-4 bg-red-100 text-red-600 rounded-xl">
-            <TrendingDown className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-2xl font-black text-slate-900">3</p>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Price Drops</p>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-          <div className="p-4 bg-blue-100 text-blue-600 rounded-xl">
-            <Sparkles className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-2xl font-black text-slate-900">5</p>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Newly Added</p>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
-          <div className="p-4 bg-green-100 text-green-600 rounded-xl">
-            <Tag className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-2xl font-black text-slate-900">₹2,450</p>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Potential Savings</p>
-          </div>
-        </div>
-      </div>
 
       {/* Main Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
