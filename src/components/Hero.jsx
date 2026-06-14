@@ -1,7 +1,9 @@
 import React from 'react';
 import { Search, ArrowRight, Tag, BookOpen, Calculator, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const navigate = useNavigate();
   return (
     <div className="relative overflow-hidden bg-slate-50" id="home">
       {/* Dynamic Background Gradients */}
@@ -28,11 +30,15 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4">
-              <button className="bg-theme-maroon text-white px-8 py-3.5 rounded-full font-semibold hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-1 shadow-xl shadow-theme-maroon/30 flex items-center gap-2">
+              <button 
+                onClick={() => navigate('/login')}
+                className="bg-theme-maroon text-white px-8 py-3.5 rounded-full font-semibold hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-1 shadow-xl shadow-theme-maroon/30 flex items-center gap-2">
                 Browse Products
                 <ArrowRight className="w-5 h-5" />
               </button>
-              <button className="bg-white text-theme-maroon border-2 border-theme-maroon/20 px-8 py-3.5 rounded-full font-semibold hover:border-theme-maroon hover:bg-theme-maroon/5 transition-all transform hover:-translate-y-1 shadow-sm flex items-center gap-2">
+              <button 
+                onClick={() => navigate('/login')}
+                className="bg-white text-theme-maroon border-2 border-theme-maroon/20 px-8 py-3.5 rounded-full font-semibold hover:border-theme-maroon hover:bg-theme-maroon/5 transition-all transform hover:-translate-y-1 shadow-sm flex items-center gap-2">
                 <Tag className="w-5 h-5" />
                 Sell an Item
               </button>

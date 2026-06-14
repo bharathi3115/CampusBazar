@@ -236,4 +236,54 @@ router.get('/purchases', async (req, res) => {
   }
 });
 
+// Get seller sales
+router.get('/seller/sales', async (req, res) => {
+  try {
+    // In a real app, seller name would come from auth token req.user.name
+    // For demo, we use the "Demo Seller" we created
+    const sellerName = 'Demo Seller';
+    
+    // Fetch purchases where sellerName matches
+    const sales = await Purchase.find({ sellerName })
+      .populate({
+        path: 'buyerId',
+        select: 'name email'
+      })
+      .populate({
+        path: 'productId',
+        select: 'views wishlistCount status'
+      })
+      .sort({ purchaseDate: -1 });
+
+    // Calculate Top Summary Cards statistics
+    const totalItemsSold = sales.length;
+    const totalRevenue = sales.reduce((sum, s) => sum + s.purchasePrice, 0);
+    const averageSellerRating = sales.length > 0
+      ? (sales.reduce((sum, s) => sum + s.sellerRating, 0) / sales.length).toFixed(1)
+      : 0;
+
+    // Find best selling product (highest views)
+    let bestSellingProduct = null;
+    if (sales.length > 0) {
+      bestSellingProduct = [...sales].sort((a, b) => {
+        const viewsA = a.productId?.views || 0;
+        const viewsB = b.productId?.views || 0;
+        return viewsB - viewsA;
+      })[0];
+    }
+
+    res.json({
+      sales,
+      summary: {
+        totalRevenue,
+        totalItemsSold,
+        averageSellerRating,
+        bestSellingProduct: bestSellingProduct ? bestSellingProduct.productName : 'N/A'
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;

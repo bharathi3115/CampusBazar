@@ -7,6 +7,9 @@ import {
 import { useAuth } from '../context/AuthContext';
 import SellerOverview from '../components/seller/SellerOverview';
 import PostListing from '../components/seller/PostListing';
+import MyListings from '../components/seller/MyListings';
+import InterestedBuyers from '../components/seller/InterestedBuyers';
+import SellerMessages from '../components/seller/SellerMessages';
 
 const SellerDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -18,9 +21,7 @@ const SellerDashboard = () => {
     { id: 'post', label: 'Post New Listing', icon: PlusCircle },
     { id: 'listings', label: 'My Listings', icon: Package },
     { id: 'buyers', label: 'Interested Buyers', icon: Eye },
-    { id: 'messages', label: 'Messages', icon: MessageSquare, badge: 3 },
-    { id: 'profile', label: 'Profile', icon: User },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'messages', label: 'Messages', icon: MessageSquare },
   ];
 
   return (
@@ -145,11 +146,9 @@ const SellerDashboard = () => {
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           {activeTab === 'dashboard' && <SellerOverview setActiveTab={setActiveTab} />}
           {activeTab === 'post' && <PostListing setActiveTab={setActiveTab} />}
-          {activeTab === 'listings' && <div className="max-w-7xl mx-auto p-4"><h1 className="text-2xl font-bold">My Listings</h1></div>}
-          {activeTab === 'buyers' && <div className="max-w-7xl mx-auto p-4"><h1 className="text-2xl font-bold">Interested Buyers</h1></div>}
-          {activeTab === 'messages' && <div className="max-w-7xl mx-auto p-4"><h1 className="text-2xl font-bold">Messages</h1></div>}
-          {activeTab === 'profile' && <div className="max-w-7xl mx-auto p-4"><h1 className="text-2xl font-bold">Profile</h1></div>}
-          {activeTab === 'settings' && <div className="max-w-7xl mx-auto p-4"><h1 className="text-2xl font-bold">Settings</h1></div>}
+          {activeTab === 'listings' && <MyListings />}
+          {activeTab === 'buyers' && <InterestedBuyers />}
+          {activeTab === 'messages' && <SellerMessages />}
         </div>
       </main>
     </div>

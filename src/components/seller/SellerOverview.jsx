@@ -4,6 +4,7 @@ import {
   PlusCircle, Settings, TrendingUp, DollarSign, Activity, ChevronRight,
   TrendingDown, Box, Clock, Edit, CheckSquare, BarChart2, Zap, Award
 } from 'lucide-react';
+import RecentSoldItems from './RecentSoldItems';
 
 const SellerOverview = ({ setActiveTab }) => {
   // MOCK DATA for analytics
@@ -126,6 +127,9 @@ const SellerOverview = ({ setActiveTab }) => {
 
         </div>
       </div>
+
+      {/* Recent Sold Items */}
+      <RecentSoldItems />
 
       {/* Recent Messages - Wider Horizontal Layout */}
       <div className="mt-6 sm:mt-8 bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm w-full">

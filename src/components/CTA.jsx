@@ -25,10 +25,6 @@ const CTA = () => {
                 Get Started
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <button className="bg-transparent text-white border-2 border-white/50 px-8 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
-                <ShoppingBag className="w-5 h-5" />
-                Browse Marketplace
-              </button>
             </div>
           </div>
         </div>
