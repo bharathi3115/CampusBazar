@@ -2,105 +2,13 @@ import React, { useState } from 'react';
 import { Heart, TrendingDown, Clock, Tag, MessageSquare, Trash2, Share2, Eye, Users, ShieldCheck, Search, Activity, Sparkles } from 'lucide-react';
 import ProductCard from '../marketplace/ProductCard';
 
-const DUMMY_WISHLIST = [
-  {
-    _id: 'w1',
-    title: 'Engineering Graphics Textbook',
-    price: 250,
-    category: 'Books',
-    condition: 'Like New',
-    seller: { name: 'Rahul S.', verified: false },
-    addedAt: '2 days ago',
-    views: 45,
-    img: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=400&fit=crop',
-    interestedBuyers: 0,
-    priceDrop: false
-  },
-  {
-    _id: 'w2',
-    title: 'Casio Scientific Calculator',
-    price: 500,
-    originalPrice: 650,
-    category: 'Calculators',
-    condition: 'Good',
-    seller: { name: 'Priya M.', verified: true },
-    addedAt: '5 days ago',
-    views: 120,
-    img: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?q=80&w=400&h=400&fit=crop',
-    interestedBuyers: 4,
-    priceDrop: true
-  },
-  {
-    _id: 'w3',
-    title: 'Physics Lab Coat',
-    price: 300,
-    category: 'Lab Equipment',
-    condition: 'Excellent',
-    seller: { name: 'Prof. Sharma', verified: true },
-    addedAt: '1 day ago',
-    views: 80,
-    img: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?q=80&w=400&h=400&fit=crop',
-    interestedBuyers: 2,
-    priceDrop: false
-  },
-  {
-    _id: 'w4',
-    title: 'Mountain Bicycle',
-    price: 2800,
-    category: 'Bicycles',
-    condition: 'Good',
-    seller: { name: 'Akash K.', verified: false },
-    addedAt: '3 days ago',
-    views: 310,
-    img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=400&h=400&fit=crop',
-    interestedBuyers: 12,
-    priceDrop: false
-  },
-  {
-    _id: 'w5',
-    title: 'Laptop Cooling Stand',
-    price: 450,
-    category: 'Electronics',
-    condition: 'Like New',
-    seller: { name: 'Neha P.', verified: true },
-    addedAt: '7 days ago',
-    views: 95,
-    img: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=400&h=400&fit=crop',
-    interestedBuyers: 0,
-    priceDrop: false
-  }
-];
-
-const RECOMMENDED_ITEMS = [
-  {
-    _id: 'r1',
-    title: 'Mechanical Engineering Handbook',
-    price: 400,
-    category: 'Books',
-    condition: 'Good',
-    seller: { name: 'Vikas T.', verified: true, rating: 4.8 },
-    views: 56,
-    wishlistCount: 12,
-    img: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=400&h=400&fit=crop'
-  },
-  {
-    _id: 'r2',
-    title: 'Bicycle Helmet',
-    price: 600,
-    category: 'Bicycles',
-    condition: 'New',
-    seller: { name: 'Aditi M.', verified: false, rating: 4.5 },
-    views: 89,
-    wishlistCount: 22,
-    img: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=400&h=400&fit=crop'
-  }
-];
+import { useWishlist } from '../../context/WishlistContext';
 
 const Wishlist = () => {
-  const [wishlist, setWishlist] = useState(DUMMY_WISHLIST);
+  const { wishlist, removeFromWishlist } = useWishlist();
 
   const handleRemove = (id) => {
-    setWishlist(wishlist.filter(item => item._id !== id));
+    removeFromWishlist(id);
   };
 
   if (wishlist.length === 0) {
@@ -241,11 +149,11 @@ const Wishlist = () => {
                   <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
-                        <span className="text-xs font-bold text-slate-600">{item.seller.name.charAt(0)}</span>
+                        <span className="text-xs font-bold text-slate-600">{item.seller?.name ? item.seller.name.charAt(0) : 'U'}</span>
                       </div>
                       <span className="text-sm font-bold text-slate-900 flex items-center gap-1">
-                        {item.seller.name}
-                        {item.seller.verified && <ShieldCheck className="w-3.5 h-3.5 text-blue-500" title="Verified Seller" />}
+                        {item.seller?.name || 'Unknown Seller'}
+                        {item.seller?.verified && <ShieldCheck className="w-3.5 h-3.5 text-blue-500" title="Verified Seller" />}
                       </span>
                     </div>
 
@@ -293,62 +201,8 @@ const Wishlist = () => {
             </div>
           )}
 
-          {/* Wishlist Activity */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-            <h3 className="font-extrabold text-slate-900 mb-4 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-theme-maroon" /> Recent Activity
-            </h3>
-            <div className="space-y-5 relative before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent pl-6 md:pl-0">
-              
-              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-white bg-red-500 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 absolute -left-6 md:static"></div>
-                <div className="w-[calc(100%-1.5rem)] md:w-[calc(50%-1.5rem)] pb-1">
-                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 shadow-sm">
-                    <p className="text-xs font-bold text-slate-900 mb-1">Price decreased on <span className="text-theme-maroon">Calculator</span></p>
-                    <time className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">2 hours ago</time>
-                  </div>
-                </div>
-              </div>
 
-              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-white bg-blue-500 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 absolute -left-6 md:static"></div>
-                <div className="w-[calc(100%-1.5rem)] md:w-[calc(50%-1.5rem)] pb-1">
-                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 shadow-sm">
-                    <p className="text-xs font-bold text-slate-900 mb-1">Seller updated <span className="text-theme-maroon">Lab Coat</span></p>
-                    <time className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">1 day ago</time>
-                  </div>
-                </div>
-              </div>
 
-              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-white bg-green-500 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 absolute -left-6 md:static"></div>
-                <div className="w-[calc(100%-1.5rem)] md:w-[calc(50%-1.5rem)] pb-1">
-                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 shadow-sm">
-                    <p className="text-xs font-bold text-slate-900 mb-1">Added <span className="text-theme-maroon">Textbook</span> to wishlist</p>
-                    <time className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">2 days ago</time>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Recommended Similar Items */}
-          <div>
-            <h3 className="font-extrabold text-slate-900 mb-4 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-amber-500" /> Recommended For You
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-              {RECOMMENDED_ITEMS.map(product => (
-                <ProductCard 
-                  key={product._id} 
-                  product={product} 
-                  onViewDetails={() => {}} 
-                  onWishlist={() => {}} 
-                />
-              ))}
-            </div>
-          </div>
 
         </div>
       </div>

@@ -1,7 +1,11 @@
 import React from 'react';
 import { Heart, Eye, MessageSquare, Flag, Share2, ShieldCheck, MapPin, Clock } from 'lucide-react';
+import { useWishlist } from '../../context/WishlistContext';
 
 const ProductCard = ({ product, onViewDetails, onWishlist }) => {
+  const { isWishlisted, toggleWishlist } = useWishlist();
+  const wishlisted = isWishlisted(product._id);
+
   return (
     <div 
       onClick={() => onViewDetails(product)}
@@ -30,10 +34,14 @@ const ProductCard = ({ product, onViewDetails, onWishlist }) => {
         {/* Quick Actions (Hover) */}
         <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2">
           <button 
-            onClick={(e) => { e.stopPropagation(); onWishlist(product._id); }}
-            className="p-2 bg-white/90 backdrop-blur-sm text-slate-400 hover:text-rose-500 rounded-full shadow-sm hover:shadow-md transition-all"
+            onClick={(e) => { 
+              e.stopPropagation(); 
+              toggleWishlist(product);
+              if (onWishlist) onWishlist(product._id);
+            }}
+            className={`p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:shadow-md transition-all ${wishlisted ? 'text-red-500 hover:text-red-600' : 'text-slate-400 hover:text-rose-500'}`}
           >
-            <Heart className="w-4 h-4" />
+            <Heart className="w-4 h-4" fill={wishlisted ? "currentColor" : "none"} />
           </button>
           <button 
             onClick={(e) => { e.stopPropagation(); }}

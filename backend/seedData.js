@@ -1,5 +1,6 @@
 import { Product } from './models/Product.js';
 import { User } from './models/User.js';
+import { Purchase } from './models/Purchase.js';
 
 export const seedDatabase = async () => {
   try {
@@ -103,7 +104,61 @@ export const seedDatabase = async () => {
           role: 'buyer'
         });
       }
-      console.log('Seeding completed.');
+      console.log('Seeding initial products completed.');
+    }
+    
+    let defaultBuyer = await User.findOne({ email: 'buyer@campusbazar.com' });
+    if (!defaultBuyer) {
+      defaultBuyer = await User.create({
+        email: 'buyer@campusbazar.com',
+        name: 'Demo Buyer',
+        role: 'buyer'
+      });
+    }
+
+    const purchaseCount = await Purchase.countDocuments();
+    if (purchaseCount === 0 && defaultBuyer) {
+      console.log('Seeding initial purchases...');
+      const samplePurchases = [
+        {
+          buyerId: defaultBuyer._id,
+          productName: 'Engineering Graphics Textbook',
+          category: 'Books',
+          productImage: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=400&fit=crop',
+          purchasePrice: 250,
+          sellerName: 'Rahul S.',
+          sellerRating: 4.8,
+          purchaseDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+          status: 'Completed',
+          transactionId: 'TXN-' + Math.floor(Math.random() * 1000000)
+        },
+        {
+          buyerId: defaultBuyer._id,
+          productName: 'Scientific Calculator',
+          category: 'Calculators',
+          productImage: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?q=80&w=400&h=400&fit=crop',
+          purchasePrice: 500,
+          sellerName: 'Priya M.',
+          sellerRating: 4.9,
+          purchaseDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+          status: 'Completed',
+          transactionId: 'TXN-' + Math.floor(Math.random() * 1000000)
+        },
+        {
+          buyerId: defaultBuyer._id,
+          productName: 'Physics Lab Coat',
+          category: 'Lab Equipment',
+          productImage: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?q=80&w=400&h=400&fit=crop',
+          purchasePrice: 300,
+          sellerName: 'Prof. Sharma',
+          sellerRating: 4.9,
+          purchaseDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          status: 'Pending Pickup',
+          transactionId: 'TXN-' + Math.floor(Math.random() * 1000000)
+        }
+      ];
+      await Purchase.insertMany(samplePurchases);
+      console.log('Seeding purchases completed.');
     }
   } catch (error) {
     console.error('Error seeding database:', error);

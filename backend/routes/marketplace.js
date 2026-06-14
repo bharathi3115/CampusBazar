@@ -1,7 +1,9 @@
 import express from 'express';
 import { Product } from '../models/Product.js';
 import { User } from '../models/User.js';
+import { Purchase } from '../models/Purchase.js';
 import { v2 as cloudinary } from 'cloudinary';
+import mongoose from 'mongoose';
 
 // Configure Cloudinary
 cloudinary.config({ 
@@ -11,6 +13,14 @@ cloudinary.config({
 });
 
 const router = express.Router();
+
+// Fail fast if database is disconnected so frontend can fallback to dummy data immediately
+router.use((req, res, next) => {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({ message: 'Database disconnected' });
+  }
+  next();
+});
 
 // Get all products with filters, sorting, and pagination
 router.get('/products', async (req, res) => {
@@ -173,6 +183,54 @@ router.get('/price-drops', async (req, res) => {
   try {
     const priceDrops = await Product.find({ originalPrice: { $gt: 0 } }).limit(4);
     res.json(priceDrops);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get user purchases
+router.get('/purchases', async (req, res) => {
+  try {
+    // In a real app, buyerId would come from auth token req.user.id
+    // For demo, fetch the default buyer user
+    const defaultBuyer = await User.findOne({ email: 'buyer@campusbazar.com' });
+    if (!defaultBuyer) {
+      return res.status(404).json({ message: 'Buyer user not found' });
+    }
+
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const purchases = await Purchase.find({ buyerId: defaultBuyer._id })
+      .sort({ purchaseDate: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Purchase.countDocuments({ buyerId: defaultBuyer._id });
+
+    // Calculate summary statistics
+    const allPurchases = await Purchase.find({ buyerId: defaultBuyer._id });
+    const totalAmountSpent = allPurchases.reduce((sum, p) => sum + p.purchasePrice, 0);
+    const averageSellerRating = allPurchases.length > 0 
+      ? (allPurchases.reduce((sum, p) => sum + p.sellerRating, 0) / allPurchases.length).toFixed(1)
+      : 0;
+    
+    // Purchases this month
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const purchasesThisMonth = allPurchases.filter(p => new Date(p.purchaseDate) >= thirtyDaysAgo).length;
+
+    res.json({
+      purchases,
+      summary: {
+        totalPurchases: total,
+        totalAmountSpent,
+        averageSellerRating,
+        purchasesThisMonth
+      },
+      totalPages: Math.ceil(total / parseInt(limit)),
+      currentPage: parseInt(page)
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

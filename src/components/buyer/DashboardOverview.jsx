@@ -1,10 +1,13 @@
 import React from 'react';
 import { 
-  Tag, CheckCircle, Heart, MessageSquare, Eye, 
+  Tag, Package, Heart, MessageSquare, Eye, 
   Search, ShoppingBag, TrendingUp, Clock, ChevronRight
 } from 'lucide-react';
+import RecentPurchases from './RecentPurchases';
+import { useWishlist } from '../../context/WishlistContext';
 
 const DashboardOverview = ({ setActiveTab }) => {
+  const { wishlist } = useWishlist();
   return (
     <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
       {/* Welcome & Stats Row */}
@@ -14,9 +17,9 @@ const DashboardOverview = ({ setActiveTab }) => {
         
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           {[
-            { label: 'Active Listings', value: '4', icon: Tag, color: 'text-blue-600', bg: 'bg-blue-100' },
-            { label: 'Items Sold', value: '12', icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-100' },
-            { label: 'Wishlist', value: '8', icon: Heart, color: 'text-rose-600', bg: 'bg-rose-100' },
+            { label: 'Active Orders', value: '4', icon: Tag, color: 'text-blue-600', bg: 'bg-blue-100' },
+            { label: 'Items Purchased', value: '12', icon: Package, color: 'text-green-600', bg: 'bg-green-100' },
+            { label: 'Wishlist', value: wishlist.length.toString(), icon: Heart, color: 'text-rose-600', bg: 'bg-rose-100' },
             { label: 'Unread Messages', value: '3', icon: MessageSquare, color: 'text-purple-600', bg: 'bg-purple-100' },
             { label: 'Profile Views', value: '142', icon: Eye, color: 'text-amber-600', bg: 'bg-amber-100', hideOnSm: true }
           ].map((stat, i) => (
@@ -43,7 +46,7 @@ const DashboardOverview = ({ setActiveTab }) => {
             <h2 className="text-lg font-bold text-slate-900 mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
-                { id: 'browse', label: 'Browse Marketplace', icon: Search, color: 'bg-theme-maroon text-white hover:bg-theme-dark-maroon shadow-md border border-transparent' },
+                { id: 'browse', label: 'Browse Marketplace', icon: Search, color: 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' },
                 { id: 'wishlist', label: 'View Wishlist', icon: Heart, color: 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' },
                 { id: 'messages', label: 'Open Messages', icon: MessageSquare, color: 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' },
                 { id: 'purchases', label: 'My Purchases', icon: ShoppingBag, color: 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' },
@@ -73,7 +76,7 @@ const DashboardOverview = ({ setActiveTab }) => {
                 <span className="font-bold text-slate-900">2,451</span>
               </div>
               <div className="flex justify-between items-center border-b border-slate-100 pb-2">
-                <span className="text-sm font-medium text-slate-500">Items Sold This Week</span>
+                <span className="text-sm font-medium text-slate-500">Items Purchased This Week</span>
                 <span className="font-bold text-slate-900">142</span>
               </div>
               <div className="flex justify-between items-center">
@@ -125,6 +128,11 @@ const DashboardOverview = ({ setActiveTab }) => {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Recent Purchases */}
+      <div className="mt-6 sm:mt-8 w-full">
+        <RecentPurchases />
       </div>
 
       {/* Recent Messages - Wider Horizontal Layout */}

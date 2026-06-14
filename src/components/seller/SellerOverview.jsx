@@ -64,171 +64,32 @@ const SellerOverview = ({ setActiveTab }) => {
         {/* Left/Main Column - 2/3 width */}
         <div className="xl:col-span-2 space-y-8">
           
-          {/* Quick Actions & Performance (Split Row) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Quick Actions */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-              <h2 className="text-lg font-bold text-slate-900 mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <button onClick={() => setActiveTab('post')} className="flex flex-col items-center justify-center p-4 bg-theme-maroon text-white rounded-xl shadow-md hover:bg-theme-dark-maroon transition-colors gap-2">
-                  <PlusCircle className="w-6 h-6" />
-                  <span className="text-sm font-bold">Post Listing</span>
-                </button>
-                <button onClick={() => setActiveTab('listings')} className="flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors gap-2">
-                  <Package className="w-6 h-6" />
-                  <span className="text-sm font-bold">Manage Listings</span>
-                </button>
-                <button onClick={() => setActiveTab('messages')} className="flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors gap-2">
-                  <MessageSquare className="w-6 h-6" />
-                  <span className="text-sm font-bold">Respond</span>
-                </button>
-                <button onClick={() => setActiveTab('analytics')} className="flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors gap-2">
-                  <BarChart2 className="w-6 h-6" />
-                  <span className="text-sm font-bold">Analytics</span>
-                </button>
-              </div>
-            </div>
-
-
-          </div>
-
-          {/* Sales Analytics Overview (Charts Placeholder) */}
+          {/* Quick Actions */}
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-bold text-slate-900">Sales Analytics</h2>
-              <select className="bg-slate-50 border border-slate-200 text-sm font-bold text-slate-600 rounded-lg px-3 py-1.5 outline-none focus:border-theme-maroon">
-                <option>Last 7 Days</option>
-                <option>Last 30 Days</option>
-                <option>This Semester</option>
-              </select>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Fake Chart 1: Views vs Sales */}
-              <div>
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Activity (Views vs Sales)</h3>
-                <div className="h-40 flex items-end gap-2 bg-slate-50 rounded-xl p-4 border border-slate-100">
-                  {/* CSS Bars for visual */}
-                  {[40, 65, 45, 80, 50, 90, 70].map((h, i) => (
-                    <div key={`v-${i}`} className="w-full flex justify-center group relative">
-                      <div className="absolute bottom-full mb-2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
-                        Day {i+1}: {h*10} views
-                      </div>
-                      <div className="w-full max-w-[12px] bg-blue-200 rounded-t-sm" style={{ height: `${h}%` }}></div>
-                      <div className="w-full max-w-[12px] bg-theme-maroon rounded-t-sm absolute bottom-0" style={{ height: `${h * 0.3}%` }}></div>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex items-center justify-center gap-4 mt-3 text-xs font-medium text-slate-500">
-                  <span className="flex items-center gap-1"><div className="w-3 h-3 bg-blue-200 rounded-sm"></div> Views</span>
-                  <span className="flex items-center gap-1"><div className="w-3 h-3 bg-theme-maroon rounded-sm"></div> Inquiries/Sales</span>
-                </div>
-              </div>
-
-              {/* Fake Chart 2: Category Performance */}
-              <div>
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Category Performance</h3>
-                <div className="space-y-3">
-                  {[
-                    { cat: 'Books', pct: 45, color: 'bg-blue-500' },
-                    { cat: 'Calculators', pct: 25, color: 'bg-amber-500' },
-                    { cat: 'Electronics', pct: 20, color: 'bg-emerald-500' },
-                    { cat: 'Others', pct: 10, color: 'bg-slate-400' },
-                  ].map((c, i) => (
-                    <div key={i}>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="font-bold text-slate-700">{c.cat}</span>
-                        <span className="font-medium text-slate-500">{c.pct}%</span>
-                      </div>
-                      <div className="w-full bg-slate-100 rounded-full h-2">
-                        <div className={`${c.color} h-2 rounded-full`} style={{ width: `${c.pct}%` }}></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <h2 className="text-lg font-bold text-slate-900 mb-4">Quick Actions</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <button onClick={() => setActiveTab('post')} className="flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors gap-2">
+                <PlusCircle className="w-6 h-6" />
+                <span className="text-sm font-bold text-center">Post Listing</span>
+              </button>
+              <button onClick={() => setActiveTab('listings')} className="flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors gap-2">
+                <Package className="w-6 h-6" />
+                <span className="text-sm font-bold text-center">Manage Listings</span>
+              </button>
+              <button onClick={() => setActiveTab('buyers')} className="flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors gap-2">
+                <Users className="w-6 h-6" />
+                <span className="text-sm font-bold text-center">Buyers</span>
+              </button>
+              <button onClick={() => setActiveTab('messages')} className="flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors gap-2">
+                <MessageSquare className="w-6 h-6" />
+                <span className="text-sm font-bold text-center">Messages</span>
+              </button>
             </div>
           </div>
 
-          {/* Top Performing Listings */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-bold text-slate-900">Top Performing Listings</h2>
-              <button className="text-theme-maroon text-sm font-bold hover:underline">View All</button>
-            </div>
-            
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    <th className="pb-3 pl-2">Product</th>
-                    <th className="pb-3 text-right">Price</th>
-                    <th className="pb-3 text-center">Metrics</th>
-                    <th className="pb-3 text-center">Status</th>
-                    <th className="pb-3 text-right pr-2">Badge</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {topListings.map((item, i) => (
-                    <tr key={i} className="hover:bg-slate-50 transition-colors group">
-                      <td className="py-4 pl-2">
-                        <p className="font-bold text-slate-900 text-sm group-hover:text-theme-maroon transition-colors">{item.name}</p>
-                      </td>
-                      <td className="py-4 text-right font-black text-slate-900 text-sm">{item.price}</td>
-                      <td className="py-4">
-                        <div className="flex items-center justify-center gap-3 text-xs font-medium text-slate-500">
-                          <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5 text-blue-400" />{item.views}</span>
-                          <span className="flex items-center gap-1"><Heart className="w-3.5 h-3.5 text-rose-400" />{item.saves}</span>
-                          <span className="flex items-center gap-1"><MessageSquare className="w-3.5 h-3.5 text-amber-400" />{item.inquiries}</span>
-                        </div>
-                      </td>
-                      <td className="py-4 text-center">
-                        <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${item.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'}`}>
-                          {item.status}
-                        </span>
-                      </td>
-                      <td className="py-4 text-right pr-2">
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 px-2 py-1 rounded-md border border-amber-200">
-                          <Zap className="w-3 h-3" /> {item.badge}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
 
-          {/* Interested Buyers */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Users className="w-5 h-5 text-theme-maroon" /> Interested Buyers
-              </h2>
-            </div>
-            <div className="space-y-4">
-              {interestedBuyers.map((buyer, i) => (
-                <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border border-slate-100 rounded-xl hover:border-theme-maroon/30 hover:shadow-sm transition-all bg-slate-50">
-                  <div className="flex items-center gap-3">
-                    <img src={buyer.avatar} alt={buyer.name} className="w-10 h-10 rounded-full bg-white border border-slate-200" />
-                    <div>
-                      <h4 className="font-bold text-slate-900 text-sm">{buyer.name}</h4>
-                      <p className="text-xs font-medium text-slate-500">Wants: <span className="font-bold text-theme-maroon">{buyer.item}</span></p>
-                    </div>
-                  </div>
-                  <div className="flex-1 sm:px-6">
-                    <p className="text-sm italic text-slate-600 bg-white p-2 rounded-lg border border-slate-100 truncate">"{buyer.message}"</p>
-                  </div>
-                  <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
-                    <span className="text-xs font-bold text-slate-400">{buyer.time}</span>
-                    <button className="px-4 py-2 bg-theme-maroon text-white text-xs font-bold rounded-lg hover:bg-theme-dark-maroon transition-colors shadow-sm">
-                      Reply
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+
+
 
         </div>
 
@@ -242,33 +103,68 @@ const SellerOverview = ({ setActiveTab }) => {
 
 
           {/* Marketplace Insights (Compact) */}
-          <div className="bg-gradient-to-br from-theme-dark-maroon to-theme-maroon p-6 rounded-2xl shadow-lg shadow-theme-maroon/20 text-white relative overflow-hidden group">
-            <TrendingUp className="absolute -right-4 -bottom-4 w-24 h-24 text-white/10 group-hover:scale-110 transition-transform duration-500" />
-            <h3 className="font-bold text-white mb-4 relative z-10 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5" /> Campus Insights
+          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group">
+            <TrendingUp className="absolute -right-4 -bottom-4 w-24 h-24 text-slate-50 group-hover:scale-110 transition-transform duration-500" />
+            <h3 className="font-bold text-slate-900 mb-4 relative z-10 flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-theme-maroon" /> Campus Insights
             </h3>
             <div className="space-y-3 relative z-10">
-              <div className="flex justify-between items-center border-b border-white/20 pb-2">
-                <span className="text-xs font-medium text-white/90">Active Students</span>
-                <span className="text-sm font-bold">2,451</span>
+              <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                <span className="text-sm font-medium text-slate-500">Active Students</span>
+                <span className="font-bold text-slate-900">2,451</span>
               </div>
-              <div className="flex justify-between items-center border-b border-white/20 pb-2">
-                <span className="text-xs font-medium text-white/90">Items Sold This Week</span>
-                <span className="text-sm font-bold">142</span>
-              </div>
-              <div className="flex justify-between items-center border-b border-white/20 pb-2">
-                <span className="text-xs font-medium text-white/90">Popular Category</span>
-                <span className="text-sm font-bold text-theme-light-maroon">Books</span>
+              <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                <span className="text-sm font-medium text-slate-500">Items Sold This Week</span>
+                <span className="font-bold text-slate-900">142</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-xs font-medium text-white/90">Marketplace Growth</span>
-                <span className="text-sm font-bold text-green-400">+12%</span>
+                <span className="text-sm font-medium text-slate-500">Popular Category</span>
+                <span className="font-bold text-theme-maroon">Books</span>
               </div>
             </div>
           </div>
 
         </div>
       </div>
+
+      {/* Recent Messages - Wider Horizontal Layout */}
+      <div className="mt-6 sm:mt-8 bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm w-full">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="font-bold text-slate-900 text-lg sm:text-xl">Recent Messages</h3>
+          <span className="text-sm font-bold text-white bg-theme-maroon px-3 py-1 rounded-full shadow-sm shadow-theme-maroon/20">3 New</span>
+        </div>
+        <div className="space-y-4">
+          {interestedBuyers.map((buyer, i) => {
+            const unread = i === 0; // Just to mimic unread behavior
+            return (
+            <div key={i} className={`flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-xl border ${unread ? 'border-theme-maroon/30 bg-theme-maroon/5' : 'border-slate-100 bg-slate-50 hover:bg-white'} hover:border-theme-maroon/50 hover:shadow-md transition-all cursor-pointer group`}>
+              <img src={buyer.avatar} className="w-12 h-12 rounded-full bg-white border-2 border-white shadow-sm flex-shrink-0" alt="" />
+              <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-6">
+                <div className="flex flex-col min-w-0 sm:w-1/4">
+                  <h4 className={`text-base ${unread ? 'font-bold text-slate-900' : 'font-bold text-slate-700'} group-hover:text-theme-maroon transition-colors truncate`}>{buyer.name}</h4>
+                  <span className="text-xs font-bold text-theme-maroon truncate">[{buyer.item}]</span>
+                </div>
+                <p className={`text-sm flex-1 truncate ${unread ? 'font-bold text-slate-800' : 'font-medium text-slate-500'}`}>
+                  {buyer.message}
+                </p>
+                <div className="flex items-center justify-between sm:justify-end gap-3 flex-shrink-0 sm:w-24">
+                  <span className="text-xs font-bold text-slate-400 whitespace-nowrap">{buyer.time}</span>
+                  {unread ? (
+                    <span className="w-2.5 h-2.5 bg-theme-maroon rounded-full shadow-sm shadow-theme-maroon/50"></span>
+                  ) : (
+                    <span className="w-2.5 h-2.5"></span>
+                  )}
+                </div>
+              </div>
+            </div>
+            );
+          })}
+        </div>
+        <button className="w-full mt-6 py-3.5 bg-slate-50 border border-slate-200 text-sm font-bold text-slate-700 hover:text-theme-maroon hover:bg-theme-maroon/5 hover:border-theme-maroon/20 rounded-xl transition-all shadow-sm">
+          View All Messages
+        </button>
+      </div>
+
     </div>
   );
 };

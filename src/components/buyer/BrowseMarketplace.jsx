@@ -1,12 +1,170 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, SlidersHorizontal, X } from 'lucide-react';
-import HeroBanner from '../marketplace/HeroBanner';
 import ProductCard from '../marketplace/ProductCard';
 import ProductDetailsModal from '../marketplace/ProductDetailsModal';
 
 const CATEGORIES = ['All Categories', 'Books', 'Calculators', 'Electronics', 'Bicycles', 'Lab Equipment', 'Hostel Essentials', 'Stationery', 'Furniture', 'Miscellaneous'];
 const CONDITIONS = ['All Conditions', 'New', 'Like New', 'Good', 'Fair'];
 const SORTS = ['Newest First', 'Oldest First', 'Price Low to High', 'Price High to Low', 'Most Viewed', 'Most Wishlisted'];
+
+const DUMMY_PRODUCTS = [
+  {
+    _id: '1',
+    title: 'Engineering Graphics Textbook',
+    price: 250,
+    category: 'Books',
+    condition: 'Like New',
+    seller: { name: 'Rahul S.', verified: true, rating: 4.8 },
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 120,
+    wishlistCount: 15,
+    img: '/engineering_graphics.png',
+    status: 'Active'
+  },
+  {
+    _id: '2',
+    title: 'Physics Lab Manual',
+    price: 180,
+    category: 'Books',
+    condition: 'Good',
+    seller: { name: 'Priya M.', verified: false, rating: 4.2 },
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 45,
+    wishlistCount: 5,
+    img: '/physics_lab_manual.png',
+    status: 'Active'
+  },
+  {
+    _id: '3',
+    title: 'Casio Scientific Calculator FX-991ES',
+    price: 500,
+    category: 'Calculators',
+    condition: 'Excellent',
+    seller: { name: 'Akash K.', verified: true, rating: 4.9 },
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 300,
+    wishlistCount: 50,
+    img: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?q=80&w=400&h=400&fit=crop',
+    status: 'Active'
+  },
+  {
+    _id: '4',
+    title: 'Mountain Bicycle',
+    price: 3500,
+    category: 'Bicycles',
+    condition: 'Good',
+    seller: { name: 'Arjun P.', verified: false, rating: 4.5 },
+    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 210,
+    wishlistCount: 30,
+    img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=400&h=400&fit=crop',
+    status: 'Active'
+  },
+  {
+    _id: '5',
+    title: 'Laptop Cooling Pad',
+    price: 450,
+    category: 'Electronics',
+    condition: 'Like New',
+    seller: { name: 'Neha S.', verified: true, rating: 4.7 },
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 80,
+    wishlistCount: 12,
+    img: '/laptop_cooling_pad.png',
+    status: 'Active'
+  },
+  {
+    _id: '6',
+    title: 'Bluetooth Headphones',
+    price: 800,
+    category: 'Electronics',
+    condition: 'Good',
+    seller: { name: 'Kiran R.', verified: true, rating: 4.6 },
+    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 150,
+    wishlistCount: 20,
+    img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400&h=400&fit=crop',
+    status: 'Active'
+  },
+  {
+    _id: '7',
+    title: 'Physics Lab Coat',
+    price: 300,
+    category: 'Lab Equipment',
+    condition: 'Excellent',
+    seller: { name: 'Prof. Sharma', verified: true, rating: 4.9 },
+    createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 65,
+    wishlistCount: 8,
+    img: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?q=80&w=400&h=400&fit=crop',
+    status: 'Active'
+  },
+  {
+    _id: '8',
+    title: 'Study Chair',
+    price: 1200,
+    category: 'Furniture',
+    condition: 'Good',
+    seller: { name: 'Deepak M.', verified: false, rating: 4.3 },
+    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 110,
+    wishlistCount: 14,
+    img: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?q=80&w=400&h=400&fit=crop',
+    status: 'Active'
+  },
+  {
+    _id: '9',
+    title: 'Data Structures Textbook',
+    price: 350,
+    category: 'Books',
+    condition: 'Like New',
+    seller: { name: 'Anjali P.', verified: true, rating: 4.8 },
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 90,
+    wishlistCount: 22,
+    img: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=400&fit=crop',
+    status: 'Active'
+  },
+  {
+    _id: '10',
+    title: 'Extension Board',
+    price: 150,
+    category: 'Hostel Essentials',
+    condition: 'Good',
+    seller: { name: 'Rohit K.', verified: false, rating: 4.1 },
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 40,
+    wishlistCount: 5,
+    img: '/extension_board.png',
+    status: 'Active'
+  },
+  {
+    _id: '11',
+    title: 'Printer',
+    price: 2500,
+    category: 'Electronics',
+    condition: 'Fair',
+    seller: { name: 'Harsh V.', verified: true, rating: 4.5 },
+    createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 180,
+    wishlistCount: 25,
+    img: 'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?q=80&w=400&h=400&fit=crop',
+    status: 'Active'
+  },
+  {
+    _id: '12',
+    title: 'College Backpack',
+    price: 400,
+    category: 'Miscellaneous',
+    condition: 'Good',
+    seller: { name: 'Sneha R.', verified: false, rating: 4.4 },
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    views: 100,
+    wishlistCount: 18,
+    img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=400&h=400&fit=crop',
+    status: 'Active'
+  }
+];
 
 const BrowseMarketplace = () => {
   const [products, setProducts] = useState([]);
@@ -46,13 +204,44 @@ const BrowseMarketplace = () => {
         const data = await productsRes.json();
         setProducts(data.products);
         setTotalPages(data.totalPages);
+      } else {
+        throw new Error('Backend request failed');
       }
       if (statsRes.ok) setStats(await statsRes.json());
       if (trendingRes.ok) setTrending(await trendingRes.json());
       
     } catch (error) {
       console.error('Failed to fetch marketplace data:', error);
-      // Fallback or error state could be handled here
+      // Fallback to DUMMY_PRODUCTS
+      let filtered = [...DUMMY_PRODUCTS];
+      if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search.toLowerCase()) || p.category.toLowerCase().includes(search.toLowerCase()));
+      if (category !== 'All Categories') filtered = filtered.filter(p => p.category === category);
+      if (condition !== 'All Conditions') filtered = filtered.filter(p => p.condition === condition);
+      
+      switch (sort) {
+        case 'Price Low to High': filtered.sort((a,b) => a.price - b.price); break;
+        case 'Price High to Low': filtered.sort((a,b) => b.price - a.price); break;
+        case 'Most Viewed': filtered.sort((a,b) => b.views - a.views); break;
+        case 'Most Wishlisted': filtered.sort((a,b) => b.wishlistCount - a.wishlistCount); break;
+        case 'Oldest First': filtered.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)); break;
+        case 'Newest First': 
+        default: filtered.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)); break;
+      }
+      setProducts(filtered);
+      setTotalPages(1);
+      
+      setStats({
+        activeListings: DUMMY_PRODUCTS.length,
+        studentsOnline: 124,
+        verifiedSellers: 8,
+        itemsSoldThisWeek: 42
+      });
+      
+      setTrending([
+        { name: 'Books', listings: 4 },
+        { name: 'Electronics', listings: 3 },
+        { name: 'Calculators', listings: 1 }
+      ]);
     } finally {
       setLoading(false);
     }
@@ -78,8 +267,6 @@ const BrowseMarketplace = () => {
 
   return (
     <div className="max-w-7xl mx-auto pb-12">
-      <HeroBanner stats={stats} />
-
       {/* Sticky Filter Bar */}
       <div className="sticky top-0 z-40 bg-slate-50/80 backdrop-blur-xl border-y border-slate-200 py-4 mb-8 -mx-4 px-4 sm:mx-0 sm:px-0 sm:bg-transparent sm:backdrop-blur-none sm:border-none sm:static">
         <form onSubmit={handleSearchSubmit} className="flex flex-col lg:flex-row gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">

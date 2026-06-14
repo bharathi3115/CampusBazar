@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { X, Heart, MessageSquare, Share2, Flag, ShieldCheck, MapPin, Clock, Eye, ChevronRight } from 'lucide-react';
+import { useWishlist } from '../../context/WishlistContext';
 
 const ProductDetailsModal = ({ product, isOpen, onClose }) => {
+  const { isWishlisted, toggleWishlist } = useWishlist();
   if (!isOpen || !product) return null;
 
   // Record view on open (in a real app, we'd trigger an API call here or in the parent before opening)
@@ -117,8 +119,11 @@ const ProductDetailsModal = ({ product, isOpen, onClose }) => {
             </button>
             
             <div className="flex gap-3">
-              <button className="p-3.5 bg-white border border-slate-200 text-slate-700 hover:text-rose-500 hover:border-rose-200 rounded-xl font-bold shadow-sm flex items-center justify-center transition-all group relative">
-                <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <button 
+                onClick={() => toggleWishlist(product)}
+                className={`p-3.5 bg-white border ${isWishlisted(product._id) ? 'border-red-200 text-red-500 hover:text-red-600' : 'border-slate-200 text-slate-700 hover:text-rose-500 hover:border-rose-200'} rounded-xl font-bold shadow-sm flex items-center justify-center transition-all group relative`}
+              >
+                <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" fill={isWishlisted(product._id) ? "currentColor" : "none"} />
               </button>
               <button className="p-3.5 bg-white border border-slate-200 text-slate-700 hover:text-blue-500 hover:border-blue-200 rounded-xl font-bold shadow-sm flex items-center justify-center transition-all group">
                 <Share2 className="w-5 h-5 group-hover:scale-110 transition-transform" />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { WishlistProvider } from './context/WishlistContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import Home from './pages/Home';
@@ -16,29 +17,31 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <WishlistProvider>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
-          {/* Protected Routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/choose-role" element={<ChooseRole />} />
-          </Route>
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/choose-role" element={<ChooseRole />} />
+            </Route>
 
-          {/* Role-Specific Protected Routes */}
-          <Route element={<ProtectedRoute requireRole="buyer" />}>
-            <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
-          </Route>
+            {/* Role-Specific Protected Routes */}
+            <Route element={<ProtectedRoute requireRole="buyer" />}>
+              <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
+            </Route>
 
-          <Route element={<ProtectedRoute requireRole="seller" />}>
-            <Route path="/seller/dashboard" element={<SellerDashboard />} />
-          </Route>
-        </Routes>
+            <Route element={<ProtectedRoute requireRole="seller" />}>
+              <Route path="/seller/dashboard" element={<SellerDashboard />} />
+            </Route>
+          </Routes>
+        </WishlistProvider>
       </AuthProvider>
     </BrowserRouter>
   );
