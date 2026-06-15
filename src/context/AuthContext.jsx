@@ -19,23 +19,55 @@ export const AuthProvider = ({ children }) => {
     const storedRole = localStorage.getItem('role');
 
     if (storedAuth === 'true' && storedUser) {
+      let parsedUser = JSON.parse(storedUser);
       setIsAuthenticated(true);
-      setUser(JSON.parse(storedUser));
+      setUser(parsedUser);
       if (storedRole) {
         setRole(storedRole);
+      }
+      
+      // Auto-sync with backend if _id is missing
+      if (!parsedUser._id) {
+        fetch('http://localhost:5000/api/users/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: parsedUser.email, name: parsedUser.name, role: storedRole })
+        })
+        .then(res => res.json())
+        .then(fullUser => {
+          if (fullUser && fullUser._id) {
+            setUser(fullUser);
+            localStorage.setItem('user', JSON.stringify(fullUser));
+          }
+        })
+        .catch(err => console.error('Failed to sync user', err));
       }
     }
   }, []);
 
   const login = (userData) => {
+    // Optimistically set partial user
     setIsAuthenticated(true);
     setUser(userData);
     localStorage.setItem('isAuthenticated', 'true');
     localStorage.setItem('user', JSON.stringify(userData));
-    // Remove old role to force re-selection or keep it? The prompt says select role after login
-    // Let's clear role on fresh login so they must choose again
     setRole(null);
     localStorage.removeItem('role');
+
+    // Sync with backend immediately
+    fetch('http://localhost:5000/api/users/sync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: userData.email, name: userData.name })
+    })
+    .then(res => res.json())
+    .then(fullUser => {
+      if (fullUser && fullUser._id) {
+        setUser(fullUser);
+        localStorage.setItem('user', JSON.stringify(fullUser));
+      }
+    })
+    .catch(err => console.error('Failed to sync user on login', err));
   };
 
   const logout = () => {
@@ -58,6 +90,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = (updatedData) => {
+    setUser(updatedData);
+    localStorage.setItem('user', JSON.stringify(updatedData));
+  };
+
   const switchRole = (newRole) => {
     setRole(newRole);
     localStorage.setItem('role', newRole);
@@ -69,7 +106,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, role, login, logout, selectRole, switchRole }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, role, login, logout, selectRole, switchRole, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

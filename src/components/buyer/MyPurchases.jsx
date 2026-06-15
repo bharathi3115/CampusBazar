@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Package, 
   Star, 
@@ -10,8 +10,10 @@ import {
   Hash,
   ChevronRight,
   Filter,
-  Search
+  Search,
+  X
 } from 'lucide-react';
+import { jsPDF } from "jspdf";
 
 const DUMMY_PURCHASES = [
   {
@@ -52,7 +54,60 @@ const DUMMY_PURCHASES = [
   }
 ];
 
-const MyPurchases = () => {
+const MyPurchases = ({ setActiveTab }) => {
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [toastMessage, setToastMessage] = useState('');
+
+  const handleDownloadInvoice = (purchase) => {
+    setToastMessage(`Downloading PDF invoice for ${purchase.transactionId}...`);
+    
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFontSize(22);
+    doc.setTextColor(85, 0, 0); // maroon
+    doc.text("CAMPUS BAZAR", 105, 20, null, null, "center");
+    
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text("INVOICE", 105, 30, null, null, "center");
+    
+    // Details
+    doc.setFontSize(12);
+    doc.text(`Transaction ID: ${purchase.transactionId}`, 20, 50);
+    doc.text(`Date: ${new Date(purchase.purchaseDate).toLocaleDateString()}`, 20, 60);
+    doc.text(`Status: ${purchase.status}`, 20, 70);
+    doc.text(`Seller: ${purchase.sellerName}`, 20, 80);
+    
+    // Line separator
+    doc.line(20, 90, 190, 90);
+    
+    // Product info
+    doc.setFontSize(14);
+    doc.text("Order Details", 20, 100);
+    
+    doc.setFontSize(12);
+    doc.text(`Item: ${purchase.productName}`, 20, 110);
+    doc.text(`Category: ${purchase.category}`, 20, 120);
+    doc.text(`Price: Rs. ${purchase.purchasePrice}`, 20, 130);
+    
+    doc.line(20, 140, 190, 140);
+    
+    doc.setFontSize(16);
+    doc.text(`TOTAL PAID: Rs. ${purchase.purchasePrice}`, 20, 155);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text("Thank you for shopping with Campus Bazar!", 105, 280, null, null, "center");
+
+    doc.save(`Invoice_${purchase.transactionId}.pdf`);
+
+    setTimeout(() => {
+      setToastMessage('PDF Invoice downloaded successfully!');
+      setTimeout(() => setToastMessage(''), 3000);
+    }, 1500);
+  };
+
   const getStatusBadge = (status) => {
     switch(status) {
       case 'Completed':
@@ -169,13 +224,22 @@ const MyPurchases = () => {
                   </div>
                   
                   <div className="flex flex-wrap items-center gap-2">
-                    <button className="flex-1 lg:flex-none items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-colors shadow-sm flex">
+                    <button 
+                      onClick={() => setActiveTab('messages')}
+                      className="flex-1 lg:flex-none items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-colors shadow-sm flex"
+                    >
                       <MessageSquare className="w-4 h-4" /> Message Seller
                     </button>
-                    <button className="flex-1 lg:flex-none items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-colors shadow-sm flex">
+                    <button 
+                      onClick={() => handleDownloadInvoice(purchase)}
+                      className="flex-1 lg:flex-none items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-colors shadow-sm flex"
+                    >
                       <Download className="w-4 h-4" /> Invoice
                     </button>
-                    <button className="flex-1 lg:flex-none items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-white bg-theme-maroon hover:bg-theme-dark-maroon rounded-xl transition-colors shadow-sm shadow-theme-maroon/20 flex">
+                    <button 
+                      onClick={() => setSelectedOrder(purchase)}
+                      className="flex-1 lg:flex-none items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-white bg-theme-maroon hover:bg-theme-dark-maroon rounded-xl transition-colors shadow-sm shadow-theme-maroon/20 flex"
+                    >
                       Order Details <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -185,6 +249,59 @@ const MyPurchases = () => {
           </div>
         ))}
       </div>
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-6 py-3 rounded-xl shadow-2xl font-bold flex items-center gap-3 animate-pulse">
+          <CheckCircle className="w-5 h-5 text-green-400" />
+          {toastMessage}
+        </div>
+      )}
+
+      {/* Order Details Modal */}
+      {selectedOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={() => setSelectedOrder(null)}></div>
+          <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col transform transition-all">
+            <div className="p-6 sm:p-8 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
+              <h2 className="text-2xl font-black text-slate-900">Order Details</h2>
+              <button onClick={() => setSelectedOrder(null)} className="p-2 bg-white rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-100 shadow-sm transition-all">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 sm:p-8 space-y-6 overflow-y-auto max-h-[70vh]">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-1">{selectedOrder.productName}</h3>
+                  <p className="text-sm font-medium text-slate-500 flex items-center gap-2"><Hash className="w-4 h-4" /> {selectedOrder.transactionId}</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-black text-theme-maroon">₹{selectedOrder.purchasePrice}</div>
+                  <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">{selectedOrder.status}</div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Date</p>
+                  <p className="text-sm font-bold text-slate-900">{formatDate(selectedOrder.purchaseDate)}</p>
+                </div>
+                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Seller</p>
+                  <p className="text-sm font-bold text-slate-900">{selectedOrder.sellerName}</p>
+                </div>
+              </div>
+              <div className="border-t border-slate-100 pt-6 flex gap-3">
+                <button 
+                  onClick={() => { setSelectedOrder(null); setActiveTab('messages'); }} 
+                  className="flex-1 bg-theme-maroon text-white font-bold py-3 px-6 rounded-xl hover:bg-theme-dark-maroon transition-colors flex items-center justify-center gap-2"
+                >
+                  <MessageSquare className="w-4 h-4" /> Contact Seller
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

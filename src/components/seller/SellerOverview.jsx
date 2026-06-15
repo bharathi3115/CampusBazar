@@ -6,7 +6,11 @@ import {
 } from 'lucide-react';
 import RecentSoldItems from './RecentSoldItems';
 
+import { useAuth } from '../../context/AuthContext';
+
 const SellerOverview = ({ setActiveTab }) => {
+  const { user } = useAuth();
+  const firstName = user?.name ? user.name.split(' ')[0] : 'User';
   // MOCK DATA for analytics
   const overviewStats = [
     { label: 'Active Listings', value: '18', icon: Package, color: 'text-blue-600', bg: 'bg-blue-100' },
@@ -64,7 +68,7 @@ const SellerOverview = ({ setActiveTab }) => {
           
           {/* Quick Actions */}
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 mb-4">Quick Actions</h2>
+            <h2 className="text-lg font-bold text-slate-900 mb-4">Welcome back, {firstName}! Quick Actions</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <button onClick={() => setActiveTab('post')} className="flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors gap-2">
                 <PlusCircle className="w-6 h-6" />

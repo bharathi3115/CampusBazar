@@ -1,13 +1,30 @@
 import React, { useEffect } from 'react';
 import { X, Heart, MessageSquare, Share2, Flag, ShieldCheck, MapPin, Clock, Eye, ChevronRight } from 'lucide-react';
 import { useWishlist } from '../../context/WishlistContext';
+import { useAuth } from '../../context/AuthContext';
 
-const ProductDetailsModal = ({ product, isOpen, onClose }) => {
+const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab }) => {
   const { isWishlisted, toggleWishlist } = useWishlist();
+  const { user } = useAuth();
   if (!isOpen || !product) return null;
 
   // Record view on open (in a real app, we'd trigger an API call here or in the parent before opening)
   
+  const handleContactSeller = async () => {
+    if (!user) return alert("Please login to message the seller");
+    try {
+      await fetch('http://localhost:5000/api/messages/conversation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ buyerId: user._id, productId: product._id })
+      });
+      onClose();
+      if (setActiveTab) setActiveTab('messages');
+    } catch (err) {
+      console.error('Failed to create conversation', err);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
@@ -114,7 +131,10 @@ const ProductDetailsModal = ({ product, isOpen, onClose }) => {
 
           {/* Action Bar (Sticky at bottom of right pane) */}
           <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-100 mt-auto flex flex-col sm:flex-row gap-3">
-            <button className="flex-1 bg-theme-maroon text-white font-bold py-3.5 px-6 rounded-xl hover:bg-theme-dark-maroon shadow-lg shadow-theme-maroon/20 flex items-center justify-center gap-2 transition-all">
+            <button 
+              onClick={handleContactSeller}
+              className="flex-1 bg-theme-maroon text-white font-bold py-3.5 px-6 rounded-xl hover:bg-theme-dark-maroon shadow-lg shadow-theme-maroon/20 flex items-center justify-center gap-2 transition-all"
+            >
               <MessageSquare className="w-5 h-5" /> Contact Seller
             </button>
             

@@ -1,28 +1,118 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   User, Mail, MapPin, Building, BookOpen, Clock, ShieldCheck, 
-  Edit3, Camera, CheckCircle2, TrendingUp, Package, Star, Settings
+  Edit3, Camera, CheckCircle2, TrendingUp, Package, Star, Settings, X, Save
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const Profile = () => {
-  const { user, role } = useAuth();
+  const { user, role, updateUser } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [coverFile, setCoverFile] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
   
-  // Dummy User Data
-  const profileData = {
+  const [profileData, setProfileData] = useState({
     name: user?.name || 'John Doe',
     email: user?.email || 'ap@gmail.com',
-    studentId: 'CB-2023-4589',
-    department: 'Computer Science & Engineering',
-    year: '3rd Year',
-    campus: 'Main Campus, North Block',
-    joined: 'August 2023',
+    avatarUrl: user?.avatarUrl || null,
+    coverUrl: user?.coverUrl || null,
+    studentId: user?.studentId || 'CB-2023-4589',
+    department: user?.department || 'Computer Science & Engineering',
+    year: user?.year || '3rd Year',
+    campus: user?.campus || 'Main Campus, North Block',
+    joined: user?.joined || 'August 2023',
     verified: true,
-    stats: {
+    stats: user?.stats || {
       itemsBought: 12,
       savedAmount: 4500,
       activeWishlist: 8,
       reviewsGiven: 5
+    }
+  });
+
+  const [formData, setFormData] = useState({ ...profileData });
+  const fileInputRef = React.useRef(null);
+  const coverInputRef = React.useRef(null);
+
+  const handleEditClick = () => {
+    setFormData({ ...profileData });
+    setIsEditing(true);
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      let currentUserId = user?._id;
+
+      // Ensure we have a valid user ID
+      if (!currentUserId || currentUserId === 'undefined' || currentUserId === 'null') {
+        const syncRes = await fetch('http://localhost:5000/api/users/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: user?.email, name: user?.name, role: role })
+        });
+        
+        if (syncRes.ok) {
+          const fullUser = await syncRes.json();
+          currentUserId = fullUser._id;
+          updateUser(fullUser);
+        } else {
+          throw new Error('Could not sync user profile. Please login again.');
+        }
+      }
+
+      if (!currentUserId || currentUserId === 'undefined') {
+        throw new Error('Still missing user ID after sync.');
+      }
+
+      const fd = new FormData();
+      fd.append('name', formData.name);
+      fd.append('email', formData.email);
+      fd.append('studentId', formData.studentId);
+      fd.append('department', formData.department);
+      fd.append('year', formData.year);
+      fd.append('campus', formData.campus);
+      
+      if (avatarFile) fd.append('avatar', avatarFile);
+      if (coverFile) fd.append('cover', coverFile);
+
+      const res = await fetch(`http://localhost:5000/api/users/${currentUserId}`, {
+        method: 'PUT',
+        body: fd
+      });
+
+      if (res.ok) {
+        const updatedUser = await res.json();
+        setProfileData(prev => ({ ...prev, ...updatedUser }));
+        updateUser({ ...user, ...updatedUser });
+        setIsEditing(false);
+      } else {
+        alert('Failed to update profile');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error updating profile');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAvatarFile(file);
+      const url = URL.createObjectURL(file);
+      setProfileData(prev => ({ ...prev, avatarUrl: url }));
+    }
+  };
+
+  const handleCoverChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCoverFile(file);
+      const url = URL.createObjectURL(file);
+      setProfileData(prev => ({ ...prev, coverUrl: url }));
     }
   };
 
@@ -32,9 +122,29 @@ const Profile = () => {
       {/* Header Profile Card */}
       <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden relative">
         {/* Cover Photo */}
-        <div className="h-32 sm:h-48 bg-theme-maroon w-full relative overflow-hidden">
+        <div 
+          className="h-32 sm:h-48 w-full relative overflow-hidden"
+          style={{ 
+            backgroundColor: profileData.coverUrl ? 'transparent' : '#8B0000', // theme-maroon hex approx
+            backgroundImage: profileData.coverUrl ? `url(${profileData.coverUrl})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        >
+          {!profileData.coverUrl && <div className="absolute inset-0 bg-theme-maroon"></div>}
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay"></div>
-          <button className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-md transition-colors">
+          
+          <input 
+            type="file" 
+            ref={coverInputRef} 
+            onChange={handleCoverChange} 
+            accept="image/*" 
+            className="hidden" 
+          />
+          <button 
+            onClick={() => coverInputRef.current?.click()}
+            className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-md transition-colors"
+          >
             <Edit3 className="w-4 h-4" />
           </button>
         </div>
@@ -44,11 +154,21 @@ const Profile = () => {
           <div className="flex flex-col sm:flex-row sm:items-end gap-6 sm:gap-8 -mt-16 sm:-mt-20 mb-6">
             <div className="relative inline-block group">
               <img 
-                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${profileData.email}`} 
+                src={profileData.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profileData.email}`} 
                 alt="Profile" 
-                className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-white border-4 border-white shadow-xl"
+                className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-white border-4 border-white shadow-xl object-cover"
               />
-              <button className="absolute bottom-2 right-2 p-2.5 bg-theme-maroon hover:bg-theme-dark-maroon text-white rounded-full shadow-lg transition-colors scale-0 group-hover:scale-100 origin-center duration-200">
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleAvatarChange} 
+                accept="image/*" 
+                className="hidden" 
+              />
+              <button 
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute bottom-2 right-2 p-2.5 bg-theme-maroon hover:bg-theme-dark-maroon text-white rounded-full shadow-lg transition-colors scale-0 group-hover:scale-100 origin-center duration-200"
+              >
                 <Camera className="w-4 h-4" />
               </button>
             </div>
@@ -68,7 +188,10 @@ const Profile = () => {
             </div>
 
             <div className="flex gap-3 pb-2 w-full sm:w-auto">
-              <button className="flex-1 sm:flex-none px-6 py-2.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold rounded-xl transition-colors flex items-center justify-center gap-2">
+              <button 
+                onClick={handleEditClick}
+                className="flex-1 sm:flex-none px-6 py-2.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
                 <Edit3 className="w-4 h-4" /> Edit Profile
               </button>
             </div>
@@ -153,7 +276,7 @@ const Profile = () => {
             <div className="space-y-4">
               {[
                 { title: 'Email Notifications', desc: 'Receive emails about new messages and order updates.', enabled: true },
-                { title: 'Price Drop Alerts', desc: 'Get notified when an item in your wishlist drops in price.', enabled: true },
+
                 { title: 'Profile Visibility', desc: 'Allow other students to see your basic profile information.', enabled: false }
               ].map((pref, i) => (
                 <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-theme-maroon/30 transition-colors">
@@ -190,6 +313,102 @@ const Profile = () => {
         </div>
 
       </div>
+
+      {/* Edit Profile Modal */}
+      {isEditing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col transform transition-all">
+            
+            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <Edit3 className="w-5 h-5 text-theme-maroon" /> Edit Profile Details
+              </h2>
+              <button 
+                onClick={() => setIsEditing(false)}
+                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto max-h-[60vh] space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Full Name</label>
+                <input 
+                  type="text" 
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-theme-maroon focus:ring-1 focus:ring-theme-maroon rounded-xl transition-all outline-none text-slate-700 font-medium"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Email</label>
+                <input 
+                  type="email" 
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-theme-maroon focus:ring-1 focus:ring-theme-maroon rounded-xl transition-all outline-none text-slate-700 font-medium"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Student ID</label>
+                  <input 
+                    type="text" 
+                    value={formData.studentId}
+                    onChange={(e) => setFormData({...formData, studentId: e.target.value})}
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-theme-maroon focus:ring-1 focus:ring-theme-maroon rounded-xl transition-all outline-none text-slate-700 font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Year of Study</label>
+                  <input 
+                    type="text" 
+                    value={formData.year}
+                    onChange={(e) => setFormData({...formData, year: e.target.value})}
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-theme-maroon focus:ring-1 focus:ring-theme-maroon rounded-xl transition-all outline-none text-slate-700 font-medium"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Department</label>
+                <input 
+                  type="text" 
+                  value={formData.department}
+                  onChange={(e) => setFormData({...formData, department: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-theme-maroon focus:ring-1 focus:ring-theme-maroon rounded-xl transition-all outline-none text-slate-700 font-medium"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Campus Location</label>
+                <input 
+                  type="text" 
+                  value={formData.campus}
+                  onChange={(e) => setFormData({...formData, campus: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-theme-maroon focus:ring-1 focus:ring-theme-maroon rounded-xl transition-all outline-none text-slate-700 font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-3">
+              <button 
+                onClick={() => setIsEditing(false)}
+                className="px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleSave}
+                disabled={isSaving}
+                className="px-6 py-2.5 bg-theme-maroon text-white text-sm font-bold rounded-xl hover:bg-theme-dark-maroon shadow-md shadow-theme-maroon/20 flex items-center gap-2 transition-all disabled:opacity-70"
+              >
+                <Save className="w-4 h-4" /> {isSaving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

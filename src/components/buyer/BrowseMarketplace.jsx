@@ -5,7 +5,7 @@ import ProductDetailsModal from '../marketplace/ProductDetailsModal';
 
 const CATEGORIES = ['All Categories', 'Books', 'Calculators', 'Electronics', 'Bicycles', 'Lab Equipment', 'Hostel Essentials', 'Stationery', 'Furniture', 'Miscellaneous'];
 const CONDITIONS = ['All Conditions', 'New', 'Like New', 'Good', 'Fair'];
-const SORTS = ['Newest First', 'Oldest First', 'Price Low to High', 'Price High to Low', 'Most Viewed', 'Most Wishlisted'];
+const SORTS = ['Newest First', 'Oldest First', 'Price Low to High', 'Price High to Low', 'Most Wishlisted'];
 
 const DUMMY_PRODUCTS = [
   {
@@ -166,7 +166,7 @@ const DUMMY_PRODUCTS = [
   }
 ];
 
-const BrowseMarketplace = () => {
+const BrowseMarketplace = ({ setActiveTab }) => {
   const [products, setProducts] = useState([]);
   const [stats, setStats] = useState({});
   const [trending, setTrending] = useState([]);
@@ -221,7 +221,7 @@ const BrowseMarketplace = () => {
       switch (sort) {
         case 'Price Low to High': filtered.sort((a,b) => a.price - b.price); break;
         case 'Price High to Low': filtered.sort((a,b) => b.price - a.price); break;
-        case 'Most Viewed': filtered.sort((a,b) => b.views - a.views); break;
+
         case 'Most Wishlisted': filtered.sort((a,b) => b.wishlistCount - a.wishlistCount); break;
         case 'Oldest First': filtered.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)); break;
         case 'Newest First': 
@@ -248,8 +248,11 @@ const BrowseMarketplace = () => {
   };
 
   useEffect(() => {
-    fetchMarketplaceData();
-  }, [category, condition, sort, page]); // Search triggered manually or debounced
+    const timer = setTimeout(() => {
+      fetchMarketplaceData();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search, category, condition, sort, page]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -275,7 +278,10 @@ const BrowseMarketplace = () => {
             <input 
               type="text" 
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
               placeholder="Search products, brands, or items..." 
               className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-theme-maroon focus:ring-2 focus:ring-theme-maroon/20 outline-none transition-all font-medium"
             />
@@ -339,43 +345,8 @@ const BrowseMarketplace = () => {
             </div>
           )}
           
-          {/* Price Drops (Simulated by filtering products with originalPrice) */}
-          {products.filter(p => p.originalPrice).length > 0 && (
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <span className="text-red-500">📉</span> Price Drop Alerts
-                </h2>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {products.filter(p => p.originalPrice).slice(0, 4).map(product => (
-                  <ProductCard 
-                    key={product._id} 
-                    product={product} 
-                    onViewDetails={(p) => setSelectedProduct(p)} 
-                    onWishlist={(id) => console.log('Wishlist', id)} 
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-          
-          {/* Most Viewed (Simulated by sorting products by views) */}
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-slate-900">Most Viewed Products</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[...products].sort((a,b) => b.views - a.views).slice(0, 4).map(product => (
-                <ProductCard 
-                  key={product._id} 
-                  product={product} 
-                  onViewDetails={(p) => setSelectedProduct(p)} 
-                  onWishlist={(id) => console.log('Wishlist', id)} 
-                />
-              ))}
-            </div>
-          </div>
+
+
         </div>
       )}
 
@@ -458,11 +429,14 @@ const BrowseMarketplace = () => {
         )}
       </div>
 
-      <ProductDetailsModal 
-        product={selectedProduct} 
-        isOpen={!!selectedProduct} 
-        onClose={() => setSelectedProduct(null)} 
-      />
+      {selectedProduct && (
+        <ProductDetailsModal 
+          product={selectedProduct} 
+          isOpen={!!selectedProduct} 
+          onClose={() => setSelectedProduct(null)} 
+          setActiveTab={setActiveTab}
+        />
+      )}
     </div>
   );
 };

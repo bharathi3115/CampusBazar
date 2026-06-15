@@ -18,6 +18,7 @@ const productSchema = new mongoose.Schema({
     meetingPoint: { type: String }
   },
   seller: {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     name: { type: String, required: true },
     rating: { type: Number, default: 0 },
     verified: { type: Boolean, default: false },

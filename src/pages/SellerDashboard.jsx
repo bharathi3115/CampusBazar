@@ -102,12 +102,12 @@ const SellerDashboard = () => {
                 onClick={() => setShowRoleMenu(!showRoleMenu)}
               >
                 <img 
-                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email || 'John'}`} 
+                  src={user?.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email || 'John'}`} 
                   alt="Profile" 
-                  className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200"
+                  className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 object-cover"
                 />
                 <div className="hidden sm:block">
-                  <p className="text-sm font-bold text-slate-900">{user?.email || 'John Doe'}</p>
+                  <p className="text-sm font-bold text-slate-900">{user?.name || user?.email || 'John Doe'}</p>
                   <p className="text-xs text-slate-500 font-medium capitalize flex items-center gap-1">
                     Role: {role || 'Seller'} <ChevronDown className="w-3 h-3" />
                   </p>

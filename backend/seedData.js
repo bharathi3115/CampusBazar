@@ -4,6 +4,27 @@ import { Purchase } from './models/Purchase.js';
 
 export const seedDatabase = async () => {
   try {
+    const userCount = await User.countDocuments();
+    let defaultBuyer, defaultSeller;
+    if (userCount === 0) {
+      defaultBuyer = await User.create({
+        email: 'buyer@campusbazar.com',
+        name: 'Demo Buyer',
+        role: 'buyer'
+      });
+      defaultSeller = await User.create({
+        email: 'seller@campusbazar.com',
+        name: 'Demo Seller',
+        role: 'seller'
+      });
+    } else {
+      defaultBuyer = await User.findOne({ role: 'buyer' });
+      defaultSeller = await User.findOne({ role: 'seller' });
+      if (!defaultSeller) {
+        defaultSeller = await User.create({ email: 'seller@campusbazar.com', name: 'Demo Seller', role: 'seller' });
+      }
+    }
+
     const productCount = await Product.countDocuments();
     if (productCount === 0) {
       console.log('Seeding initial marketplace data...');
@@ -16,7 +37,7 @@ export const seedDatabase = async () => {
           category: 'Books',
           condition: 'Good',
           img: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=400&fit=crop',
-          seller: { name: 'Alice W.', rating: 4.8, verified: true, listingsCount: 5 },
+          seller: { userId: defaultSeller._id, name: 'Alice W.', rating: 4.8, verified: true, listingsCount: 5 },
           views: 120,
           wishlistCount: 15
         },
@@ -27,7 +48,7 @@ export const seedDatabase = async () => {
           category: 'Calculators',
           condition: 'Like New',
           img: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?q=80&w=400&h=400&fit=crop',
-          seller: { name: 'Emma S.', rating: 4.9, verified: true, listingsCount: 12 },
+          seller: { userId: defaultSeller._id, name: 'Emma S.', rating: 4.9, verified: true, listingsCount: 12 },
           views: 340,
           wishlistCount: 42
         },
@@ -37,7 +58,7 @@ export const seedDatabase = async () => {
           category: 'Hostel Essentials',
           condition: 'Fair',
           img: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=400&h=400&fit=crop',
-          seller: { name: 'David K.', rating: 4.2, verified: false, listingsCount: 2 },
+          seller: { userId: defaultSeller._id, name: 'David K.', rating: 4.2, verified: false, listingsCount: 2 },
           views: 89,
           wishlistCount: 5
         },
@@ -47,7 +68,7 @@ export const seedDatabase = async () => {
           category: 'Electronics',
           condition: 'New',
           img: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=400&h=400&fit=crop',
-          seller: { name: 'Sarah M.', rating: 5.0, verified: true, listingsCount: 8 },
+          seller: { userId: defaultSeller._id, name: 'Sarah M.', rating: 5.0, verified: true, listingsCount: 8 },
           views: 210,
           wishlistCount: 28
         },
@@ -57,7 +78,7 @@ export const seedDatabase = async () => {
           category: 'Lab Equipment',
           condition: 'Good',
           img: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?q=80&w=400&h=400&fit=crop',
-          seller: { name: 'Prof. Miller', rating: 4.9, verified: true, listingsCount: 24 },
+          seller: { userId: defaultSeller._id, name: 'Prof. Miller', rating: 4.9, verified: true, listingsCount: 24 },
           views: 450,
           wishlistCount: 55
         },
@@ -67,7 +88,7 @@ export const seedDatabase = async () => {
           category: 'Bicycles',
           condition: 'Like New',
           img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=400&h=400&fit=crop',
-          seller: { name: 'Mike T.', rating: 4.5, verified: false, listingsCount: 1 },
+          seller: { userId: defaultSeller._id, name: 'Mike T.', rating: 4.5, verified: false, listingsCount: 1 },
           views: 520,
           wishlistCount: 65
         },
@@ -78,7 +99,7 @@ export const seedDatabase = async () => {
           category: 'Furniture',
           condition: 'Good',
           img: 'https://images.unsplash.com/photo-1593062096033-9a26b09da705?q=80&w=400&h=400&fit=crop',
-          seller: { name: 'John D.', rating: 4.7, verified: true, listingsCount: 4 },
+          seller: { userId: defaultSeller._id, name: 'John D.', rating: 4.7, verified: true, listingsCount: 4 },
           views: 180,
           wishlistCount: 20
         },
@@ -88,26 +109,17 @@ export const seedDatabase = async () => {
           category: 'Books',
           condition: 'Good',
           img: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=400&fit=crop',
-          seller: { name: 'Rachel G.', rating: 4.6, verified: false, listingsCount: 3 },
+          seller: { userId: defaultSeller._id, name: 'Rachel G.', rating: 4.6, verified: false, listingsCount: 3 },
           views: 75,
           wishlistCount: 8
         }
       ];
 
       await Product.insertMany(sampleProducts);
-      
-      const userCount = await User.countDocuments();
-      if (userCount === 0) {
-        await User.create({
-          email: 'buyer@campusbazar.com',
-          name: 'Demo Buyer',
-          role: 'buyer'
-        });
-      }
       console.log('Seeding initial products completed.');
     }
     
-    let defaultBuyer = await User.findOne({ email: 'buyer@campusbazar.com' });
+    defaultBuyer = await User.findOne({ email: 'buyer@campusbazar.com' });
     if (!defaultBuyer) {
       defaultBuyer = await User.create({
         email: 'buyer@campusbazar.com',

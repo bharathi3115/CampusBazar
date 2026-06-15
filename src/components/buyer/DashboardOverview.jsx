@@ -5,14 +5,18 @@ import {
 } from 'lucide-react';
 import RecentPurchases from './RecentPurchases';
 import { useWishlist } from '../../context/WishlistContext';
+import { useAuth } from '../../context/AuthContext';
 
 const DashboardOverview = ({ setActiveTab }) => {
   const { wishlist } = useWishlist();
+  const { user } = useAuth();
+  const firstName = user?.name ? user.name.split(' ')[0] : 'User';
+
   return (
     <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
       {/* Welcome & Stats Row */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 mb-1">Welcome back, John! 👋</h1>
+        <h1 className="text-2xl font-bold text-slate-900 mb-1">Welcome back, {firstName}! 👋</h1>
         <p className="text-slate-500 font-medium mb-6">Here's what's happening in your campus marketplace today.</p>
         
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">

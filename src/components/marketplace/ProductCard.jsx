@@ -25,11 +25,6 @@ const ProductCard = ({ product, onViewDetails, onWishlist }) => {
               New
             </span>
           )}
-          {product.originalPrice && (
-            <span className="bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow-sm">
-              Price Drop
-            </span>
-          )}
         </div>
         {/* Quick Actions (Hover) */}
         <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2">
@@ -67,9 +62,6 @@ const ProductCard = ({ product, onViewDetails, onWishlist }) => {
         
         <div className="flex items-end gap-2 mb-4">
           <span className="text-xl font-black text-slate-900">₹{product.price}</span>
-          {product.originalPrice && (
-            <span className="text-sm font-medium text-slate-400 line-through mb-0.5">₹{product.originalPrice}</span>
-          )}
         </div>
 
         {/* Seller Info */}
