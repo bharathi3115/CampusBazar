@@ -25,13 +25,10 @@ const AdminDashboard = () => {
   };
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard Overview', icon: <LayoutDashboard className="w-5 h-5" /> },
+    { id: 'dashboard', label: 'Overview', icon: <LayoutDashboard className="w-5 h-5" /> },
     { id: 'users', label: 'User Management', icon: <Users className="w-5 h-5" /> },
-    { id: 'listings', label: 'Listing Management', icon: <ShoppingBag className="w-5 h-5" /> },
-    { id: 'categories', label: 'Categories', icon: <Layers className="w-5 h-5" /> },
     { id: 'reports', label: 'Reports', icon: <AlertTriangle className="w-5 h-5" /> },
     { id: 'analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5" /> },
-
     { id: 'verifications', label: 'Verifications', icon: <ShieldCheck className="w-5 h-5" /> },
     { id: 'settings', label: 'Settings', icon: <Settings className="w-5 h-5" /> },
   ];

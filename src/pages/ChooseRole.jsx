@@ -1,82 +1,53 @@
 import React from 'react';
-import { ShoppingCart, Store, Check } from 'lucide-react';
+import { ShoppingCart, Store } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const ChooseRole = () => {
   const { selectRole } = useAuth();
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-6 font-sans text-slate-900">
-      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col p-6 sm:p-8 lg:p-10">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold text-slate-900 mb-2 tracking-tight">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-theme-maroon/5 flex items-center justify-center p-4 sm:p-6 font-sans text-slate-900">
+      
+      {/* Outer subtle container */}
+      <div className="w-full max-w-4xl bg-white/80 backdrop-blur-xl border border-slate-200/60 rounded-[2rem] shadow-xl shadow-slate-200/50 flex flex-col p-8 sm:p-12 lg:p-16">
+        
+        <div className="text-center mb-12 sm:mb-16 mt-4">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
             Welcome to Campus<span className="text-theme-maroon">Bazaar</span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-500 font-medium max-w-2xl mx-auto">
+          <p className="text-lg text-slate-500 font-medium max-w-xl mx-auto">
             How would you like to use CampusBazaar today? You can always switch your role later from your dashboard.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto w-full">
           
           {/* Buyer Card */}
-          <div className="group relative bg-white border-2 border-slate-100 rounded-3xl p-6 sm:p-8 hover:border-theme-maroon hover:shadow-2xl hover:shadow-theme-maroon/20 transition-all duration-300 flex flex-col h-full transform hover:-translate-y-2 cursor-pointer"
+          <div className="group relative bg-white border border-slate-200 rounded-3xl p-8 hover:border-theme-maroon hover:shadow-2xl hover:shadow-theme-maroon/10 transition-all duration-300 flex flex-col h-full transform hover:-translate-y-1.5 cursor-pointer"
                onClick={() => selectRole('buyer')}>
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-theme-maroon/10 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-theme-maroon group-hover:text-white text-theme-maroon transition-colors duration-300">
-              <ShoppingCart className="w-6 h-6 sm:w-8 sm:h-8" />
+            <div className="w-16 h-16 bg-theme-maroon/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-theme-maroon group-hover:text-white text-theme-maroon transition-colors duration-300">
+              <ShoppingCart className="w-8 h-8" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2 sm:mb-3">Buyer</h2>
-            <p className="text-sm sm:text-base text-slate-500 mb-4 sm:mb-6 flex-grow">
+            <h2 className="text-2xl font-extrabold text-slate-900 mb-3">Buyer</h2>
+            <p className="text-base text-slate-500 mb-8 flex-grow">
               Browse campus listings, save favorites, contact sellers, and purchase student essentials.
             </p>
-            <ul className="space-y-3 mb-6 sm:mb-8">
-              {[
-                'Marketplace',
-                'Wishlist Items',
-                'Contact Sellers',
-                'Purchase History',
-                'Recommended Products'
-              ].map((feature, idx) => (
-                <li key={idx} className="flex items-center gap-3 text-slate-700 font-medium text-sm sm:text-base">
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 flex-shrink-0">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </div>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <button className="w-full bg-slate-100 text-slate-700 font-bold py-3 sm:py-4 px-6 rounded-xl group-hover:bg-theme-maroon group-hover:text-white transition-colors duration-300 text-base sm:text-lg shadow-sm">
+            <button className="w-full bg-slate-50 border border-slate-100 text-slate-700 font-bold py-3.5 px-6 rounded-xl group-hover:bg-theme-maroon group-hover:border-theme-maroon group-hover:text-white transition-all duration-300 text-lg shadow-sm">
               Continue as Buyer
             </button>
           </div>
 
           {/* Seller Card */}
-          <div className="group relative bg-white border-2 border-slate-100 rounded-3xl p-6 sm:p-8 hover:border-theme-dark-maroon hover:shadow-2xl hover:shadow-theme-dark-maroon/20 transition-all duration-300 flex flex-col h-full transform hover:-translate-y-2 cursor-pointer"
+          <div className="group relative bg-white border border-slate-200 rounded-3xl p-8 hover:border-theme-dark-maroon hover:shadow-2xl hover:shadow-theme-dark-maroon/10 transition-all duration-300 flex flex-col h-full transform hover:-translate-y-1.5 cursor-pointer"
                onClick={() => selectRole('seller')}>
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-theme-dark-maroon/10 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-theme-dark-maroon group-hover:text-white text-theme-dark-maroon transition-colors duration-300">
-              <Store className="w-6 h-6 sm:w-8 sm:h-8" />
+            <div className="w-16 h-16 bg-theme-dark-maroon/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-theme-dark-maroon group-hover:text-white text-theme-dark-maroon transition-colors duration-300">
+              <Store className="w-8 h-8" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2 sm:mb-3">Seller</h2>
-            <p className="text-sm sm:text-base text-slate-500 mb-4 sm:mb-6 flex-grow">
+            <h2 className="text-2xl font-extrabold text-slate-900 mb-3">Seller</h2>
+            <p className="text-base text-slate-500 mb-8 flex-grow">
               List products, manage inventory, respond to buyers, and track marketplace activity.
             </p>
-            <ul className="space-y-3 mb-6 sm:mb-8">
-              {[
-                'Post Listings',
-                'Manage Products',
-                'View Interested Buyers',
-                'Listing Analytics',
-                'Sales Activity'
-              ].map((feature, idx) => (
-                <li key={idx} className="flex items-center gap-3 text-slate-700 font-medium text-sm sm:text-base">
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 flex-shrink-0">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </div>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <button className="w-full bg-slate-100 text-slate-700 font-bold py-3 sm:py-4 px-6 rounded-xl group-hover:bg-theme-dark-maroon group-hover:text-white transition-colors duration-300 text-base sm:text-lg shadow-sm">
+            <button className="w-full bg-slate-50 border border-slate-100 text-slate-700 font-bold py-3.5 px-6 rounded-xl group-hover:bg-theme-dark-maroon group-hover:border-theme-dark-maroon group-hover:text-white transition-all duration-300 text-lg shadow-sm">
               Continue as Seller
             </button>
           </div>
@@ -88,4 +59,3 @@ const ChooseRole = () => {
 };
 
 export default ChooseRole;
-
