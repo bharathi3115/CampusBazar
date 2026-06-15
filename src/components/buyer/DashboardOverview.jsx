@@ -89,90 +89,14 @@ const DashboardOverview = ({ setActiveTab }) => {
         </div>
       </div>
 
-      {/* Recently Viewed Items - Full Width */}
-      <div className="mt-6 sm:mt-8 w-full">
-        <div className="mb-6">
-          <h3 className="font-bold text-slate-900 text-lg sm:text-xl">Recently Viewed Items</h3>
-          <p className="text-sm font-medium text-slate-500 mt-1">Quickly access products you've recently explored.</p>
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
-          {[
-            { title: 'Physics Book', category: 'Books', price: '₹20', seller: 'John D.', time: 'Viewed 2 hours ago' },
-            { title: 'Scientific Calculator', category: 'Electronics', price: '₹15', seller: 'Emma S.', time: 'Viewed 3 hours ago' },
-            { title: 'Bicycle', category: 'Transport', price: '₹80', seller: 'Mike T.', time: 'Viewed 1 day ago' },
-            { title: 'Laptop Stand', category: 'Accessories', price: '₹12', seller: 'Sarah M.', time: 'Viewed 2 days ago' },
-            { title: 'Lab Coat', category: 'Apparel', price: '₹18', seller: 'Prof. Miller', time: 'Viewed 2 days ago' },
-            { title: 'Engineering Graphics Textbook', category: 'Books', price: '₹25', seller: 'Alice W.', time: 'Viewed 3 days ago' }
-          ].map((item, i) => (
-            <div key={i} className="bg-white rounded-xl border border-slate-200 shadow-sm hover:border-theme-maroon/50 hover:shadow-md transition-all duration-300 p-4 flex flex-col group relative cursor-pointer">
-              <button className="absolute top-4 right-4 text-slate-300 hover:text-rose-500 transition-colors">
-                <Heart className="w-4 h-4" />
-              </button>
-              <div className="pr-8">
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-bold text-slate-900 text-sm truncate">{item.title}</h4>
-                </div>
-                <p className="text-xs font-medium text-slate-600 mb-3">
-                  <span className="font-bold text-theme-maroon">{item.price}</span> <span className="mx-1 text-slate-300">•</span> {item.seller}
-                </p>
-              </div>
-              <div className="mt-auto flex items-center justify-between pt-3 border-t border-slate-100">
-                <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                  <Clock className="w-3.5 h-3.5" /> <span>{item.time}</span>
-                </div>
-                <button className="text-xs font-bold text-slate-400 group-hover:text-theme-maroon transition-colors flex items-center gap-1">
-                  View Details <ChevronRight className="w-3 h-3" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+
 
       {/* Recent Purchases */}
       <div className="mt-6 sm:mt-8 w-full">
         <RecentPurchases />
       </div>
 
-      {/* Recent Messages - Wider Horizontal Layout */}
-      <div className="mt-6 sm:mt-8 bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm w-full">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-bold text-slate-900 text-lg sm:text-xl">Recent Messages</h3>
-          <span className="text-sm font-bold text-white bg-red-500 px-3 py-1 rounded-full shadow-sm shadow-red-500/20">3 New</span>
-        </div>
-        <div className="space-y-4">
-          {[
-            { name: 'Sarah M.', item: 'Calculus Book', msg: 'Is this still available?', time: '10m ago', unread: true },
-            { name: 'David K.', item: 'Bicycle', msg: 'Can you do $40?', time: '2h ago', unread: false },
-            { name: 'Prof. Miller', item: 'Lab Coat', msg: 'Sure, meet me at the lab.', time: '1d ago', unread: false }
-          ].map((chat, i) => (
-            <div key={i} className={`flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-xl border ${chat.unread ? 'border-theme-maroon/30 bg-theme-maroon/5' : 'border-slate-100 bg-slate-50 hover:bg-white'} hover:border-theme-maroon/50 hover:shadow-md transition-all cursor-pointer group`}>
-              <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${chat.name}`} className="w-12 h-12 rounded-full bg-white border-2 border-white shadow-sm flex-shrink-0" alt="" />
-              <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-6">
-                <div className="flex flex-col min-w-0 sm:w-1/4">
-                  <h4 className={`text-base ${chat.unread ? 'font-bold text-slate-900' : 'font-bold text-slate-700'} group-hover:text-theme-maroon transition-colors truncate`}>{chat.name}</h4>
-                  <span className="text-xs font-bold text-theme-maroon truncate">[{chat.item}]</span>
-                </div>
-                <p className={`text-sm flex-1 truncate ${chat.unread ? 'font-bold text-slate-800' : 'font-medium text-slate-500'}`}>
-                  {chat.msg}
-                </p>
-                <div className="flex items-center justify-between sm:justify-end gap-3 flex-shrink-0 sm:w-24">
-                  <span className="text-xs font-bold text-slate-400 whitespace-nowrap">{chat.time}</span>
-                  {chat.unread ? (
-                    <span className="w-2.5 h-2.5 bg-red-500 rounded-full shadow-sm shadow-red-500/50"></span>
-                  ) : (
-                    <span className="w-2.5 h-2.5"></span>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <button className="w-full mt-6 py-3.5 bg-slate-50 border border-slate-200 text-sm font-bold text-slate-700 hover:text-theme-maroon hover:bg-theme-maroon/5 hover:border-theme-maroon/20 rounded-xl transition-all shadow-sm">
-          View All Messages
-        </button>
-      </div>
+
       
     </div>
   );

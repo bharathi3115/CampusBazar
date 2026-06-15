@@ -86,7 +86,7 @@ const BuyerDashboard = () => {
           <div className="flex flex-col items-center justify-center gap-1 flex-1">
             <div className="flex items-center justify-center gap-2">
               <ShoppingBag className="w-7 h-7 text-theme-maroon" />
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-theme-maroon tracking-tight">Buyer Dashboard</h1>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-theme-maroon tracking-tight">Buyer</h1>
             </div>
             <p className="text-sm font-medium text-slate-500 text-center">Discover items, track purchases, and chat with sellers.</p>
           </div>
