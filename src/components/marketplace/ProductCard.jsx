@@ -2,7 +2,7 @@ import React from 'react';
 import { Heart, Eye, MessageSquare, Flag, Share2, ShieldCheck, MapPin, Clock } from 'lucide-react';
 import { useWishlist } from '../../context/WishlistContext';
 
-const ProductCard = ({ product, onViewDetails, onWishlist }) => {
+const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
   const { isWishlisted, toggleWishlist } = useWishlist();
   const wishlisted = isWishlisted(product._id);
 
@@ -19,13 +19,18 @@ const ProductCard = ({ product, onViewDetails, onWishlist }) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-2">
+        <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
           {product.condition === 'New' && (
             <span className="bg-green-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow-sm">
               New
             </span>
           )}
         </div>
+        {product.status === 'Sold' && (
+          <div className="absolute inset-0 bg-slate-900/50 flex items-center justify-center z-10 backdrop-blur-[2px]">
+            <span className="bg-red-500 text-white font-black px-4 py-2 rounded-xl text-lg shadow-xl rotate-[-12deg] border-2 border-white">SOLD</span>
+          </div>
+        )}
         {/* Quick Actions (Hover) */}
         <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2">
           <button 
@@ -83,8 +88,9 @@ const ProductCard = ({ product, onViewDetails, onWishlist }) => {
             </div>
           </div>
           <button 
-            onClick={(e) => { e.stopPropagation(); }}
+            onClick={(e) => { e.stopPropagation(); if (onMessage) onMessage(product); }}
             className="p-2 text-theme-maroon bg-theme-maroon/5 hover:bg-theme-maroon hover:text-white rounded-lg transition-colors"
+            title="Message Seller"
           >
             <MessageSquare className="w-4 h-4" />
           </button>

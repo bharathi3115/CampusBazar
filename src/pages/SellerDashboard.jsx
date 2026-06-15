@@ -13,6 +13,7 @@ import SellerMessages from '../components/seller/SellerMessages';
 
 const SellerDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [editingProduct, setEditingProduct] = useState(null);
   const [showRoleMenu, setShowRoleMenu] = useState(false);
   const { user, role, logout, switchRole } = useAuth();
 
@@ -45,7 +46,10 @@ const SellerDashboard = () => {
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  if (item.id !== 'post') setEditingProduct(null);
+                }}
                 className={`w-full flex items-center justify-between p-3 rounded-xl transition-all ${
                   isActive 
                   ? 'bg-theme-maroon/10 text-theme-maroon font-bold' 
@@ -84,7 +88,7 @@ const SellerDashboard = () => {
           <div className="flex flex-col items-center justify-center gap-1 flex-1">
             <div className="flex items-center justify-center gap-2">
               <Store className="w-7 h-7 text-theme-maroon" />
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-theme-maroon tracking-tight">Seller Dashboard</h1>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-theme-maroon tracking-tight">Seller</h1>
             </div>
             <p className="text-sm font-medium text-slate-500 text-center">Manage your items, track sales, and connect with buyers.</p>
           </div>
@@ -138,8 +142,8 @@ const SellerDashboard = () => {
         {/* Dashboard Content Scrollable Area */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           {activeTab === 'dashboard' && <SellerOverview setActiveTab={setActiveTab} />}
-          {activeTab === 'post' && <PostListing setActiveTab={setActiveTab} />}
-          {activeTab === 'listings' && <MyListings />}
+          {activeTab === 'post' && <PostListing setActiveTab={setActiveTab} editingProduct={editingProduct} setEditingProduct={setEditingProduct} />}
+          {activeTab === 'listings' && <MyListings setActiveTab={setActiveTab} setEditingProduct={setEditingProduct} />}
           {activeTab === 'buyers' && <InterestedBuyers />}
           {activeTab === 'messages' && <SellerMessages />}
         </div>

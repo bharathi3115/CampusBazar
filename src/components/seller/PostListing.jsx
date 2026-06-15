@@ -3,7 +3,7 @@ import { Upload, X, MapPin, Tag, CheckCircle, Info, ChevronRight, Image as Image
 import Webcam from 'react-webcam';
 import { useAuth } from '../../context/AuthContext';
 
-const PostListing = ({ setActiveTab }) => {
+const PostListing = ({ setActiveTab, editingProduct, setEditingProduct }) => {
   const { user } = useAuth();
   
   const [formData, setFormData] = useState({
@@ -16,7 +16,6 @@ const PostListing = ({ setActiveTab }) => {
     negotiable: false,
     condition: 'Good',
     pickupDetails: {
-      college: '',
       hostel: '',
       location: '',
       meetingPoint: ''
@@ -33,6 +32,44 @@ const PostListing = ({ setActiveTab }) => {
   
   const fileInputRef = useRef(null);
   const webcamRef = useRef(null);
+
+  React.useEffect(() => {
+    if (editingProduct) {
+      setFormData({
+        title: editingProduct.title || '',
+        category: editingProduct.category || 'Books',
+        description: editingProduct.description || '',
+        department: editingProduct.department || '',
+        price: editingProduct.price || '',
+        originalPrice: editingProduct.originalPrice || '',
+        negotiable: editingProduct.negotiable || false,
+        condition: editingProduct.condition || 'Good',
+        pickupDetails: {
+          hostel: editingProduct.pickupDetails?.hostel || '',
+          location: editingProduct.pickupDetails?.location || '',
+          meetingPoint: editingProduct.pickupDetails?.meetingPoint || ''
+        }
+      });
+      setImages(editingProduct.images || (editingProduct.img ? [editingProduct.img] : []));
+    } else {
+      setFormData({
+        title: '',
+        category: 'Books',
+        description: '',
+        department: '',
+        price: '',
+        originalPrice: '',
+        negotiable: false,
+        condition: 'Good',
+        pickupDetails: {
+          hostel: '',
+          location: '',
+          meetingPoint: ''
+        }
+      });
+      setImages([]);
+    }
+  }, [editingProduct]);
 
   const categories = ['Books', 'Calculators', 'Electronics', 'Bicycles', 'Lab Equipment', 'Hostel Essentials', 'Stationery', 'Furniture', 'Others'];
   const conditions = ['New', 'Like New', 'Good', 'Fair'];
@@ -141,7 +178,8 @@ const PostListing = ({ setActiveTab }) => {
         originalPrice: formData.originalPrice ? Number(formData.originalPrice) : undefined,
         images, // These are still base64 strings right now
         seller: {
-          name: user?.email ? user.email.split('@')[0] : 'Seller',
+          userId: user?._id,
+          name: user?.name || (user?.email ? user.email.split('@')[0] : 'Seller'),
           rating: 0,
           verified: false,
           listingsCount: 1,
@@ -150,23 +188,47 @@ const PostListing = ({ setActiveTab }) => {
         status: isDraft ? 'Draft' : 'Active'
       };
 
-      const response = await fetch('http://localhost:5000/api/marketplace/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create listing');
+      let response;
+      if (editingProduct) {
+        response = await fetch(`http://localhost:5000/api/marketplace/products/${editingProduct._id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        response = await fetch('http://localhost:5000/api/marketplace/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
       }
 
-      alert(isDraft ? 'Draft saved successfully!' : 'Listing published successfully!');
+      if (!response.ok) {
+        throw new Error(editingProduct ? 'Failed to update listing' : 'Failed to create listing');
+      }
+
+      alert(isDraft ? 'Draft saved successfully!' : (editingProduct ? 'Listing Updated Successfully' : 'Listing Published Successfully'));
+      setFormData({
+        title: '',
+        category: 'Books',
+        description: '',
+        department: '',
+        price: '',
+        originalPrice: '',
+        negotiable: false,
+        condition: 'Good',
+        pickupDetails: {
+          hostel: '',
+          location: '',
+          meetingPoint: ''
+        }
+      });
+      setImages([]);
+      if (setEditingProduct) setEditingProduct(null);
       setActiveTab('listings');
     } catch (error) {
       console.error('Error posting listing:', error);
-      alert('Failed to post listing. Please try again.');
+      alert('Failed to save listing. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -174,9 +236,23 @@ const PostListing = ({ setActiveTab }) => {
 
   return (
     <div className="max-w-7xl mx-auto pb-12 relative">
-      <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Post New Listing</h1>
-        <p className="text-slate-500 mt-2 font-medium">Create a compelling listing to sell your item quickly.</p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            {editingProduct ? 'Edit Listing' : 'Post New Listing'}
+          </h1>
+          <p className="text-slate-500 mt-2 font-medium">
+            {editingProduct ? 'Update your listing details below.' : 'Create a compelling listing to sell your item quickly.'}
+          </p>
+        </div>
+        {editingProduct && (
+          <button 
+            onClick={() => { setEditingProduct(null); setActiveTab('listings'); }} 
+            className="px-4 py-2 text-sm font-bold text-slate-500 hover:text-slate-900 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all shadow-sm"
+          >
+            Cancel Edit
+          </button>
+        )}
       </div>
 
       {/* Camera Modal Overlay */}
@@ -439,13 +515,13 @@ const PostListing = ({ setActiveTab }) => {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1.5">College Name</label>
+                <label className="block text-sm font-bold text-slate-700 mb-1.5">Meeting Point</label>
                 <input 
                   type="text" 
-                  name="pickupDetails.college"
-                  value={formData.pickupDetails.college}
+                  name="pickupDetails.meetingPoint"
+                  value={formData.pickupDetails.meetingPoint}
                   onChange={handleInputChange}
-                  placeholder="e.g., NIT Trichy" 
+                  placeholder="e.g., Main Gate, Library Cafe" 
                   className="w-full bg-slate-50 border border-slate-200 focus:border-theme-maroon focus:ring-2 focus:ring-theme-maroon/20 rounded-xl px-4 py-2.5 outline-none transition-all font-medium"
                 />
               </div>
@@ -457,17 +533,6 @@ const PostListing = ({ setActiveTab }) => {
                   value={formData.pickupDetails.hostel}
                   onChange={handleInputChange}
                   placeholder="e.g., Garnet A" 
-                  className="w-full bg-slate-50 border border-slate-200 focus:border-theme-maroon focus:ring-2 focus:ring-theme-maroon/20 rounded-xl px-4 py-2.5 outline-none transition-all font-medium"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-sm font-bold text-slate-700 mb-1.5">Meeting Point</label>
-                <input 
-                  type="text" 
-                  name="pickupDetails.meetingPoint"
-                  value={formData.pickupDetails.meetingPoint}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Main Gate, Library Cafe" 
                   className="w-full bg-slate-50 border border-slate-200 focus:border-theme-maroon focus:ring-2 focus:ring-theme-maroon/20 rounded-xl px-4 py-2.5 outline-none transition-all font-medium"
                 />
               </div>
@@ -530,7 +595,7 @@ const PostListing = ({ setActiveTab }) => {
                   <div className="space-y-2 pt-4 border-t border-slate-100">
                     <div className="flex items-center text-xs text-slate-500 font-medium">
                       <MapPin className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
-                      <span className="truncate">{formData.pickupDetails.college || 'College'} • {formData.pickupDetails.meetingPoint || 'Meeting Point'}</span>
+                      <span className="truncate">{formData.pickupDetails.meetingPoint || 'Meeting Point'}</span>
                     </div>
                   </div>
                 </div>
@@ -561,26 +626,13 @@ const PostListing = ({ setActiveTab }) => {
             {/* 8. Actions */}
             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-3">
               <button 
-                onClick={(e) => handleSubmit(e, false)}
+                onClick={handleSubmit} 
                 disabled={isSubmitting}
-                className="w-full bg-theme-maroon text-white font-bold py-3.5 rounded-xl shadow-lg shadow-theme-maroon/30 hover:bg-theme-dark-maroon transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                className="w-full bg-theme-maroon text-white font-bold text-lg py-4 px-6 rounded-xl hover:bg-theme-dark-maroon transition-all shadow-lg shadow-theme-maroon/20 flex justify-center items-center gap-2 mb-4 disabled:opacity-50"
               >
-                {isSubmitting ? 'Publishing...' : 'Publish Listing'}
+                {isSubmitting ? <RefreshCw className="w-5 h-5 animate-spin" /> : null}
+                {editingProduct ? 'Save Changes' : 'Publish Listing'}
               </button>
-              <div className="grid grid-cols-2 gap-3">
-                <button 
-                  onClick={(e) => handleSubmit(e, true)}
-                  disabled={isSubmitting}
-                  className="bg-slate-50 text-slate-700 font-bold py-3 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors disabled:opacity-70"
-                >
-                  Save Draft
-                </button>
-                <button 
-                  className="bg-slate-50 text-slate-700 font-bold py-3 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors flex items-center justify-center gap-1"
-                >
-                  <Eye className="w-4 h-4" /> Preview Full
-                </button>
-              </div>
             </div>
 
           </div>

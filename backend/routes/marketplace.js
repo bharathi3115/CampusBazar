@@ -286,4 +286,64 @@ router.get('/seller/sales', async (req, res) => {
   }
 });
 
+// Get seller's products
+router.get('/seller/:userId/products', async (req, res) => {
+  try {
+    const products = await Product.find({ 'seller.userId': req.params.userId }).sort({ createdAt: -1 });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Update product (e.g. mark as sold, or full edit)
+router.put('/products/:id', async (req, res) => {
+  try {
+    const updateData = { ...req.body };
+    
+    // Upload new base64 images to Cloudinary
+    if (updateData.images && updateData.images.length > 0) {
+      if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+        const uploadPromises = updateData.images.map(async (imgBase64) => {
+          // If it's already a URL, skip upload
+          if (imgBase64.startsWith('http')) return imgBase64;
+          
+          try {
+            const uploadResponse = await cloudinary.uploader.upload(imgBase64, {
+              folder: 'campusbazaar_products'
+            });
+            return uploadResponse.secure_url;
+          } catch (uploadErr) {
+            console.error('Cloudinary upload error:', uploadErr);
+            return imgBase64; // Fallback to base64
+          }
+        });
+        updateData.images = await Promise.all(uploadPromises);
+      }
+      
+      // Update the main img reference if images changed
+      if (updateData.images.length > 0) {
+        updateData.img = updateData.images[0];
+      }
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    if (!updatedProduct) return res.status(404).json({ message: 'Product not found' });
+    res.json(updatedProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Delete product
+router.delete('/products/:id', async (req, res) => {
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+    if (!deletedProduct) return res.status(404).json({ message: 'Product not found' });
+    res.json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;

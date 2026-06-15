@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, SlidersHorizontal, X } from 'lucide-react';
 import ProductCard from '../marketplace/ProductCard';
 import ProductDetailsModal from '../marketplace/ProductDetailsModal';
+import { useAuth } from '../../context/AuthContext';
 
 const CATEGORIES = ['All Categories', 'Books', 'Calculators', 'Electronics', 'Bicycles', 'Lab Equipment', 'Hostel Essentials', 'Stationery', 'Furniture', 'Miscellaneous'];
 const CONDITIONS = ['All Conditions', 'New', 'Like New', 'Good', 'Fair'];
@@ -172,6 +173,7 @@ const BrowseMarketplace = ({ setActiveTab }) => {
   const [trending, setTrending] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const { user } = useAuth();
   
   // Filters
   const [search, setSearch] = useState('');
@@ -266,6 +268,29 @@ const BrowseMarketplace = ({ setActiveTab }) => {
     setCondition('All Conditions');
     setSort('Newest First');
     setPage(1);
+  };
+
+  const handleMessageSeller = async (product) => {
+    try {
+      const res = await fetch('http://localhost:5000/api/messages/conversation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          buyerId: user._id,
+          productId: product._id
+        })
+      });
+      if (res.ok) {
+        // Conversation created, switch to messages tab
+        setActiveTab('messages');
+      } else {
+        const error = await res.json();
+        alert(error.message || 'Failed to initiate chat.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Network error.');
+    }
   };
 
   return (
@@ -381,6 +406,7 @@ const BrowseMarketplace = ({ setActiveTab }) => {
                   fetch(`http://localhost:5000/api/marketplace/products/${p._id}`).catch(e => console.error(e));
                 }} 
                 onWishlist={(id) => console.log('Wishlist', id)} 
+                onMessage={handleMessageSeller}
               />
             ))}
           </div>
@@ -435,6 +461,7 @@ const BrowseMarketplace = ({ setActiveTab }) => {
           isOpen={!!selectedProduct} 
           onClose={() => setSelectedProduct(null)} 
           setActiveTab={setActiveTab}
+          onMessage={handleMessageSeller}
         />
       )}
     </div>

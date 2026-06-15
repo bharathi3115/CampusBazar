@@ -1,107 +1,108 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Package, Eye, Heart, Edit, Trash2, CheckCircle, Clock, Check, MoreVertical } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
-const MyListings = () => {
-  const [listings, setListings] = useState([
+const MyListings = ({ setActiveTab, setEditingProduct }) => {
+  const initialDummyData = [
     {
-      id: 1,
-      name: 'Engineering Graphics Textbook',
-      category: 'Books',
-      price: 250,
+      _id: 'd1',
+      title: 'Scientific Calculator fx-991EX',
+      category: 'Electronics',
+      price: 850,
       status: 'Active',
       views: 45,
       wishlistCount: 12,
-      postedDate: '2025-01-15',
-      image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=400&fit=crop'
+      createdAt: '2023-10-15T10:00:00Z',
+      img: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?q=80&w=200&h=200&fit=crop'
     },
     {
-      id: 2,
-      name: 'Data Structures Textbook',
+      _id: 'd2',
+      title: 'Engineering Drawing Board (Full Size)',
+      category: 'Equipment',
+      price: 400,
+      status: 'Pending',
+      views: 120,
+      wishlistCount: 8,
+      createdAt: '2023-10-12T14:30:00Z',
+      img: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=200&h=200&fit=crop'
+    },
+    {
+      _id: 'd3',
+      title: 'Data Structures & Algorithms in Java',
       category: 'Books',
       price: 350,
-      status: 'Active',
-      views: 78,
-      wishlistCount: 22,
-      postedDate: '2025-01-20',
-      image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=400&fit=crop'
-    },
-    {
-      id: 3,
-      name: 'Casio Scientific Calculator',
-      category: 'Calculators',
-      price: 500,
-      status: 'Sold',
-      views: 120,
-      wishlistCount: 18,
-      postedDate: '2025-01-10',
-      image: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?q=80&w=400&h=400&fit=crop'
-    },
-    {
-      id: 4,
-      name: 'Physics Lab Coat',
-      category: 'Lab Equipment',
-      price: 300,
-      status: 'Active',
-      views: 85,
-      wishlistCount: 9,
-      postedDate: '2025-02-01',
-      image: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?q=80&w=400&h=400&fit=crop'
-    },
-    {
-      id: 5,
-      name: 'Mountain Bicycle',
-      category: 'Vehicles',
-      price: 3500,
       status: 'Sold',
       views: 210,
-      wishlistCount: 25,
-      postedDate: '2025-01-05',
-      image: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=400&h=400&fit=crop'
-    },
-    {
-      id: 6,
-      name: 'Laptop Cooling Pad',
-      category: 'Electronics',
-      price: 450,
-      status: 'Active',
-      views: 32,
-      wishlistCount: 4,
-      postedDate: '2025-02-10',
-      image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=400&h=400&fit=crop'
-    },
-    {
-      id: 7,
-      name: 'Drawing Board',
-      category: 'Stationery',
-      price: 700,
-      status: 'Pending',
-      views: 156,
-      wishlistCount: 30,
-      postedDate: '2025-01-25',
-      image: 'https://images.unsplash.com/photo-1593062096033-9a26b09da705?q=80&w=400&h=400&fit=crop'
-    },
-    {
-      id: 8,
-      name: 'Scientific Instruments Kit',
-      category: 'Lab Equipment',
-      price: 1200,
-      status: 'Active',
-      views: 64,
-      wishlistCount: 15,
-      postedDate: '2025-02-05',
-      image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=400&h=400&fit=crop'
+      wishlistCount: 0,
+      createdAt: '2023-10-01T09:15:00Z',
+      img: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=200&h=200&fit=crop'
     }
-  ]);
+  ];
+
+  const [listings, setListings] = useState(initialDummyData);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user?._id) {
+      fetchListings();
+    }
+  }, [user]);
+
+  const fetchListings = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/marketplace/seller/${user._id}/products`);
+      if (res.ok) {
+        const data = await res.json();
+        // Merge dummy data with actual backend data
+        setListings([...initialDummyData, ...data]);
+      }
+    } catch (err) {
+      console.error('Failed to fetch listings', err);
+    }
+  };
 
   const summary = {
     total: listings.length,
     active: listings.filter(l => l.status === 'Active').length,
     sold: listings.filter(l => l.status === 'Sold').length,
-    views: listings.reduce((sum, l) => sum + l.views, 0)
+    views: listings.reduce((sum, l) => sum + (l.views || 0), 0)
   };
 
-  const markAsSold = (id) => {
-    setListings(listings.map(l => l.id === id ? { ...l, status: 'Sold' } : l));
+  const markAsSold = async (id) => {
+    if (id.startsWith('d')) {
+      setListings(listings.map(l => l._id === id ? { ...l, status: 'Sold' } : l));
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:5000/api/marketplace/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'Sold' })
+      });
+      if (res.ok) {
+        setListings(listings.map(l => l._id === id ? { ...l, status: 'Sold' } : l));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const deleteListing = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this listing?')) return;
+    if (id.startsWith('d')) {
+      setListings(listings.filter(l => l._id !== id));
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:5000/api/marketplace/products/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        setListings(listings.filter(l => l._id !== id));
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const getStatusBadge = (status) => {
@@ -139,13 +140,13 @@ const MyListings = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {listings.map(item => (
-                <tr key={item.id} className="hover:bg-slate-50 transition-colors group">
+              {[...listings].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(item => (
+                <tr key={item._id} className="hover:bg-slate-50 transition-colors group">
                   <td className="p-4">
                     <div className="flex items-center gap-4">
-                      <img src={item.image} alt={item.name} className="w-16 h-16 rounded-lg object-cover border border-slate-200" />
+                      <img src={item.img || item.images?.[0] || 'https://via.placeholder.com/150'} alt={item.title} className="w-16 h-16 rounded-lg object-cover border border-slate-200" />
                       <div>
-                        <p className="font-bold text-slate-900 group-hover:text-theme-maroon transition-colors line-clamp-1">{item.name}</p>
+                        <p className="font-bold text-slate-900 group-hover:text-theme-maroon transition-colors line-clamp-1">{item.title}</p>
                         <p className="text-xs font-bold text-slate-400 mt-0.5">{item.category}</p>
                       </div>
                     </div>
@@ -158,18 +159,25 @@ const MyListings = () => {
                       <span className="flex items-center gap-1" title="Wishlist"><Heart className="w-4 h-4 text-rose-400"/> {item.wishlistCount}</span>
                     </div>
                   </td>
-                  <td className="p-4 text-sm font-medium text-slate-600">{new Date(item.postedDate).toLocaleDateString()}</td>
+                  <td className="p-4 text-sm font-medium text-slate-600">{new Date(item.createdAt).toLocaleDateString()}</td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       {item.status !== 'Sold' && (
-                        <button onClick={() => markAsSold(item.id)} className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors" title="Mark as Sold">
+                        <button onClick={() => markAsSold(item._id)} className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors" title="Mark as Sold">
                           <CheckCircle className="w-4 h-4" />
                         </button>
                       )}
-                      <button className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors" title="Edit">
+                      <button onClick={() => {
+                        if (item._id.startsWith('d')) {
+                          alert('Cannot edit dummy data. Post a real listing to try edit!');
+                          return;
+                        }
+                        setEditingProduct(item);
+                        setActiveTab('post');
+                      }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors" title="Edit">
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Delete">
+                      <button onClick={() => deleteListing(item._id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Delete">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>

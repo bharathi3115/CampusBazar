@@ -3,7 +3,7 @@ import { X, Heart, MessageSquare, Share2, Flag, ShieldCheck, MapPin, Clock, Eye,
 import { useWishlist } from '../../context/WishlistContext';
 import { useAuth } from '../../context/AuthContext';
 
-const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab }) => {
+const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab, onMessage }) => {
   const { isWishlisted, toggleWishlist } = useWishlist();
   const { user } = useAuth();
   if (!isOpen || !product) return null;
@@ -12,16 +12,9 @@ const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab }) => {
   
   const handleContactSeller = async () => {
     if (!user) return alert("Please login to message the seller");
-    try {
-      await fetch('http://localhost:5000/api/messages/conversation', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ buyerId: user._id, productId: product._id })
-      });
+    if (onMessage) {
+      await onMessage(product);
       onClose();
-      if (setActiveTab) setActiveTab('messages');
-    } catch (err) {
-      console.error('Failed to create conversation', err);
     }
   };
 
