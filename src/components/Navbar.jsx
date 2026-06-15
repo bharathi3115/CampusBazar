@@ -7,8 +7,6 @@ const NAV_ITEMS = [
   { label: 'About Us', id: 'about-us' },
   { label: 'Categories', id: 'categories' },
   { label: 'How It Works', id: 'how-it-works' },
-  { label: 'Why Us', id: 'why-us' },
-  { label: 'Benefits', id: 'benefits' },
 ];
 
 const Navbar = () => {
