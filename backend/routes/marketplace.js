@@ -28,8 +28,25 @@ router.get('/products', async (req, res) => {
     const { search, category, condition, sort, page = 1, limit = 12 } = req.query;
     
     let query = {};
+    const categoryNames = ['Books', 'Calculators', 'Electronics', 'Bicycles', 'Lab Equipment', 'Hostel Essentials', 'Stationery', 'Furniture', 'Miscellaneous'];
+
     if (search) {
-      query.title = { $regex: search, $options: 'i' };
+      const searchLower = search.toLowerCase().trim();
+      const matchedCategory = categoryNames.find(c => {
+        const cLower = c.toLowerCase();
+        return cLower === searchLower || cLower === searchLower + 's' || cLower + 's' === searchLower;
+      });
+
+      if (matchedCategory) {
+        query.category = matchedCategory;
+      } else {
+        query.$or = [
+          { title: { $regex: search, $options: 'i' } },
+          { category: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } },
+          { tags: { $regex: search, $options: 'i' } }
+        ];
+      }
     }
     if (category && category !== 'All Categories') {
       query.category = category;

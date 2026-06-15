@@ -62,7 +62,7 @@ router.get('/conversations/:userId', async (req, res) => {
     const conversations = await Conversation.find({
       $or: [{ buyerId: userId }, { sellerId: userId }]
     })
-      .populate('buyerId', 'name email')
+      .populate('buyerId', 'name email avatarUrl department year campus stats createdAt')
       .populate('sellerId', 'name email')
       .populate('productId', 'title img')
       .sort({ lastMessageAt: -1 });

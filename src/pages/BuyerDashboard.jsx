@@ -18,8 +18,8 @@ const BuyerDashboard = () => {
   const { user, role, logout, switchRole } = useAuth();
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard Overview', icon: Home },
-    { id: 'browse', label: 'Browse Marketplace', icon: Search },
+    { id: 'dashboard', label: 'Overview', icon: Home },
+    { id: 'browse', label: 'Marketplace', icon: Search },
     { id: 'wishlist', label: 'Wishlist', icon: Heart },
     { id: 'purchases', label: 'My Purchases', icon: ShoppingBag },
     { id: 'messages', label: 'Messages', icon: MessageSquare },

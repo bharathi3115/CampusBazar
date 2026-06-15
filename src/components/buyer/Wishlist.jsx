@@ -55,18 +55,12 @@ const Wishlist = () => {
           </div>
 
           <div className="space-y-4">
-            {wishlist.map((item) => (
+            {[...wishlist].reverse().map((item) => (
               <div key={item._id} className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-theme-maroon/30 hover:shadow-lg transition-all flex flex-col sm:flex-row gap-5 group">
                 {/* Image */}
                 <div className="relative w-full sm:w-40 h-40 flex-shrink-0 bg-slate-100 rounded-xl overflow-hidden">
                   <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute top-2 left-2 flex flex-col gap-1.5">
-                    {item.views > 100 && (
-                      <span className="bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
-                        <Star className="w-3 h-3" /> Popular
-                      </span>
-                    )}
-                  </div>
+                  {/* Badges removed as requested */}
                 </div>
 
                 {/* Content */}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Heart, Eye, MessageSquare, Flag, Share2, ShieldCheck, MapPin, Clock } from 'lucide-react';
 import { useWishlist } from '../../context/WishlistContext';
+import { getFallbackImage } from '../../utils/imageFallback';
 
 const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
   const { isWishlisted, toggleWishlist } = useWishlist();
@@ -14,7 +15,7 @@ const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
       {/* Image Container */}
       <div className="relative aspect-square overflow-hidden bg-slate-100">
         <img 
-          src={product.img || `https://source.unsplash.com/400x400/?${product.category}`} 
+          src={product.img || getFallbackImage(product.category, product.title)} 
           alt={product.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />

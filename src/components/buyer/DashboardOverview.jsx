@@ -50,7 +50,7 @@ const DashboardOverview = ({ setActiveTab }) => {
             <h2 className="text-lg font-bold text-slate-900 mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
-                { id: 'browse', label: 'Browse Marketplace', icon: Search, color: 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' },
+                { id: 'browse', label: 'Marketplace', icon: Search, color: 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' },
                 { id: 'wishlist', label: 'View Wishlist', icon: Heart, color: 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' },
                 { id: 'messages', label: 'Open Messages', icon: MessageSquare, color: 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' },
                 { id: 'purchases', label: 'My Purchases', icon: ShoppingBag, color: 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200' },

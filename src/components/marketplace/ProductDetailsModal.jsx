@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { X, Heart, MessageSquare, Share2, Flag, ShieldCheck, MapPin, Clock, Eye, ChevronRight } from 'lucide-react';
 import { useWishlist } from '../../context/WishlistContext';
 import { useAuth } from '../../context/AuthContext';
+import { getFallbackImage } from '../../utils/imageFallback';
 
 const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab, onMessage }) => {
   const { isWishlisted, toggleWishlist } = useWishlist();
@@ -40,7 +41,7 @@ const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab, onMessage
         {/* Left: Image Gallery */}
         <div className="w-full md:w-1/2 bg-slate-100 flex-shrink-0 relative h-64 md:h-auto">
           <img 
-            src={product.img || `https://source.unsplash.com/800x800/?${product.category}`} 
+            src={product.img || getFallbackImage(product.category, product.title)} 
             alt={product.title}
             className="w-full h-full object-cover"
           />

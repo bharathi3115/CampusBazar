@@ -31,7 +31,7 @@ const ChooseRole = () => {
             </p>
             <ul className="space-y-3 mb-6 sm:mb-8">
               {[
-                'Browse Marketplace',
+                'Marketplace',
                 'Wishlist Items',
                 'Contact Sellers',
                 'Purchase History',

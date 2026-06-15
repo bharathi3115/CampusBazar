@@ -14,11 +14,12 @@ import SellerMessages from '../components/seller/SellerMessages';
 const SellerDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [editingProduct, setEditingProduct] = useState(null);
+  const [selectedConversationId, setSelectedConversationId] = useState(null);
   const [showRoleMenu, setShowRoleMenu] = useState(false);
   const { user, role, logout, switchRole } = useAuth();
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard Overview', icon: Home },
+    { id: 'dashboard', label: 'Overview', icon: Home },
     { id: 'post', label: 'Post New Listing', icon: PlusCircle },
     { id: 'listings', label: 'My Listings', icon: Package },
     { id: 'buyers', label: 'Interested Buyers', icon: Eye },
@@ -144,8 +145,8 @@ const SellerDashboard = () => {
           {activeTab === 'dashboard' && <SellerOverview setActiveTab={setActiveTab} />}
           {activeTab === 'post' && <PostListing setActiveTab={setActiveTab} editingProduct={editingProduct} setEditingProduct={setEditingProduct} />}
           {activeTab === 'listings' && <MyListings setActiveTab={setActiveTab} setEditingProduct={setEditingProduct} />}
-          {activeTab === 'buyers' && <InterestedBuyers />}
-          {activeTab === 'messages' && <SellerMessages />}
+          {activeTab === 'buyers' && <InterestedBuyers setActiveTab={setActiveTab} setSelectedConversationId={setSelectedConversationId} />}
+          {activeTab === 'messages' && <SellerMessages initialChatId={selectedConversationId} />}
         </div>
       </main>
     </div>

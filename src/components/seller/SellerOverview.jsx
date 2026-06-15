@@ -13,12 +13,10 @@ const SellerOverview = ({ setActiveTab }) => {
   const firstName = user?.name ? user.name.split(' ')[0] : 'User';
   // MOCK DATA for analytics
   const overviewStats = [
-    { label: 'Active Listings', value: '18', icon: Package, color: 'text-blue-600', bg: 'bg-blue-100' },
     { label: 'Items Sold', value: '45', icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-100' },
     { label: 'Listing Views', value: '4.2k', icon: Eye, color: 'text-purple-600', bg: 'bg-purple-100' },
     { label: 'Buyer Inquiries', value: '32', icon: MessageSquare, color: 'text-amber-600', bg: 'bg-amber-100' },
     { label: 'Wishlist Saves', value: '156', icon: Heart, color: 'text-rose-600', bg: 'bg-rose-100' },
-    { label: 'Seller Rating', value: '4.8/5', icon: Star, color: 'text-yellow-600', bg: 'bg-yellow-100' },
   ];
 
 
@@ -28,8 +26,13 @@ const SellerOverview = ({ setActiveTab }) => {
       
       {/* 1. Header & Welcome */}
       <div>        
+        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2 mb-2">
+          Welcome back, {firstName}! <span className="text-2xl">👋</span>
+        </h1>
+        <p className="text-slate-500 font-medium mb-6">Here's what's happening in your campus marketplace today.</p>
+        
         {/* Top Overview Statistics */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {overviewStats.map((stat, i) => (
             <div key={i} className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex justify-between items-start mb-2">
@@ -51,7 +54,7 @@ const SellerOverview = ({ setActiveTab }) => {
           
           {/* Quick Actions */}
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 mb-4">Welcome back, {firstName}! Quick Actions</h2>
+            <h2 className="text-lg font-bold text-slate-900 mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <button onClick={() => setActiveTab('post')} className="flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors gap-2">
                 <PlusCircle className="w-6 h-6" />
