@@ -7,10 +7,12 @@ import { Server } from 'socket.io';
 import marketplaceRoutes from './routes/marketplace.js';
 import messagesRoutes from './routes/messages.js';
 import usersRoutes from './routes/users.js';
+import authRoutes from './routes/auth.js';
 import { seedDatabase } from './seedData.js';
 import { Message } from './models/Message.js';
 import { Conversation } from './models/Conversation.js';
 import path from 'path';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 const app = express();
@@ -28,10 +30,18 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+// Rate limiting for auth routes
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 auth requests per windowMs
+  message: 'Too many login attempts from this IP, please try again after 15 minutes'
+});
+
 // Serve static uploads
 app.use('/uploads', express.static(path.join(process.cwd(), 'public', 'uploads')));
 
 // Routes
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/messages', messagesRoutes);
 app.use('/api/users', usersRoutes);

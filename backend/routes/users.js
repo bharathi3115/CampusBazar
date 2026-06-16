@@ -28,13 +28,32 @@ const upload = multer({ storage });
 // POST sync user (find or create)
 router.post('/sync', async (req, res) => {
   try {
-    const { email, name, role } = req.body;
+    const { email, name, role, googleId, picture } = req.body;
     if (!email) return res.status(400).json({ message: 'Email required' });
 
     let user = await User.findOne({ email });
     if (!user) {
-      user = new User({ email, name: name || email.split('@')[0], role: role || 'buyer' });
+      user = new User({ 
+        email, 
+        name: name || email.split('@')[0], 
+        role: role || 'buyer',
+        googleId,
+        avatarUrl: picture
+      });
       await user.save();
+    } else {
+      let updated = false;
+      if (googleId && !user.googleId) {
+        user.googleId = googleId;
+        updated = true;
+      }
+      if (picture && !user.avatarUrl) {
+        user.avatarUrl = picture;
+        updated = true;
+      }
+      if (updated) {
+        await user.save();
+      }
     }
     res.json(user);
   } catch (error) {

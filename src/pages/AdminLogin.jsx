@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ShieldCheck, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import adminIllustration from '../assets/admin-illustration.png';
 
 const AdminLogin = () => {
@@ -11,7 +11,18 @@ const AdminLogin = () => {
     password: '',
     rememberMe: false
   });
+  const [globalError, setGlobalError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState({});
+
+  const validatePassword = (pwd) => {
+    const isLengthValid = pwd.length >= 8 && pwd.length <= 12;
+    const hasUpper = /[A-Z]/.test(pwd);
+    const hasLower = /[a-z]/.test(pwd);
+    const hasNumber = /\d/.test(pwd);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+    return isLengthValid && hasUpper && hasLower && hasNumber && hasSpecial;
+  };
 
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
@@ -21,8 +32,35 @@ const AdminLogin = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleForgotPassword = async (e) => {
     e.preventDefault();
+    setGlobalError('');
+    setSuccessMessage('');
+    if (!formData.email) {
+      setErrors({ email: 'Email is required to reset password.' });
+      return;
+    }
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSuccessMessage(data.message);
+      } else {
+        setGlobalError(data.message || 'Failed to request password reset.');
+      }
+    } catch (err) {
+      setGlobalError('Network error. Please try again.');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setGlobalError('');
+    setSuccessMessage('');
     const newErrors = {};
 
     if (!formData.email.trim()) {
@@ -31,6 +69,8 @@ const AdminLogin = () => {
     
     if (!formData.password) {
       newErrors.password = 'Password is required';
+    } else if (!validatePassword(formData.password)) {
+      newErrors.password = 'Password must contain 8-12 characters, one uppercase, one lowercase, one number, and one special character.';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -38,11 +78,30 @@ const AdminLogin = () => {
       return;
     }
 
-    // Role-based auth mock
-    if (formData.email === 'admin@campus.edu' && formData.password === 'admin') {
-      navigate('/admin/dashboard');
-    } else {
-      setErrors({ email: 'Unauthorized access. Valid admin credentials required.' });
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, password: formData.password })
+      });
+      const data = await res.json();
+      
+      if (res.ok) {
+        if (data.role !== 'admin') {
+          setGlobalError('Unauthorized access. Valid admin credentials required.');
+          return;
+        }
+        // Success
+        const storage = formData.rememberMe ? localStorage : sessionStorage;
+        storage.setItem('isAuthenticated', 'true');
+        storage.setItem('user', JSON.stringify(data));
+        storage.setItem('role', 'admin');
+        navigate('/admin/dashboard');
+      } else {
+        setGlobalError(data.message || 'Invalid credentials');
+      }
+    } catch (err) {
+      setGlobalError('Network error. Please try again.');
     }
   };
 
@@ -81,6 +140,20 @@ const AdminLogin = () => {
               <h2 className="text-3xl font-extrabold text-slate-900 mb-3">Admin Access</h2>
               <p className="text-slate-500 text-lg">Manage users, listings, reports, and marketplace operations.</p>
             </div>
+
+            {globalError && (
+              <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-700">{globalError}</p>
+              </div>
+            )}
+            
+            {successMessage && (
+              <div className="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-green-700">{successMessage}</p>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -123,7 +196,35 @@ const AdminLogin = () => {
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
-                {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
+                {errors.password ? (
+                  <p className="mt-1 text-xs text-red-500">{errors.password}</p>
+                ) : formData.password.length > 0 ? (
+                  <div className="mt-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Security Checklist</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className={`flex items-center gap-2 text-xs font-bold ${formData.password.length >= 8 && formData.password.length <= 12 ? 'text-theme-maroon' : 'text-slate-400'}`}>
+                        {formData.password.length >= 8 && formData.password.length <= 12 ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4 text-red-400" />}
+                        8-12 CHARACTERS
+                      </div>
+                      <div className={`flex items-center gap-2 text-xs font-bold ${/[A-Z]/.test(formData.password) ? 'text-theme-maroon' : 'text-slate-400'}`}>
+                        {/[A-Z]/.test(formData.password) ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4 text-red-400" />}
+                        UPPERCASE
+                      </div>
+                      <div className={`flex items-center gap-2 text-xs font-bold ${/[a-z]/.test(formData.password) ? 'text-theme-maroon' : 'text-slate-400'}`}>
+                        {/[a-z]/.test(formData.password) ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4 text-red-400" />}
+                        LOWERCASE
+                      </div>
+                      <div className={`flex items-center gap-2 text-xs font-bold ${/\d/.test(formData.password) ? 'text-theme-maroon' : 'text-slate-400'}`}>
+                        {/\d/.test(formData.password) ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4 text-red-400" />}
+                        NUMBER
+                      </div>
+                      <div className={`flex items-center gap-2 text-xs font-bold ${/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? 'text-theme-maroon' : 'text-slate-400'}`}>
+                        {/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4 text-red-400" />}
+                        SPECIAL CHAR
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
               </div>
 
 
@@ -144,9 +245,9 @@ const AdminLogin = () => {
                 </div>
 
                 <div className="text-sm">
-                  <a href="#" className="font-bold text-theme-wine hover:text-theme-maroon">
+                  <button type="button" onClick={handleForgotPassword} className="font-bold text-theme-wine hover:text-theme-maroon">
                     Forgot Password?
-                  </a>
+                  </button>
                 </div>
               </div>
 

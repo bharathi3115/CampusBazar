@@ -1,11 +1,12 @@
 import { Product } from './models/Product.js';
 import { User } from './models/User.js';
 import { Purchase } from './models/Purchase.js';
+import bcrypt from 'bcryptjs';
 
 export const seedDatabase = async () => {
   try {
     const userCount = await User.countDocuments();
-    let defaultBuyer, defaultSeller;
+    let defaultBuyer, defaultSeller, defaultAdmin;
     if (userCount === 0) {
       defaultBuyer = await User.create({
         email: 'buyer@campusbazar.com',
@@ -17,11 +18,28 @@ export const seedDatabase = async () => {
         name: 'Demo Seller',
         role: 'seller'
       });
+      const adminPassword = await bcrypt.hash('Admin@123', 10);
+      defaultAdmin = await User.create({
+        email: 'admin@campus.edu',
+        name: 'Super Admin',
+        role: 'admin',
+        password: adminPassword
+      });
     } else {
       defaultBuyer = await User.findOne({ role: 'buyer' });
       defaultSeller = await User.findOne({ role: 'seller' });
+      defaultAdmin = await User.findOne({ role: 'admin' });
       if (!defaultSeller) {
         defaultSeller = await User.create({ email: 'seller@campusbazar.com', name: 'Demo Seller', role: 'seller' });
+      }
+      if (!defaultAdmin) {
+        const adminPassword = await bcrypt.hash('Admin@123', 10);
+        defaultAdmin = await User.create({
+          email: 'admin@campus.edu',
+          name: 'Super Admin',
+          role: 'admin',
+          password: adminPassword
+        });
       }
     }
 

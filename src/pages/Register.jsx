@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, User, Mail, Phone, Hash, Lock, CheckCircle, XCircle } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Phone, Hash, Lock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import authIllustration from '../assets/auth-illustration.png';
+import { useAuth } from '../context/AuthContext';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Register = () => {
   const navigate = useNavigate();
+  const { login, selectRole } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -14,6 +17,7 @@ const Register = () => {
     password: ''
   });
   const [errors, setErrors] = useState({});
+  const [globalError, setGlobalError] = useState('');
 
   const validatePassword = (pwd) => {
     const minLength = pwd.length >= 8;
@@ -63,6 +67,35 @@ const Register = () => {
     navigate('/login');
   };
 
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setGlobalError('');
+        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        const googleUser = await res.json();
+        
+        const fullUser = await login({ 
+          email: googleUser.email, 
+          name: googleUser.name,
+          googleId: googleUser.sub,
+          picture: googleUser.picture
+        });
+
+        // Redirect based on whether the user has a defined role
+        if (fullUser && fullUser.role && (fullUser.role === 'buyer' || fullUser.role === 'seller')) {
+          selectRole(fullUser.role);
+        } else {
+          navigate('/choose-role');
+        }
+      } catch (err) {
+        setGlobalError('Failed to authenticate with Google.');
+      }
+    },
+    onError: () => setGlobalError('Google Sign-In was cancelled or failed.'),
+  });
+
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-8 font-sans text-slate-900">
       <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
@@ -99,6 +132,13 @@ const Register = () => {
               <h2 className="text-3xl font-extrabold text-slate-900 mb-2">Create Account</h2>
               <p className="text-slate-500">Join the CampusBazar student community.</p>
             </div>
+
+            {globalError && (
+              <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-700">{globalError}</p>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -244,6 +284,7 @@ const Register = () => {
 
             <button
               type="button"
+              onClick={() => handleGoogleLogin()}
               className="mt-6 w-full bg-white border border-slate-200 text-slate-700 font-bold py-3.5 px-4 rounded-xl hover:bg-slate-50 transition-all flex justify-center items-center gap-3 shadow-sm"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

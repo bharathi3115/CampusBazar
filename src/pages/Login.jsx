@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react';
 import authIllustration from '../assets/auth-illustration.png';
 import { useAuth } from '../context/AuthContext';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, loginWithPassword, selectRole } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -14,6 +15,8 @@ const Login = () => {
     rememberMe: false
   });
   const [errors, setErrors] = useState({});
+  const [globalError, setGlobalError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
@@ -23,8 +26,35 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleForgotPassword = async (e) => {
     e.preventDefault();
+    setGlobalError('');
+    setSuccessMessage('');
+    if (!formData.email) {
+      setErrors({ email: 'Email is required to reset password.' });
+      return;
+    }
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSuccessMessage(data.message);
+      } else {
+        setGlobalError(data.message || 'Failed to request password reset.');
+      }
+    } catch (err) {
+      setGlobalError('Network error. Please try again.');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setGlobalError('');
+    setSuccessMessage('');
     const newErrors = {};
 
     if (!formData.email.trim()) {
@@ -42,11 +72,49 @@ const Login = () => {
       return;
     }
 
-    // Success -> Redirect to Choose Role
-    login({ email: formData.email });
-    // In a real app, you'd get the user data from the backend here.
-    navigate('/choose-role');
+    const res = await loginWithPassword(formData.email, formData.password, formData.rememberMe);
+    if (res.success) {
+      const fullUser = res.user;
+      if (fullUser && fullUser.role && fullUser.role !== 'buyer' && fullUser.role !== 'seller') {
+        navigate('/choose-role');
+      } else if (fullUser && fullUser.role) {
+        selectRole(fullUser.role);
+      } else {
+        navigate('/choose-role');
+      }
+    } else {
+      setGlobalError(res.message);
+    }
   };
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setGlobalError('');
+        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        const googleUser = await res.json();
+        
+        const fullUser = await login({ 
+          email: googleUser.email, 
+          name: googleUser.name,
+          googleId: googleUser.sub,
+          picture: googleUser.picture
+        });
+
+        // Redirect based on whether the user has a defined role
+        if (fullUser && fullUser.role && (fullUser.role === 'buyer' || fullUser.role === 'seller')) {
+          selectRole(fullUser.role);
+        } else {
+          navigate('/choose-role');
+        }
+      } catch (err) {
+        setGlobalError('Failed to authenticate with Google.');
+      }
+    },
+    onError: () => setGlobalError('Google Sign-In was cancelled or failed.'),
+  });
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-8 font-sans text-slate-900">
@@ -84,6 +152,20 @@ const Login = () => {
               <h2 className="text-3xl font-extrabold text-slate-900 mb-2">Welcome Back</h2>
               <p className="text-slate-500">Please enter your details to continue.</p>
             </div>
+
+            {globalError && (
+              <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-700">{globalError}</p>
+              </div>
+            )}
+            
+            {successMessage && (
+              <div className="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-green-700">{successMessage}</p>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -145,9 +227,9 @@ const Login = () => {
                 </div>
 
                 <div className="text-sm">
-                  <a href="#" className="font-bold text-theme-wine hover:text-theme-maroon">
+                  <button type="button" onClick={handleForgotPassword} className="font-bold text-theme-wine hover:text-theme-maroon">
                     Forgot Password?
-                  </a>
+                  </button>
                 </div>
               </div>
 
@@ -167,6 +249,7 @@ const Login = () => {
 
             <button
               type="button"
+              onClick={() => handleGoogleLogin()}
               className="mt-6 w-full bg-white border border-slate-200 text-slate-700 font-bold py-3.5 px-4 rounded-xl hover:bg-slate-50 transition-all flex justify-center items-center gap-3 shadow-sm"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

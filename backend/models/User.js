@@ -3,7 +3,11 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
-  role: { type: String, enum: ['buyer', 'seller'], default: 'buyer' },
+  role: { type: String, enum: ['buyer', 'seller', 'admin'], default: 'buyer' },
+  password: { type: String },
+  loginAttempts: { type: Number, required: true, default: 0 },
+  lockUntil: { type: Date },
+  googleId: { type: String },
   avatarUrl: { type: String },
   coverUrl: { type: String },
   studentId: { type: String },
