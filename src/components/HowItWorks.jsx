@@ -35,33 +35,26 @@ const HowItWorks = () => {
         </div>
 
         <div className="relative">
-          {/* Connecting Line for desktop */}
-          <div className="hidden lg:block absolute top-16 left-[15%] right-[15%] h-1 bg-gradient-to-r from-theme-maroon/20 via-theme-burgundy/20 to-theme-wine/20 -z-10 rounded-full opacity-60"></div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8">
             {steps.map((step, index) => (
-              <div key={step.id} className="relative flex flex-col items-center text-center group">
+              <div key={step.id} className="relative flex flex-col items-center text-center">
                 
-                {/* Icon Container with animations */}
-                <div className={`w-32 h-32 rounded-3xl ${step.color} border-4 border-white shadow-xl shadow-slate-200/50 flex items-center justify-center mb-8 relative z-10 group-hover:-translate-y-2 transition-transform duration-300`}>
+                {/* Icon Container */}
+                <div className={`w-32 h-32 rounded-3xl ${step.color} border-4 border-white shadow-xl shadow-slate-200/50 flex items-center justify-center mb-8 relative z-10`}>
                   
                   {/* Step Number Badge */}
                   <div className="absolute -top-3 -right-3 w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center font-extrabold text-lg shadow-lg z-20 ring-4 ring-white">
                     {step.id}
                   </div>
 
-                  <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-white/50 transition-colors"></div>
                   {step.icon}
                 </div>
                 
                 {/* Content */}
-                <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-theme-maroon transition-colors">{step.title}</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-4">{step.title}</h3>
                 <p className="text-lg text-slate-600 leading-relaxed max-w-sm">{step.description}</p>
                 
-                {/* Mobile connecting arrow */}
-                {index < steps.length - 1 && (
-                  <div className="lg:hidden w-1 h-16 bg-theme-maroon opacity-20 my-8 rounded-full"></div>
-                )}
               </div>
             ))}
           </div>
