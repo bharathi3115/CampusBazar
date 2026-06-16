@@ -15,11 +15,9 @@ router.post('/conversation', async (req, res) => {
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ message: 'Product not found' });
     
-    // Fallback if seller is not fully populated in dummy data (demo purposes)
     let sellerId = product.seller?.userId;
     if (!sellerId) {
-       const dummySeller = await User.findOne({ role: 'seller' }) || await User.findOne();
-       sellerId = dummySeller._id;
+      return res.status(400).json({ message: 'Product has no valid seller' });
     }
 
     if (buyerId === sellerId.toString()) {

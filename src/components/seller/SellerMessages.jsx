@@ -12,69 +12,7 @@ const SellerMessages = ({ initialChatId }) => {
   const [activeChatId, setActiveChatId] = useState(initialChatId || null);
   const [messages, setMessages] = useState([]);
 
-  const dummyConversations = [
-    {
-      _id: 'dummy_conv_1',
-      buyerId: { _id: 'd1', name: 'Rahul S.', email: 'rahul@example.com' },
-      sellerId: user || { _id: 'seller1', name: 'Seller' },
-      productId: { title: 'Scientific Calculator', img: '' },
-      lastMessageAt: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
-      unreadBySeller: 1
-    },
-    {
-      _id: 'dummy_conv_2',
-      buyerId: { _id: 'd2', name: 'Priya M.', email: 'priya@example.com' },
-      sellerId: user || { _id: 'seller1', name: 'Seller' },
-      productId: { title: 'Engineering Graphics Book', img: '' },
-      lastMessageAt: new Date(Date.now() - 1000 * 60 * 300).toISOString(),
-      unreadBySeller: 0
-    },
-    {
-      _id: 'dummy_conv_3',
-      buyerId: { _id: 'd3', name: 'Akash K.', email: 'akash@example.com' },
-      sellerId: user || { _id: 'seller1', name: 'Seller' },
-      productId: { title: 'Drawing Board', img: '' },
-      lastMessageAt: new Date(Date.now() - 1000 * 60 * 1440).toISOString(),
-      unreadBySeller: 0
-    },
-    {
-      _id: 'dummy_conv_4',
-      buyerId: { _id: 'd4', name: 'Neha P.', email: 'neha@example.com' },
-      sellerId: user || { _id: 'seller1', name: 'Seller' },
-      productId: { title: 'Mountain Bicycle', img: '' },
-      lastMessageAt: new Date(Date.now() - 1000 * 60 * 2880).toISOString(),
-      unreadBySeller: 0
-    },
-    {
-      _id: 'dummy_conv_5',
-      buyerId: { _id: 'd5', name: 'David K.', email: 'david@example.com' },
-      sellerId: user || { _id: 'seller1', name: 'Seller' },
-      productId: { title: 'Physics Lab Coat', img: '' },
-      lastMessageAt: new Date(Date.now() - 1000 * 60 * 4320).toISOString(),
-      unreadBySeller: 0
-    }
-  ];
 
-  const dummyMessagesMap = {
-    'dummy_conv_1': [
-      { _id: 'm1', senderId: 'd1', text: 'Hi, is the calculator still available?', createdAt: new Date(Date.now() - 1000 * 60 * 125).toISOString() },
-      { _id: 'm2', senderId: user?._id || 'seller1', text: 'Yes it is! When do you want to meet?', createdAt: new Date(Date.now() - 1000 * 60 * 122).toISOString() },
-      { _id: 'm3', senderId: 'd1', text: 'How about tomorrow evening near the library?', createdAt: new Date(Date.now() - 1000 * 60 * 120).toISOString() }
-    ],
-    'dummy_conv_2': [
-      { _id: 'm4', senderId: 'd2', text: 'Can you reduce the price a bit?', createdAt: new Date(Date.now() - 1000 * 60 * 300).toISOString() }
-    ],
-    'dummy_conv_3': [
-      { _id: 'm5', senderId: 'd3', text: 'Is the drawing board in good condition?', createdAt: new Date(Date.now() - 1000 * 60 * 1440).toISOString() }
-    ],
-    'dummy_conv_4': [
-      { _id: 'm6', senderId: 'd4', text: 'I am interested in the bicycle.', createdAt: new Date(Date.now() - 1000 * 60 * 2880).toISOString() }
-    ],
-    'dummy_conv_5': [
-      { _id: 'm7', senderId: 'd5', text: 'What size is the lab coat?', createdAt: new Date(Date.now() - 1000 * 60 * 4320).toISOString() }
-    ]
-  };
-  
   useEffect(() => {
     if (initialChatId) {
       setActiveChatId(initialChatId);
@@ -91,17 +29,16 @@ const SellerMessages = ({ initialChatId }) => {
       if (res.ok) {
         const data = await res.json();
         const realData = Array.isArray(data) ? data : [];
-        const combinedData = [...realData, ...dummyConversations];
-        setConversations(combinedData);
-        if (!activeChatId && combinedData.length > 0) {
-          setActiveChatId(combinedData[0]._id);
+        setConversations(realData);
+        if (!activeChatId && realData.length > 0) {
+          setActiveChatId(realData[0]._id);
         }
       } else {
-        setConversations(dummyConversations);
+        setConversations([]);
       }
     } catch (err) {
       console.error(err);
-      setConversations(dummyConversations);
+      setConversations([]);
     }
   };
 
@@ -131,11 +68,7 @@ const SellerMessages = ({ initialChatId }) => {
 
   useEffect(() => {
     if (activeChatId && user) {
-      if (activeChatId.startsWith('dummy_conv_')) {
-        setMessages(dummyMessagesMap[activeChatId] || []);
-        return;
-      }
-      
+
       const fetchMessages = async () => {
         try {
           const res = await fetch(`http://localhost:5000/api/messages/${activeChatId}`);
@@ -173,10 +106,6 @@ const SellerMessages = ({ initialChatId }) => {
     e.preventDefault();
     if (!newMessage.trim() || !activeChat || !socket) return;
     
-    if (activeChatId.startsWith('dummy_conv_')) {
-      alert("This is a dummy conversation. You cannot send messages.");
-      return;
-    }
 
     const isMeBuyer = activeChat.buyerId._id === user._id;
     const receiverId = isMeBuyer ? activeChat.sellerId._id : activeChat.buyerId._id;

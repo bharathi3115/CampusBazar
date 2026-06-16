@@ -3,9 +3,33 @@ import { Heart, TrendingDown, Clock, Tag, MessageSquare, Trash2, Share2, Eye, Us
 import ProductCard from '../marketplace/ProductCard';
 
 import { useWishlist } from '../../context/WishlistContext';
+import { useAuth } from '../../context/AuthContext';
 
-const Wishlist = () => {
+const Wishlist = ({ setActiveTab }) => {
   const { wishlist, removeFromWishlist } = useWishlist();
+  const { user } = useAuth();
+
+  const handleMessageSeller = async (product) => {
+    try {
+      const res = await fetch('http://localhost:5000/api/messages/conversation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          buyerId: user._id,
+          productId: product._id
+        })
+      });
+      if (res.ok) {
+        if (setActiveTab) setActiveTab('messages');
+      } else {
+        const error = await res.json();
+        alert(error.message || 'Failed to initiate chat.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Network error.');
+    }
+  };
 
   const handleRemove = (id) => {
     removeFromWishlist(id);
@@ -105,11 +129,11 @@ const Wishlist = () => {
                     </div>
 
                     <div className="flex items-center gap-2 w-full sm:w-auto">
-                      <button className="flex-1 sm:flex-none p-2.5 bg-theme-maroon text-white hover:bg-theme-dark-maroon rounded-xl transition-colors font-bold text-sm shadow-sm flex items-center justify-center gap-1.5">
+                      <button 
+                        onClick={() => handleMessageSeller(item)}
+                        className="flex-1 sm:flex-none p-2.5 bg-theme-maroon text-white hover:bg-theme-dark-maroon rounded-xl transition-colors font-bold text-sm shadow-sm flex items-center justify-center gap-1.5"
+                      >
                         <MessageSquare className="w-4 h-4" /> <span className="hidden sm:inline">Contact</span>
-                      </button>
-                      <button className="p-2.5 bg-slate-50 text-slate-600 hover:text-blue-500 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 rounded-xl transition-colors shadow-sm" title="Share">
-                        <Share2 className="w-4 h-4" />
                       </button>
                       <button className="p-2.5 bg-slate-50 text-slate-600 hover:text-red-500 hover:bg-red-50 border border-slate-200 hover:border-red-200 rounded-xl transition-colors shadow-sm" title="Remove from Wishlist" onClick={() => handleRemove(item._id)}>
                         <Trash2 className="w-4 h-4" />
