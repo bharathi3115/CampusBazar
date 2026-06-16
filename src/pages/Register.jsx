@@ -35,7 +35,7 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
@@ -63,8 +63,25 @@ const Register = () => {
       return;
     }
 
-    // Success -> Redirect to Login
-    navigate('/login');
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Success -> Redirect to Login
+        navigate('/login');
+      } else {
+        setGlobalError(data.message || 'Registration failed. Please try again.');
+      }
+    } catch (error) {
+      setGlobalError('Network error. Please make sure the server is running.');
+      console.error('Registration error:', error);
+    }
   };
 
   const handleGoogleLogin = useGoogleLogin({

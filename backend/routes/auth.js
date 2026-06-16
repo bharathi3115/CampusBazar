@@ -82,4 +82,36 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 
+router.post('/register', async (req, res) => {
+  try {
+    const { fullName, email, mobile, password } = req.body;
+    
+    if (!fullName || !email || !mobile || !password) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists with this email' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      name: fullName,
+      email,
+      phone: mobile,
+      password: hashedPassword,
+      role: 'buyer' // Default role, user can choose later if needed
+    });
+
+    await newUser.save();
+
+    res.status(201).json({ message: 'Registration successful', user: newUser });
+  } catch (error) {
+    console.error('Registration Error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 export default router;
