@@ -1,13 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Eye, Trash2, ShieldAlert, CheckCircle } from 'lucide-react';
+import ProductDetailsModal from '../marketplace/ProductDetailsModal';
 
 const ReportedListings = () => {
-  const reports = [
-    { id: 1, product: 'iPhone 13 Pro Max - Too Good to be True', reason: 'Fake Product', reportedBy: 'vikas.s@college.edu', date: 'Oct 14, 2023', severity: 'High' },
-    { id: 2, title: 'Earn ₹5000 Daily without working', reason: 'Spam Listing', reportedBy: 'amit.k@college.edu', date: 'Oct 13, 2023', severity: 'High' },
-    { id: 3, product: 'Calculus Textbook 9th Ed (Duplicate)', reason: 'Duplicate Listing', reportedBy: 'neha.g@college.edu', date: 'Oct 13, 2023', severity: 'Low' },
-    { id: 4, product: 'Party Speakers', reason: 'Inappropriate Content', reportedBy: 'priya.p@college.edu', date: 'Oct 12, 2023', severity: 'Medium' },
-  ];
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  useEffect(() => {
+    fetchReports();
+  }, []);
+
+  const fetchReports = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/reports');
+      if (res.ok) {
+        const data = await res.json();
+        setReports(data);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleIgnoreReport = async (reportId) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/reports/${reportId}/ignore`, {
+        method: 'PUT'
+      });
+      if (res.ok) {
+        setReports(reports.filter(r => r._id !== reportId));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleRemoveListing = async (productId, reportId) => {
+    if (!window.confirm("Are you sure you want to permanently delete this listing?")) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/marketplace/products/${productId._id || productId}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        setReports(reports.filter(r => r._id !== reportId));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -36,10 +79,21 @@ const ReportedListings = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {reports.map((report) => (
-                <tr key={report.id} className="hover:bg-slate-50 transition-colors group">
+              {loading ? (
+                <tr>
+                  <td colSpan="5" className="px-6 py-8 text-center text-slate-500">Loading reports...</td>
+                </tr>
+              ) : reports.length === 0 ? (
+                <tr>
+                  <td colSpan="5" className="px-6 py-8 text-center text-slate-500">No active reports.</td>
+                </tr>
+              ) : reports.map((report) => (
+                <tr key={report._id} className="hover:bg-slate-50 transition-colors group">
                   <td className="px-6 py-4">
-                    <p className="font-bold text-slate-900 line-clamp-1 max-w-[200px]">{report.product || report.title}</p>
+                    <p className="font-bold text-slate-900 line-clamp-1 max-w-[200px]">
+                      {report.productId?.title || 'Unknown Product'} 
+                      {report.count > 1 && <span className="ml-2 text-xs bg-slate-200 px-2 py-0.5 rounded-full text-slate-600 font-bold">{report.count} Reports</span>}
+                    </p>
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 mt-1 rounded text-[10px] font-bold uppercase tracking-wider ${
                       report.severity === 'High' ? 'bg-red-100 text-red-700' : 
                       report.severity === 'Medium' ? 'bg-amber-100 text-amber-700' : 
@@ -53,20 +107,33 @@ const ReportedListings = () => {
                       <AlertTriangle className="w-3.5 h-3.5" /> {report.reason}
                     </span>
                   </td>
-                  <td className="px-6 py-4 font-medium text-slate-600">{report.reportedBy}</td>
-                  <td className="px-6 py-4 text-slate-500 font-medium">{report.date}</td>
+                  <td className="px-6 py-4 font-medium text-slate-600">
+                    {report.reporter?.email || report.reporter?.name || 'Unknown'}
+                  </td>
+                  <td className="px-6 py-4 text-slate-500 font-medium">
+                    {new Date(report.createdAt).toLocaleDateString()}
+                  </td>
                   <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View Report Details">
+                    <div className="flex items-center justify-end gap-2 transition-opacity">
+                      <button 
+                        onClick={() => setSelectedProduct(report.productId)}
+                        className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" 
+                        title="View Report Details"
+                      >
                         <Eye className="w-4 h-4" />
                       </button>
-                      <button className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Warn User">
-                        <ShieldAlert className="w-4 h-4" />
-                      </button>
-                      <button className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Remove Listing">
+                      <button 
+                        onClick={() => handleRemoveListing(report.productId, report._id)}
+                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
+                        title="Remove Listing"
+                      >
                         <Trash2 className="w-4 h-4" />
                       </button>
-                      <button className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Ignore Report">
+                      <button 
+                        onClick={() => handleIgnoreReport(report._id)}
+                        className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" 
+                        title="Ignore Report"
+                      >
                         <CheckCircle className="w-4 h-4" />
                       </button>
                     </div>
@@ -77,6 +144,11 @@ const ReportedListings = () => {
           </table>
         </div>
       </div>
+      <ProductDetailsModal 
+        product={selectedProduct} 
+        isOpen={!!selectedProduct} 
+        onClose={() => setSelectedProduct(null)} 
+      />
     </div>
   );
 };

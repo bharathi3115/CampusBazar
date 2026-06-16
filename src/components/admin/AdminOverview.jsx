@@ -28,20 +28,20 @@ const AdminOverview = () => {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
         {stats.map((stat, idx) => (
-          <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
-            <div className="flex items-center justify-between mb-4 relative z-10">
-              <div className={`p-3 rounded-xl ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}>
-                <stat.icon className="w-6 h-6" />
+          <div key={idx} className="bg-white p-4 sm:p-5 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+            <div className="flex items-center justify-between mb-3 relative z-10">
+              <div className={`p-2 rounded-lg ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}>
+                <stat.icon className="w-5 h-5" />
               </div>
-              <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${stat.trend.startsWith('+') ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${stat.trend.startsWith('+') ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
                 {stat.trend}
               </span>
             </div>
             <div className="relative z-10">
-              <h3 className="text-3xl font-black text-slate-800 mb-1">{stat.value}</h3>
-              <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">{stat.title}</p>
+              <h3 className="text-2xl font-black text-slate-800 mb-0.5">{stat.value}</h3>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{stat.title}</p>
             </div>
           </div>
         ))}

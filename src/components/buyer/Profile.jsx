@@ -28,6 +28,10 @@ const Profile = () => {
       savedAmount: 4500,
       activeWishlist: 8,
       reviewsGiven: 5
+    },
+    preferences: user?.preferences || {
+      emailNotifications: true,
+      profileVisibility: false
     }
   });
 
@@ -38,6 +42,42 @@ const Profile = () => {
   const handleEditClick = () => {
     setFormData({ ...profileData });
     setIsEditing(true);
+  };
+
+  const togglePreference = async (key) => {
+    const updatedPreferences = {
+      ...profileData.preferences,
+      [key]: !profileData.preferences[key]
+    };
+    
+    // Optimistic update
+    setProfileData(prev => ({
+      ...prev,
+      preferences: updatedPreferences
+    }));
+    
+    // Save to backend immediately
+    if (user?._id) {
+      try {
+        const fd = new FormData();
+        fd.append('preferences', JSON.stringify(updatedPreferences));
+        const res = await fetch(`http://localhost:5000/api/users/${user._id}`, {
+          method: 'PUT',
+          body: fd
+        });
+        if (res.ok) {
+          const updatedUser = await res.json();
+          updateUser({ ...user, ...updatedUser });
+        }
+      } catch (err) {
+        console.error('Failed to update preference', err);
+        // Revert on failure
+        setProfileData(prev => ({
+          ...prev,
+          preferences: profileData.preferences
+        }));
+      }
+    }
   };
 
   const handleSave = async () => {
@@ -275,16 +315,18 @@ const Profile = () => {
             
             <div className="space-y-4">
               {[
-                { title: 'Email Notifications', desc: 'Receive emails about new messages and order updates.', enabled: true },
-
-                { title: 'Profile Visibility', desc: 'Allow other students to see your basic profile information.', enabled: false }
-              ].map((pref, i) => (
-                <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-theme-maroon/30 transition-colors">
+                { id: 'emailNotifications', title: 'Email Notifications', desc: 'Receive emails about new messages and order updates.', enabled: profileData.preferences.emailNotifications },
+                { id: 'profileVisibility', title: 'Profile Visibility', desc: 'Allow other students to see your basic profile information.', enabled: profileData.preferences.profileVisibility }
+              ].map((pref) => (
+                <div key={pref.id} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-theme-maroon/30 transition-colors">
                   <div className="pr-4">
                     <h4 className="font-bold text-slate-900 text-sm mb-1">{pref.title}</h4>
                     <p className="text-xs text-slate-500 font-medium">{pref.desc}</p>
                   </div>
-                  <button className={`w-12 h-6 rounded-full relative flex-shrink-0 transition-colors ${pref.enabled ? 'bg-theme-maroon' : 'bg-slate-300'}`}>
+                  <button 
+                    onClick={() => togglePreference(pref.id)}
+                    className={`w-12 h-6 rounded-full relative flex-shrink-0 transition-colors ${pref.enabled ? 'bg-theme-maroon' : 'bg-slate-300'}`}
+                  >
                     <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${pref.enabled ? 'translate-x-6' : 'translate-x-0'}`}></span>
                   </button>
                 </div>

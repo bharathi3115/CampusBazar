@@ -7,6 +7,11 @@ import { getFallbackImage } from '../../utils/imageFallback';
 const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab, onMessage }) => {
   const { isWishlisted, toggleWishlist } = useWishlist();
   const { user } = useAuth();
+  
+  const [isReporting, setIsReporting] = React.useState(false);
+  const [reportReason, setReportReason] = React.useState('');
+  const [isSubmittingReport, setIsSubmittingReport] = React.useState(false);
+
   if (!isOpen || !product) return null;
 
   // Record view on open (in a real app, we'd trigger an API call here or in the parent before opening)
@@ -16,6 +21,36 @@ const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab, onMessage
     if (onMessage) {
       await onMessage(product);
       onClose();
+    }
+  };
+
+  const handleReportSubmit = async () => {
+    if (!user) return alert("Please login to report a listing");
+    if (!reportReason) return alert("Please select a reason");
+    
+    setIsSubmittingReport(true);
+    try {
+      const res = await fetch('http://localhost:5000/api/reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: product._id,
+          reporterId: user._id,
+          reason: reportReason
+        })
+      });
+      if (res.ok) {
+        alert("Report submitted successfully");
+        setIsReporting(false);
+        setReportReason('');
+      } else {
+        alert("Failed to submit report");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network error while submitting report");
+    } finally {
+      setIsSubmittingReport(false);
     }
   };
 
@@ -132,19 +167,55 @@ const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab, onMessage
               <MessageSquare className="w-5 h-5" /> Contact Seller
             </button>
             
-            <div className="flex gap-3">
+            <div className="flex gap-3 relative">
               <button 
                 onClick={() => toggleWishlist(product)}
                 className={`p-3.5 bg-white border ${isWishlisted(product._id) ? 'border-red-200 text-red-500 hover:text-red-600' : 'border-slate-200 text-slate-700 hover:text-rose-500 hover:border-rose-200'} rounded-xl font-bold shadow-sm flex items-center justify-center transition-all group relative`}
               >
                 <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" fill={isWishlisted(product._id) ? "currentColor" : "none"} />
               </button>
-              <button className="p-3.5 bg-white border border-slate-200 text-slate-700 hover:text-blue-500 hover:border-blue-200 rounded-xl font-bold shadow-sm flex items-center justify-center transition-all group">
-                <Share2 className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              </button>
-              <button className="p-3.5 bg-white border border-slate-200 text-slate-400 hover:text-amber-500 hover:border-amber-200 rounded-xl font-bold shadow-sm flex items-center justify-center transition-all group" title="Report Listing">
+              <button 
+                onClick={() => setIsReporting(!isReporting)}
+                className={`p-3.5 bg-white border ${isReporting ? 'border-amber-500 text-amber-500' : 'border-slate-200 text-slate-400 hover:text-amber-500 hover:border-amber-200'} rounded-xl font-bold shadow-sm flex items-center justify-center transition-all group`} 
+                title="Report Listing"
+              >
                 <Flag className="w-5 h-5 group-hover:scale-110 transition-transform" />
               </button>
+
+              {isReporting && (
+                <div className="absolute bottom-full right-0 mb-2 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl p-4 z-50">
+                  <h4 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2">
+                    <Flag className="w-4 h-4 text-amber-500" /> Report Listing
+                  </h4>
+                  <select 
+                    value={reportReason}
+                    onChange={(e) => setReportReason(e.target.value)}
+                    className="w-full text-sm p-2 mb-3 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-amber-500"
+                  >
+                    <option value="">Select a reason...</option>
+                    <option value="Fake Product">Fake Product</option>
+                    <option value="Spam Listing">Spam Listing</option>
+                    <option value="Duplicate Listing">Duplicate Listing</option>
+                    <option value="Inappropriate Content">Inappropriate Content</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => setIsReporting(false)}
+                      className="flex-1 py-1.5 text-xs font-bold text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={handleReportSubmit}
+                      disabled={isSubmittingReport}
+                      className="flex-1 py-1.5 text-xs font-bold bg-amber-500 text-white hover:bg-amber-600 rounded-lg shadow-sm transition-colors disabled:opacity-50"
+                    >
+                      {isSubmittingReport ? 'Submitting...' : 'Submit'}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

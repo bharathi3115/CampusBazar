@@ -2,6 +2,7 @@ import express from 'express';
 import { Product } from '../models/Product.js';
 import { User } from '../models/User.js';
 import { Purchase } from '../models/Purchase.js';
+import { Report } from '../models/Report.js';
 import { v2 as cloudinary } from 'cloudinary';
 import mongoose from 'mongoose';
 
@@ -357,6 +358,10 @@ router.delete('/products/:id', async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
     if (!deletedProduct) return res.status(404).json({ message: 'Product not found' });
+    
+    // Clean up related reports
+    await Report.deleteMany({ productId: req.params.id });
+    
     res.json({ message: 'Product deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -1,6 +1,7 @@
 import { Product } from './models/Product.js';
 import { User } from './models/User.js';
 import { Purchase } from './models/Purchase.js';
+import { Report } from './models/Report.js';
 import bcrypt from 'bcryptjs';
 
 export const seedDatabase = async () => {
@@ -189,6 +190,40 @@ export const seedDatabase = async () => {
       ];
       await Purchase.insertMany(samplePurchases);
       console.log('Seeding purchases completed.');
+    }
+
+    const reportCount = await Report.countDocuments();
+    if (reportCount === 0 && defaultBuyer) {
+      console.log('Seeding dummy reports...');
+      const firstProduct = await Product.findOne();
+      const secondProduct = await Product.findOne().skip(1);
+      
+      if (firstProduct && secondProduct) {
+        await Report.insertMany([
+          {
+            productId: firstProduct._id,
+            reporterId: defaultBuyer._id,
+            reason: 'Fake Product',
+            severity: 'High',
+            status: 'active'
+          },
+          {
+            productId: secondProduct._id,
+            reporterId: defaultBuyer._id,
+            reason: 'Spam Listing',
+            severity: 'High',
+            status: 'active'
+          },
+          {
+            productId: secondProduct._id,
+            reporterId: defaultBuyer._id,
+            reason: 'Duplicate Listing',
+            severity: 'Low',
+            status: 'active'
+          }
+        ]);
+        console.log('Seeding reports completed.');
+      }
     }
   } catch (error) {
     console.error('Error seeding database:', error);

@@ -21,7 +21,11 @@ const userSchema = new mongoose.Schema({
     reviewsGiven: { type: Number, default: 0 }
   },
   recentlyViewed: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
-  wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]
+  wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+  preferences: {
+    emailNotifications: { type: Boolean, default: true },
+    profileVisibility: { type: Boolean, default: false }
+  }
 });
 
 export const User = mongoose.model('User', userSchema);

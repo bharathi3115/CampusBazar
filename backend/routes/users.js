@@ -78,6 +78,14 @@ router.put('/:id', upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'cove
       }
     }
 
+    if (updateData.preferences && typeof updateData.preferences === 'string') {
+      try {
+        updateData.preferences = JSON.parse(updateData.preferences);
+      } catch (e) {
+        console.error('Failed to parse preferences');
+      }
+    }
+
     const updatedUser = await User.findByIdAndUpdate(id, updateData, { new: true });
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });

@@ -44,12 +44,6 @@ const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
           >
             <Heart className="w-4 h-4" fill={wishlisted ? "currentColor" : "none"} />
           </button>
-          <button 
-            onClick={(e) => { e.stopPropagation(); }}
-            className="p-2 bg-white/90 backdrop-blur-sm text-slate-400 hover:text-blue-500 rounded-full shadow-sm hover:shadow-md transition-all"
-          >
-            <Share2 className="w-4 h-4" />
-          </button>
         </div>
       </div>
 
@@ -88,13 +82,22 @@ const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
               </div>
             </div>
           </div>
-          <button 
-            onClick={(e) => { e.stopPropagation(); if (onMessage) onMessage(product); }}
-            className="p-2 text-theme-maroon bg-theme-maroon/5 hover:bg-theme-maroon hover:text-white rounded-lg transition-colors"
-            title="Message Seller"
-          >
-            <MessageSquare className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={(e) => { e.stopPropagation(); onViewDetails(product); }}
+              className="p-2 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition-colors"
+              title="Report Listing"
+            >
+              <Flag className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={(e) => { e.stopPropagation(); if (onMessage) onMessage(product); }}
+              className="p-2 text-theme-maroon bg-theme-maroon/5 hover:bg-theme-maroon hover:text-white rounded-lg transition-colors"
+              title="Message Seller"
+            >
+              <MessageSquare className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
