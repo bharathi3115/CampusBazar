@@ -54,18 +54,23 @@ app.use('/api/admin', adminRoutes);
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  socket.on('join_chat', (userId) => {
-    socket.join(userId);
-    console.log(`User ${userId} joined their personal room`);
+  socket.on('join_chat', ({ userId, role }) => {
+    const roomName = `${userId}_${role}`;
+    socket.join(roomName);
+    console.log(`User joined their ${role} room: ${roomName}`);
   });
 
   socket.on('send_message', async (data) => {
     try {
-      const { conversationId, senderId, receiverId, text } = data;
+      const { conversationId, productId, senderId, receiverId, senderRole, receiverRole, text } = data;
       
       const message = new Message({
         conversationId,
+        productId,
         senderId,
+        receiverId,
+        senderRole,
+        receiverRole,
         text,
         status: 'sent'
       });
@@ -73,17 +78,17 @@ io.on('connection', (socket) => {
 
       const conversation = await Conversation.findById(conversationId);
       conversation.lastMessageAt = new Date();
-      if (conversation.buyerId.toString() === receiverId) {
+      if (receiverRole === 'buyer') {
         conversation.unreadByBuyer += 1;
       } else {
         conversation.unreadBySeller += 1;
       }
       await conversation.save();
 
-      // Emit to receiver's room
-      io.to(receiverId).emit('receive_message', message);
-      // Emit back to sender to confirm
-      socket.emit('message_sent', message);
+      // Emit to receiver's specific role room
+      io.to(`${receiverId}_${receiverRole}`).emit('receive_message', message);
+      // Emit back to sender's specific role room to confirm
+      io.to(`${senderId}_${senderRole}`).emit('message_sent', message);
 
     } catch (error) {
       console.error('Socket message error:', error);

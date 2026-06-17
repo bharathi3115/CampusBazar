@@ -4,60 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 
 const InterestedBuyers = ({ setActiveTab, setSelectedConversationId }) => {
   const { user } = useAuth();
-  const initialDummyData = [
-    {
-      id: 'd1',
-      conversationId: 'dummy_conv_1',
-      name: 'Rahul S.',
-      product: 'Scientific Calculator',
-      lastContact: '2 hours ago',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul',
-      isRepeat: true,
-      profile: { department: 'Engineering', year: '3rd Year', campus: 'Main Campus', stats: { itemsBought: 4 } }
-    },
-    {
-      id: 'd2',
-      conversationId: 'dummy_conv_2',
-      name: 'Priya M.',
-      product: 'Engineering Graphics Book',
-      lastContact: '5 hours ago',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Priya',
-      isRepeat: false,
-      profile: { department: 'Architecture', year: '1st Year', campus: 'North Campus', stats: { itemsBought: 0 } }
-    },
-    {
-      id: 'd3',
-      conversationId: 'dummy_conv_3',
-      name: 'Akash K.',
-      product: 'Drawing Board',
-      lastContact: '1 day ago',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Akash',
-      isRepeat: false,
-      profile: { department: 'Fine Arts', year: '2nd Year', campus: 'South Campus', stats: { itemsBought: 1 } }
-    },
-    {
-      id: 'd4',
-      conversationId: 'dummy_conv_4',
-      name: 'Neha P.',
-      product: 'Mountain Bicycle',
-      lastContact: '2 days ago',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Neha',
-      isRepeat: true,
-      profile: { department: 'Sports Science', year: '4th Year', campus: 'Main Campus', stats: { itemsBought: 7 } }
-    },
-    {
-      id: 'd5',
-      conversationId: 'dummy_conv_5',
-      name: 'David K.',
-      product: 'Physics Lab Coat',
-      lastContact: '3 days ago',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=David',
-      isRepeat: false,
-      profile: { department: 'Physics', year: '1st Year', campus: 'Science Block', stats: { itemsBought: 0 } }
-    }
-  ];
-
-  const [buyers, setBuyers] = useState(initialDummyData);
+  const [buyers, setBuyers] = useState([]);
   const [selectedBuyer, setSelectedBuyer] = useState(null);
 
   useEffect(() => {
@@ -111,7 +58,7 @@ const InterestedBuyers = ({ setActiveTab, setSelectedConversationId }) => {
           };
         });
         
-        setBuyers([...formattedBuyers, ...initialDummyData]);
+        setBuyers(formattedBuyers);
       }
     } catch (err) {
       console.error('Failed to fetch interested buyers', err);
@@ -119,10 +66,7 @@ const InterestedBuyers = ({ setActiveTab, setSelectedConversationId }) => {
   };
 
   const handleMessageClick = (conversationId) => {
-    if (!conversationId) {
-      alert("This is a dummy buyer. You can only message real buyers.");
-      return;
-    }
+    if (!conversationId) return;
     if (setSelectedConversationId && setActiveTab) {
       setSelectedConversationId(conversationId);
       setActiveTab('messages');

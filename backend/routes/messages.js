@@ -57,9 +57,18 @@ router.post('/conversation', async (req, res) => {
 router.get('/conversations/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const conversations = await Conversation.find({
-      $or: [{ buyerId: userId }, { sellerId: userId }]
-    })
+    const { role } = req.query;
+    
+    let query = {};
+    if (role === 'buyer') {
+      query = { buyerId: userId };
+    } else if (role === 'seller') {
+      query = { sellerId: userId };
+    } else {
+      query = { $or: [{ buyerId: userId }, { sellerId: userId }] };
+    }
+
+    const conversations = await Conversation.find(query)
       .populate('buyerId', 'name email avatarUrl department year campus stats createdAt')
       .populate('sellerId', 'name email avatarUrl')
       .populate('productId', 'title img')
@@ -85,14 +94,20 @@ router.get('/:conversationId', async (req, res) => {
 // Mark messages as read
 router.put('/:conversationId/read', async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId, role } = req.body;
     const conversation = await Conversation.findById(req.params.conversationId);
     if (!conversation) return res.status(404).json({ message: 'Conversation not found' });
 
-    if (conversation.buyerId.toString() === userId) {
+    if (role === 'buyer' && conversation.buyerId.toString() === userId) {
       conversation.unreadByBuyer = 0;
-    } else if (conversation.sellerId.toString() === userId) {
+    } else if (role === 'seller' && conversation.sellerId.toString() === userId) {
       conversation.unreadBySeller = 0;
+    } else if (!role) {
+      if (conversation.buyerId.toString() === userId) {
+        conversation.unreadByBuyer = 0;
+      } else if (conversation.sellerId.toString() === userId) {
+        conversation.unreadBySeller = 0;
+      }
     }
     await conversation.save();
 

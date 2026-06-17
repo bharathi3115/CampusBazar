@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Package, CheckCircle, Eye, MessageSquare, Heart, Star,
   PlusCircle, Settings, TrendingUp, DollarSign, Activity, ChevronRight,
@@ -11,12 +11,79 @@ import { useAuth } from '../../context/AuthContext';
 const SellerOverview = ({ setActiveTab }) => {
   const { user } = useAuth();
   const firstName = user?.name ? user.name.split(' ')[0] : 'User';
-  // MOCK DATA for analytics
+
+  const [stats, setStats] = useState({
+    itemsSold: 0,
+    listingViews: 0,
+    buyerInquiries: 0,
+    wishlistSaves: 0,
+    campusInsights: {
+      activeStudents: 0,
+      itemsSoldThisWeek: 0,
+      popularCategory: 'Loading...'
+    }
+  });
+
+  useEffect(() => {
+    if (!user) return;
+    const fetchSellerData = async () => {
+      try {
+        // Fetch sales summary
+        const salesRes = await fetch('http://localhost:5000/api/marketplace/seller/sales');
+        const salesData = await salesRes.json();
+        const summary = salesData.summary || {};
+
+        // Fetch seller's products to aggregate views and wishlist saves
+        const productsRes = await fetch(`http://localhost:5000/api/marketplace/seller/${user._id}/products`);
+        const products = await productsRes.json();
+        let totalViews = 0;
+        let totalWishlistSaves = 0;
+        products.forEach(p => {
+          totalViews += (p.views || 0);
+          totalWishlistSaves += (p.wishlistCount || 0);
+        });
+
+        // Fetch inquiries (unread messages)
+        const msgRes = await fetch(`http://localhost:5000/api/messages/conversations/${user._id}`);
+        const convos = await msgRes.json();
+        let inquiries = 0;
+        convos.forEach(c => {
+           const isMeSeller = c.sellerId?._id === user._id || c.sellerId === user._id;
+           inquiries += isMeSeller ? (c.unreadBySeller || 0) : 0;
+        });
+
+        // Fetch marketplace stats
+        const mktStatsRes = await fetch('http://localhost:5000/api/marketplace/stats');
+        const mktStats = await mktStatsRes.json();
+
+        // Fetch trending categories
+        const trendingRes = await fetch('http://localhost:5000/api/marketplace/trending-categories');
+        const trendingData = await trendingRes.json();
+        const topCategory = trendingData.length > 0 ? trendingData[0].name : 'N/A';
+
+        setStats({
+          itemsSold: summary.totalItemsSold || 0,
+          listingViews: totalViews,
+          buyerInquiries: inquiries,
+          wishlistSaves: totalWishlistSaves,
+          campusInsights: {
+            activeStudents: mktStats.studentsOnline || 0,
+            itemsSoldThisWeek: mktStats.itemsSoldThisWeek || 0,
+            popularCategory: topCategory
+          }
+        });
+      } catch (err) {
+        console.error("Error fetching seller data:", err);
+      }
+    };
+    fetchSellerData();
+  }, [user]);
+
   const overviewStats = [
-    { label: 'Items Sold', value: '45', icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-100' },
-    { label: 'Listing Views', value: '4.2k', icon: Eye, color: 'text-purple-600', bg: 'bg-purple-100' },
-    { label: 'Buyer Inquiries', value: '32', icon: MessageSquare, color: 'text-amber-600', bg: 'bg-amber-100' },
-    { label: 'Wishlist Saves', value: '156', icon: Heart, color: 'text-rose-600', bg: 'bg-rose-100' },
+    { label: 'Items Sold', value: stats.itemsSold.toString(), icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-100' },
+    { label: 'Listing Views', value: stats.listingViews.toString(), icon: Eye, color: 'text-purple-600', bg: 'bg-purple-100' },
+    { label: 'Buyer Inquiries', value: stats.buyerInquiries.toString(), icon: MessageSquare, color: 'text-amber-600', bg: 'bg-amber-100' },
+    { label: 'Wishlist Saves', value: stats.wishlistSaves.toString(), icon: Heart, color: 'text-rose-600', bg: 'bg-rose-100' },
   ];
 
 
@@ -99,15 +166,15 @@ const SellerOverview = ({ setActiveTab }) => {
             <div className="space-y-3 relative z-10">
               <div className="flex justify-between items-center border-b border-slate-100 pb-2">
                 <span className="text-sm font-medium text-slate-500">Active Students</span>
-                <span className="font-bold text-slate-900">2,451</span>
+                <span className="font-bold text-slate-900">{stats.campusInsights.activeStudents}</span>
               </div>
               <div className="flex justify-between items-center border-b border-slate-100 pb-2">
                 <span className="text-sm font-medium text-slate-500">Items Sold This Week</span>
-                <span className="font-bold text-slate-900">142</span>
+                <span className="font-bold text-slate-900">{stats.campusInsights.itemsSoldThisWeek}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-slate-500">Popular Category</span>
-                <span className="font-bold text-theme-maroon">Books</span>
+                <span className="font-bold text-theme-maroon">{stats.campusInsights.popularCategory}</span>
               </div>
             </div>
           </div>

@@ -3,43 +3,7 @@ import { Package, Eye, Heart, Edit, Trash2, CheckCircle, Clock, Check, MoreVerti
 import { useAuth } from '../../context/AuthContext';
 
 const MyListings = ({ setActiveTab, setEditingProduct }) => {
-  const initialDummyData = [
-    {
-      _id: 'd1',
-      title: 'Scientific Calculator fx-991EX',
-      category: 'Electronics',
-      price: 850,
-      status: 'Active',
-      views: 45,
-      wishlistCount: 12,
-      createdAt: '2023-10-15T10:00:00Z',
-      img: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?q=80&w=200&h=200&fit=crop'
-    },
-    {
-      _id: 'd2',
-      title: 'Engineering Drawing Board (Full Size)',
-      category: 'Equipment',
-      price: 400,
-      status: 'Pending',
-      views: 120,
-      wishlistCount: 8,
-      createdAt: '2023-10-12T14:30:00Z',
-      img: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=200&h=200&fit=crop'
-    },
-    {
-      _id: 'd3',
-      title: 'Data Structures & Algorithms in Java',
-      category: 'Books',
-      price: 350,
-      status: 'Sold',
-      views: 210,
-      wishlistCount: 0,
-      createdAt: '2023-10-01T09:15:00Z',
-      img: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=200&h=200&fit=crop'
-    }
-  ];
-
-  const [listings, setListings] = useState(initialDummyData);
+  const [listings, setListings] = useState([]);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -53,8 +17,7 @@ const MyListings = ({ setActiveTab, setEditingProduct }) => {
       const res = await fetch(`http://localhost:5000/api/marketplace/seller/${user._id}/products`);
       if (res.ok) {
         const data = await res.json();
-        // Merge dummy data with actual backend data
-        setListings([...initialDummyData, ...data]);
+        setListings(data);
       }
     } catch (err) {
       console.error('Failed to fetch listings', err);
@@ -69,10 +32,6 @@ const MyListings = ({ setActiveTab, setEditingProduct }) => {
   };
 
   const markAsSold = async (id) => {
-    if (id.startsWith('d')) {
-      setListings(listings.map(l => l._id === id ? { ...l, status: 'Sold' } : l));
-      return;
-    }
     try {
       const res = await fetch(`http://localhost:5000/api/marketplace/products/${id}`, {
         method: 'PUT',
@@ -89,10 +48,6 @@ const MyListings = ({ setActiveTab, setEditingProduct }) => {
 
   const deleteListing = async (id) => {
     if (!window.confirm('Are you sure you want to delete this listing?')) return;
-    if (id.startsWith('d')) {
-      setListings(listings.filter(l => l._id !== id));
-      return;
-    }
     try {
       const res = await fetch(`http://localhost:5000/api/marketplace/products/${id}`, {
         method: 'DELETE'
@@ -168,10 +123,6 @@ const MyListings = ({ setActiveTab, setEditingProduct }) => {
                         </button>
                       )}
                       <button onClick={() => {
-                        if (item._id.startsWith('d')) {
-                          alert('Cannot edit dummy data. Post a real listing to try edit!');
-                          return;
-                        }
                         setEditingProduct(item);
                         setActiveTab('post');
                       }} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors" title="Edit">

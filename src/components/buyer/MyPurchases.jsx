@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Package, 
   Star, 
@@ -57,6 +57,27 @@ const DUMMY_PURCHASES = [
 const MyPurchases = ({ setActiveTab }) => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
+  const [purchases, setPurchases] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchPurchases();
+  }, []);
+
+  const fetchPurchases = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:5000/api/marketplace/purchases?limit=50');
+      if (!response.ok) throw new Error('Failed to fetch purchases');
+      const result = await response.json();
+      setPurchases(result.purchases || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDownloadInvoice = (purchase) => {
     setToastMessage(`Downloading PDF invoice for ${purchase.transactionId}...`);
@@ -163,8 +184,25 @@ const MyPurchases = ({ setActiveTab }) => {
       </div>
 
       {/* List */}
+      {loading ? (
+        <div className="flex justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-theme-maroon"></div>
+        </div>
+      ) : error ? (
+        <div className="p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 text-sm font-medium">
+          Error loading purchases: {error}
+        </div>
+      ) : purchases.length === 0 ? (
+        <div className="text-center py-12 px-4 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50">
+          <Package className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+          <h3 className="text-lg font-bold text-slate-900 mb-1">No Purchases Found</h3>
+          <p className="text-sm text-slate-500 max-w-sm mx-auto mb-6">
+            You haven't purchased any items yet. Start exploring the marketplace to find great deals on campus.
+          </p>
+        </div>
+      ) : (
       <div className="space-y-4">
-        {DUMMY_PURCHASES.map((purchase) => (
+        {purchases.map((purchase) => (
           <div key={purchase._id} className="group border border-slate-200 rounded-2xl p-4 sm:p-5 hover:border-slate-300 hover:shadow-lg transition-all bg-white relative overflow-hidden">
             <div className="flex flex-col sm:flex-row gap-5">
               {/* Product Image */}
@@ -249,6 +287,7 @@ const MyPurchases = ({ setActiveTab }) => {
           </div>
         ))}
       </div>
+      )}
 
       {/* Toast Notification */}
       {toastMessage && (

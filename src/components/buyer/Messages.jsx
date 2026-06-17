@@ -18,7 +18,7 @@ const Messages = ({ initialChatId }) => {
   const fetchConversations = async () => {
     if (!user) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/messages/conversations/${user._id}`);
+      const res = await fetch(`http://localhost:5000/api/messages/conversations/${user._id}?role=buyer`);
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
@@ -42,7 +42,7 @@ const Messages = ({ initialChatId }) => {
     const newSocket = io('http://localhost:5000');
     setSocket(newSocket);
 
-    newSocket.emit('join_chat', user._id);
+    newSocket.emit('join_chat', { userId: user._id, role: 'buyer' });
 
     newSocket.on('receive_message', (msg) => {
       setMessages(prev => {
@@ -77,7 +77,7 @@ const Messages = ({ initialChatId }) => {
           await fetch(`http://localhost:5000/api/messages/${activeChatId}/read`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: user._id })
+            body: JSON.stringify({ userId: user._id, role: 'buyer' })
           });
           fetchConversations();
         } catch (err) {
@@ -105,8 +105,11 @@ const Messages = ({ initialChatId }) => {
 
     const messageData = {
       conversationId: activeChatId,
+      productId: activeChat.productId._id,
       senderId: user._id,
       receiverId,
+      senderRole: 'buyer',
+      receiverRole: 'seller',
       text: newMessage
     };
 
@@ -225,11 +228,6 @@ const Messages = ({ initialChatId }) => {
                     </div>
                   </div>
                   <div className="flex items-center gap-1 sm:gap-2">
-                    <button className="p-2 text-slate-400 hover:text-theme-maroon hover:bg-theme-maroon/10 rounded-full transition-colors"><Phone className="w-5 h-5" /></button>
-                    <button className="p-2 text-slate-400 hover:text-theme-maroon hover:bg-theme-maroon/10 rounded-full transition-colors"><Video className="w-5 h-5" /></button>
-                    <div className="w-px h-6 bg-slate-200 mx-1"></div>
-                    <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"><Info className="w-5 h-5" /></button>
-                    <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"><MoreVertical className="w-5 h-5" /></button>
                   </div>
                 </div>
 
@@ -281,9 +279,6 @@ const Messages = ({ initialChatId }) => {
                 <div className="p-4 bg-white border-t border-slate-200">
                   <form onSubmit={handleSendMessage} className="flex items-end gap-2 sm:gap-3 bg-slate-50 p-2 sm:p-2 rounded-2xl border border-slate-200 focus-within:border-theme-maroon focus-within:ring-1 focus-within:ring-theme-maroon transition-all">
                     <div className="flex gap-1 pb-1 px-1 text-slate-400">
-                      <button type="button" className="p-1.5 hover:text-theme-maroon hover:bg-theme-maroon/10 rounded-lg transition-colors"><Smile className="w-5 h-5" /></button>
-                      <button type="button" className="p-1.5 hover:text-theme-maroon hover:bg-theme-maroon/10 rounded-lg transition-colors"><Paperclip className="w-5 h-5" /></button>
-                      <button type="button" className="p-1.5 hover:text-theme-maroon hover:bg-theme-maroon/10 rounded-lg transition-colors hidden sm:block"><ImageIcon className="w-5 h-5" /></button>
                     </div>
                     <input 
                       type="text" 

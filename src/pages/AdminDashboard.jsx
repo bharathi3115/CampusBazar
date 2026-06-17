@@ -26,8 +26,8 @@ const AdminDashboard = () => {
 
   const navItems = [
     { id: 'dashboard', label: 'Overview', icon: <LayoutDashboard className="w-5 h-5" /> },
-    { id: 'reports', label: 'Reports', icon: <AlertTriangle className="w-5 h-5" /> },
     { id: 'analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5" /> },
+    { id: 'reports', label: 'Reports', icon: <AlertTriangle className="w-5 h-5" /> },
     { id: 'settings', label: 'Settings', icon: <Settings className="w-5 h-5" /> },
   ];
 
