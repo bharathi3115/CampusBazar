@@ -182,10 +182,9 @@ const BrowseMarketplace = ({ setActiveTab }) => {
               </div>
               <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar">
                 {trending.map((t, i) => (
-                  <div key={i} className="flex-shrink-0 w-48 bg-white border border-slate-200 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-theme-maroon/50 hover:shadow-md transition-all group">
-                    <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">🔥</span>
+                  <div key={i} className="flex-shrink-0 w-48 bg-blue-100 text-slate-800 border border-blue-200 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-300 hover:shadow-md transition-all group">
                     <h3 className="font-bold text-slate-900 text-center">{t.name}</h3>
-                    <p className="text-xs text-slate-500 font-medium">{t.listings} Listings</p>
+                    <p className="text-xs text-slate-500 font-medium mt-1">{t.listings} Listings</p>
                   </div>
                 ))}
               </div>

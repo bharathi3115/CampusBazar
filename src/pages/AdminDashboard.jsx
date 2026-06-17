@@ -100,10 +100,7 @@ const AdminDashboard = () => {
           
           <div className="flex items-center gap-6">
             
-            <button className="relative p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-            </button>
+
             
             <div className="flex items-center gap-3 border-l border-slate-200 pl-6">
               <div className="w-9 h-9 bg-theme-dark-maroon rounded-full flex items-center justify-center text-white font-bold shadow-sm">

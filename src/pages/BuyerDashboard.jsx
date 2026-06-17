@@ -93,10 +93,7 @@ const BuyerDashboard = () => {
           
           <div className="flex items-center gap-3 sm:gap-5">
 
-            <button className="relative p-2 text-slate-400 hover:text-slate-900 transition-colors">
-              <Bell className="w-6 h-6" />
-              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
-            </button>
+
             
             <div className="relative pl-2 sm:pl-4 sm:border-l border-slate-200">
               <div 
