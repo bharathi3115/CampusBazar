@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Home, Search, PlusCircle, Bell, MessageSquare, Heart, 
   ShoppingBag, Settings, LogOut, ChevronRight, TrendingUp, Store,
   Tag, MapPin, Eye, Star, Clock, CheckCircle, Package, User, ShoppingCart, ChevronDown
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { io } from 'socket.io-client';
 import SellerOverview from '../components/seller/SellerOverview';
 import PostListing from '../components/seller/PostListing';
 import MyListings from '../components/seller/MyListings';
@@ -18,12 +19,47 @@ const SellerDashboard = () => {
   const [showRoleMenu, setShowRoleMenu] = useState(false);
   const { user, role, logout, switchRole } = useAuth();
 
+  const [unreadMessages, setUnreadMessages] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    
+    const fetchUnread = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/messages/conversations/${user._id}`);
+        if (res.ok) {
+          const convos = await res.json();
+          let unread = 0;
+          convos.forEach(c => {
+             const isMeBuyer = c.buyerId?._id === user._id || c.buyerId === user._id;
+             unread += isMeBuyer ? (c.unreadByBuyer || 0) : (c.unreadBySeller || 0);
+          });
+          setUnreadMessages(unread);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    
+    fetchUnread();
+
+    const socket = io('http://localhost:5000');
+    socket.emit('join_chat', user._id);
+    socket.on('receive_message', () => {
+      fetchUnread();
+    });
+
+    return () => socket.close();
+  }, [user]);
+
   const navItems = [
     { id: 'dashboard', label: 'Overview', icon: Home },
     { id: 'post', label: 'Post New Listing', icon: PlusCircle },
     { id: 'listings', label: 'My Listings', icon: Package },
     { id: 'buyers', label: 'Interested Buyers', icon: Eye },
-    { id: 'messages', label: 'Messages', icon: MessageSquare },
+    { id: 'messages', label: 'Messages', icon: MessageSquare, badge: unreadMessages > 0 ? (
+      <span className="flex w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
+    ) : null },
   ];
 
   return (
@@ -62,9 +98,9 @@ const SellerDashboard = () => {
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
-                  <span className="bg-theme-maroon text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  <div className="flex items-center justify-center">
                     {item.badge}
-                  </span>
+                  </div>
                 )}
               </button>
             )
