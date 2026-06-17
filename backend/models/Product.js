@@ -27,7 +27,7 @@ const productSchema = new mongoose.Schema({
   },
   views: { type: Number, default: 0 },
   wishlistCount: { type: Number, default: 0 },
-  status: { type: String, enum: ['Active', 'Sold'], default: 'Active' },
+  status: { type: String, enum: ['Pending', 'Active', 'Sold', 'Rejected'], default: 'Active' },
   createdAt: { type: Date, default: Date.now }
 });
 

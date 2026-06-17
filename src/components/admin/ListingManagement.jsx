@@ -1,14 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, CheckCircle, XCircle, Trash2, Eye, ExternalLink } from 'lucide-react';
 
 const ListingManagement = () => {
-  const listings = [
-    { id: 1, title: 'Calculus Textbook 9th Ed', seller: 'John Doe', category: 'Books', price: '₹450', status: 'Pending', date: 'Oct 12, 2023', img: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=150' },
-    { id: 2, title: 'Casio Scientific Calculator', seller: 'Rahul Sharma', category: 'Calculators', price: '₹500', status: 'Active', date: 'Oct 11, 2023', img: 'https://images.unsplash.com/photo-1574607383476-f517f260d30b?auto=format&fit=crop&q=80&w=150' },
-    { id: 3, title: 'Hercules MTB Bicycle', seller: 'Priya Patel', category: 'Cycles', price: '₹3,500', status: 'Active', date: 'Oct 10, 2023', img: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&q=80&w=150' },
-    { id: 4, title: 'Bluetooth Headphones', seller: 'Neha Gupta', category: 'Electronics', price: '₹800', status: 'Rejected', date: 'Oct 09, 2023', img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=150' },
-    { id: 5, title: 'Lab Coat & Safety Goggles', seller: 'Vikas Singh', category: 'Lab Equipment', price: '₹300', status: 'Active', date: 'Oct 08, 2023', img: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&q=80&w=150' },
-  ];
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchListings = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/admin/listings');
+      if (res.ok) {
+        const data = await res.json();
+        setListings(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch listings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchListings();
+  }, []);
+
+  const handleStatusChange = async (id, status) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/admin/listings/${id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      if (res.ok) fetchListings();
+    } catch (error) {
+      console.error('Failed to update status:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this listing?')) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/admin/listings/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) fetchListings();
+    } catch (error) {
+      console.error('Failed to delete listing:', error);
+    }
+  };
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -57,60 +95,66 @@ const ListingManagement = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {listings.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50 transition-colors group">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-4">
-                      <img src={item.img} alt={item.title} className="w-12 h-12 rounded-lg object-cover border border-slate-200 shrink-0" />
-                      <div>
-                        <p className="font-bold text-slate-900 line-clamp-1">{item.title}</p>
-                        <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                          By <span className="font-semibold text-slate-700">{item.seller}</span>
-                        </p>
+              {loading ? (
+                <tr><td colSpan="6" className="text-center py-8 text-slate-500">Loading listings...</td></tr>
+              ) : listings.length === 0 ? (
+                <tr><td colSpan="6" className="text-center py-8 text-slate-500">No listings found.</td></tr>
+              ) : (
+                listings.map((item) => (
+                  <tr key={item._id} className="hover:bg-slate-50 transition-colors group">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-4">
+                        <img src={item.images?.[0] || item.img || 'https://via.placeholder.com/150'} alt={item.title} className="w-12 h-12 rounded-lg object-cover border border-slate-200 shrink-0" />
+                        <div>
+                          <p className="font-bold text-slate-900 line-clamp-1">{item.title}</p>
+                          <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                            By <span className="font-semibold text-slate-700">{item.seller?.name || 'Unknown User'}</span>
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-medium text-slate-700">
-                    <span className="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider">
-                      {item.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 font-black text-slate-900">{item.price}</td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
-                      item.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 
-                      item.status === 'Pending' ? 'bg-amber-50 text-amber-600' : 
-                      'bg-red-50 text-red-600'
-                    }`}>
-                      {item.status === 'Active' && <CheckCircle className="w-3.5 h-3.5" />}
-                      {item.status === 'Pending' && <Eye className="w-3.5 h-3.5" />}
-                      {item.status === 'Rejected' && <XCircle className="w-3.5 h-3.5" />}
-                      {item.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-slate-500 font-medium">{item.date}</td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {item.status === 'Pending' && (
-                        <>
-                          <button className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Approve">
-                            <CheckCircle className="w-4 h-4" />
-                          </button>
-                          <button className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Reject">
-                            <XCircle className="w-4 h-4" />
-                          </button>
-                        </>
-                      )}
-                      <button className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View Details">
-                        <ExternalLink className="w-4 h-4" />
-                      </button>
-                      <button className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete Listing">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-6 py-4 font-medium text-slate-700">
+                      <span className="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider">
+                        {item.category}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 font-black text-slate-900">₹{item.price}</td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
+                        item.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 
+                        (item.status === 'Pending' || !item.status) ? 'bg-amber-50 text-amber-600' : 
+                        'bg-red-50 text-red-600'
+                      }`}>
+                        {item.status === 'Active' && <CheckCircle className="w-3.5 h-3.5" />}
+                        {(item.status === 'Pending' || !item.status) && <Eye className="w-3.5 h-3.5" />}
+                        {item.status === 'Rejected' && <XCircle className="w-3.5 h-3.5" />}
+                        {item.status || 'Pending'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-slate-500 font-medium">{new Date(item.createdAt).toLocaleDateString()}</td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {(item.status === 'Pending' || !item.status) && (
+                          <>
+                            <button onClick={() => handleStatusChange(item._id, 'Active')} className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Approve">
+                              <CheckCircle className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => handleStatusChange(item._id, 'Rejected')} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Reject">
+                              <XCircle className="w-4 h-4" />
+                            </button>
+                          </>
+                        )}
+                        <button className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View Details">
+                          <ExternalLink className="w-4 h-4" />
+                        </button>
+                        <button onClick={() => handleDelete(item._id)} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete Listing">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

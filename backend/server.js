@@ -9,6 +9,7 @@ import messagesRoutes from './routes/messages.js';
 import usersRoutes from './routes/users.js';
 import authRoutes from './routes/auth.js';
 import reportsRoutes from './routes/reports.js';
+import adminRoutes from './routes/admin.js';
 import { seedDatabase } from './seedData.js';
 import { Message } from './models/Message.js';
 import { Conversation } from './models/Conversation.js';
@@ -47,6 +48,7 @@ app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/messages', messagesRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/reports', reportsRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Socket.io
 io.on('connection', (socket) => {
