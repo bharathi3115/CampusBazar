@@ -84,10 +84,14 @@ router.put('/:id', upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'cove
             updateData.avatarUrl = res.secure_url;
           } catch (e) {
             console.error('Cloudinary upload error:', e);
-            updateData.avatarUrl = `http://localhost:5000/uploads/${req.files.avatar[0].filename}`;
+            const fileData = fs.readFileSync(req.files.avatar[0].path);
+            const base64Str = fileData.toString('base64');
+            updateData.avatarUrl = `data:${req.files.avatar[0].mimetype};base64,${base64Str}`;
           }
         } else {
-          updateData.avatarUrl = `http://localhost:5000/uploads/${req.files.avatar[0].filename}`;
+          const fileData = fs.readFileSync(req.files.avatar[0].path);
+          const base64Str = fileData.toString('base64');
+          updateData.avatarUrl = `data:${req.files.avatar[0].mimetype};base64,${base64Str}`;
         }
       }
       if (req.files.cover && req.files.cover.length > 0) {
@@ -97,10 +101,14 @@ router.put('/:id', upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'cove
             updateData.coverUrl = res.secure_url;
           } catch (e) {
             console.error('Cloudinary upload error:', e);
-            updateData.coverUrl = `http://localhost:5000/uploads/${req.files.cover[0].filename}`;
+            const fileData = fs.readFileSync(req.files.cover[0].path);
+            const base64Str = fileData.toString('base64');
+            updateData.coverUrl = `data:${req.files.cover[0].mimetype};base64,${base64Str}`;
           }
         } else {
-          updateData.coverUrl = `http://localhost:5000/uploads/${req.files.cover[0].filename}`;
+          const fileData = fs.readFileSync(req.files.cover[0].path);
+          const base64Str = fileData.toString('base64');
+          updateData.coverUrl = `data:${req.files.cover[0].mimetype};base64,${base64Str}`;
         }
       }
     }
