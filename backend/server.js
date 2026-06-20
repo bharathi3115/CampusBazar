@@ -60,6 +60,13 @@ io.on('connection', (socket) => {
     console.log(`User joined their ${role} room: ${roomName}`);
   });
 
+  socket.on('new_message_notification', (data) => {
+    // Simply relay the notification to the receiver's room
+    // The data object can just be the saved message returned by the REST API
+    const { receiverId, receiverRole } = data;
+    io.to(`${receiverId}_${receiverRole}`).emit('receive_message', data);
+  });
+
   socket.on('send_message', async (data) => {
     try {
       const { conversationId, productId, senderId, receiverId, senderRole, receiverRole, text } = data;

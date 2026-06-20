@@ -7,6 +7,41 @@ import { User } from '../models/User.js';
 
 const router = express.Router();
 
+// Send a message
+router.post('/', async (req, res) => {
+  try {
+    const { conversationId, productId, senderId, receiverId, senderRole, receiverRole, text } = req.body;
+    
+    const message = new Message({
+      conversationId,
+      productId,
+      senderId,
+      receiverId,
+      senderRole,
+      receiverRole,
+      text,
+      status: 'sent'
+    });
+    await message.save();
+
+    const conversation = await Conversation.findById(conversationId);
+    if (conversation) {
+      conversation.lastMessageAt = new Date();
+      if (receiverRole === 'buyer') {
+        conversation.unreadByBuyer += 1;
+      } else {
+        conversation.unreadBySeller += 1;
+      }
+      await conversation.save();
+    }
+
+    res.status(201).json(message);
+  } catch (error) {
+    console.error('Send message error:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Get or Create conversation
 router.post('/conversation', async (req, res) => {
   try {

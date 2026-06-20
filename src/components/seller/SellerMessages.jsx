@@ -120,15 +120,40 @@ const SellerMessages = ({ initialChatId }) => {
       text: newMessage
     };
 
-    socket.emit('send_message', messageData);
-
+    // Optimistic UI update
+    const tempId = Date.now().toString();
     setMessages(prev => [...prev, {
       ...messageData,
-      _id: Date.now().toString(),
+      _id: tempId,
       createdAt: new Date().toISOString(),
-      status: 'sent'
+      status: 'sending'
     }]);
     setNewMessage('');
+
+    try {
+      // 1. Save to Database via REST API
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(messageData)
+      });
+      
+      if (res.ok) {
+        const savedMessage = await res.json();
+        // Update optimistic message with real DB message
+        setMessages(prev => prev.map(m => m._id === tempId ? savedMessage : m));
+        
+        // 2. Notify the receiver via Socket.io
+        socket.emit('new_message_notification', savedMessage);
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error(error);
+      // Mark as failed
+      setMessages(prev => prev.map(m => m._id === tempId ? { ...m, status: 'failed' } : m));
+    }
+    
     fetchConversations();
   };
 
