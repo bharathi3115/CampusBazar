@@ -29,12 +29,12 @@ const SellerOverview = ({ setActiveTab }) => {
     const fetchSellerData = async () => {
       try {
         // Fetch sales summary
-        const salesRes = await fetch('http://localhost:5000/api/marketplace/seller/sales');
+        const salesRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/seller/sales`);
         const salesData = await salesRes.json();
         const summary = salesData.summary || {};
 
         // Fetch seller's products to aggregate views and wishlist saves
-        const productsRes = await fetch(`http://localhost:5000/api/marketplace/seller/${user._id}/products`);
+        const productsRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/seller/${user._id}/products`);
         const products = await productsRes.json();
         let totalViews = 0;
         let totalWishlistSaves = 0;
@@ -44,7 +44,7 @@ const SellerOverview = ({ setActiveTab }) => {
         });
 
         // Fetch inquiries (unread messages)
-        const msgRes = await fetch(`http://localhost:5000/api/messages/conversations/${user._id}`);
+        const msgRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/conversations/${user._id}`);
         const convos = await msgRes.json();
         let inquiries = 0;
         convos.forEach(c => {
@@ -53,11 +53,11 @@ const SellerOverview = ({ setActiveTab }) => {
         });
 
         // Fetch marketplace stats
-        const mktStatsRes = await fetch('http://localhost:5000/api/marketplace/stats');
+        const mktStatsRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/stats`);
         const mktStats = await mktStatsRes.json();
 
         // Fetch trending categories
-        const trendingRes = await fetch('http://localhost:5000/api/marketplace/trending-categories');
+        const trendingRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/trending-categories`);
         const trendingData = await trendingRes.json();
         const topCategory = trendingData.length > 0 ? trendingData[0].name : 'N/A';
 

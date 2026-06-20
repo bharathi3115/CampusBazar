@@ -7,7 +7,7 @@ const ListingManagement = () => {
 
   const fetchListings = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/listings');
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/listings`);
       if (res.ok) {
         const data = await res.json();
         setListings(data);
@@ -25,7 +25,7 @@ const ListingManagement = () => {
 
   const handleStatusChange = async (id, status) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/listings/${id}/status`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/listings/${id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
@@ -39,7 +39,7 @@ const ListingManagement = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this listing?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/listings/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/listings/${id}`, {
         method: 'DELETE'
       });
       if (res.ok) fetchListings();

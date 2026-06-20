@@ -190,13 +190,13 @@ const PostListing = ({ setActiveTab, editingProduct, setEditingProduct }) => {
 
       let response;
       if (editingProduct) {
-        response = await fetch(`http://localhost:5000/api/marketplace/products/${editingProduct._id}`, {
+        response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/products/${editingProduct._id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
       } else {
-        response = await fetch('http://localhost:5000/api/marketplace/products', {
+        response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/products`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),

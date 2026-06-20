@@ -14,7 +14,7 @@ const MyListings = ({ setActiveTab, setEditingProduct }) => {
 
   const fetchListings = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/marketplace/seller/${user._id}/products`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/seller/${user._id}/products`);
       if (res.ok) {
         const data = await res.json();
         setListings(data);
@@ -33,7 +33,7 @@ const MyListings = ({ setActiveTab, setEditingProduct }) => {
 
   const markAsSold = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/marketplace/products/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/products/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'Sold' })
@@ -49,7 +49,7 @@ const MyListings = ({ setActiveTab, setEditingProduct }) => {
   const deleteListing = async (id) => {
     if (!window.confirm('Are you sure you want to delete this listing?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/marketplace/products/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/products/${id}`, {
         method: 'DELETE'
       });
       if (res.ok) {

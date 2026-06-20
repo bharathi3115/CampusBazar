@@ -25,7 +25,7 @@ const BuyerDashboard = () => {
     
     const fetchUnread = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/messages/conversations/${user._id}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/conversations/${user._id}`);
         if (res.ok) {
           const convos = await res.json();
           let unread = 0;
@@ -42,7 +42,7 @@ const BuyerDashboard = () => {
     
     fetchUnread();
 
-    const socket = io('http://localhost:5000');
+    const socket = io(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}`);
     socket.emit('join_chat', user._id);
     socket.on('receive_message', () => {
       fetchUnread();

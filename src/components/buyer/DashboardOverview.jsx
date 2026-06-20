@@ -29,11 +29,11 @@ const DashboardOverview = ({ setActiveTab }) => {
     const fetchDashboardData = async () => {
       try {
         // Fetch purchases summary
-        const purchasesRes = await fetch('http://localhost:5000/api/marketplace/purchases?limit=1');
+        const purchasesRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/purchases?limit=1`);
         const purchasesData = await purchasesRes.json();
         
         // Fetch unread messages
-        const msgRes = await fetch(`http://localhost:5000/api/messages/conversations/${user._id}`);
+        const msgRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/conversations/${user._id}`);
         const convos = await msgRes.json();
         let unread = 0;
         convos.forEach(c => {
@@ -42,11 +42,11 @@ const DashboardOverview = ({ setActiveTab }) => {
         });
 
         // Fetch marketplace stats
-        const mktStatsRes = await fetch('http://localhost:5000/api/marketplace/stats');
+        const mktStatsRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/stats`);
         const mktStats = await mktStatsRes.json();
 
         // Fetch trending categories
-        const trendingRes = await fetch('http://localhost:5000/api/marketplace/trending-categories');
+        const trendingRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/trending-categories`);
         const trendingData = await trendingRes.json();
         const topCategory = trendingData.length > 0 ? trendingData[0].name : 'N/A';
 

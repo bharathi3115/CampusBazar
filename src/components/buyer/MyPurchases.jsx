@@ -68,7 +68,7 @@ const MyPurchases = ({ setActiveTab }) => {
   const fetchPurchases = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/marketplace/purchases?limit=50');
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/purchases?limit=50`);
       if (!response.ok) throw new Error('Failed to fetch purchases');
       const result = await response.json();
       setPurchases(result.purchases || []);

@@ -69,7 +69,7 @@ const Categories = () => {
   const [categories, setCategories] = useState(initialCategories);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/marketplace/trending-categories')
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/trending-categories`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {

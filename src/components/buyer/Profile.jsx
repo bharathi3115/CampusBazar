@@ -61,7 +61,7 @@ const Profile = () => {
       try {
         const fd = new FormData();
         fd.append('preferences', JSON.stringify(updatedPreferences));
-        const res = await fetch(`http://localhost:5000/api/users/${user._id}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/${user._id}`, {
           method: 'PUT',
           body: fd
         });
@@ -87,7 +87,7 @@ const Profile = () => {
 
       // Ensure we have a valid user ID
       if (!currentUserId || currentUserId === 'undefined' || currentUserId === 'null') {
-        const syncRes = await fetch('http://localhost:5000/api/users/sync', {
+        const syncRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/sync`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: user?.email, name: user?.name, role: role })
@@ -117,7 +117,7 @@ const Profile = () => {
       if (avatarFile) fd.append('avatar', avatarFile);
       if (coverFile) fd.append('cover', coverFile);
 
-      const res = await fetch(`http://localhost:5000/api/users/${currentUserId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/${currentUserId}`, {
         method: 'PUT',
         body: fd
       });

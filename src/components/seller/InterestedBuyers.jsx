@@ -15,7 +15,7 @@ const InterestedBuyers = ({ setActiveTab, setSelectedConversationId }) => {
 
   const fetchBuyers = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/messages/conversations/${user._id}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/conversations/${user._id}`);
       if (res.ok) {
         const data = await res.json();
         

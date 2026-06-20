@@ -33,7 +33,7 @@ const RecentPurchases = () => {
     try {
       setLoading(true);
       // In a real app, we would handle pagination
-      const response = await fetch('http://localhost:5000/api/marketplace/purchases?limit=5');
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/purchases?limit=5`);
       if (!response.ok) throw new Error('Failed to fetch purchases');
       const result = await response.json();
       setData(result);

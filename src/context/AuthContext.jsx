@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       
       // Auto-sync with backend if _id is missing
       if (!parsedUser._id) {
-        fetch('http://localhost:5000/api/users/sync', {
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/sync`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: parsedUser.email, name: parsedUser.name, role: storedRole })
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('role');
 
       // Sync with backend immediately
-      fetch('http://localhost:5000/api/users/sync', {
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/sync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
 
   const loginWithPassword = async (email, password, rememberMe) => {
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

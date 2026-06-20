@@ -10,8 +10,8 @@ const AdminOverview = () => {
     const fetchAdminData = async () => {
       try {
         const [statsRes, activityRes] = await Promise.all([
-          fetch('http://localhost:5000/api/admin/stats'),
-          fetch('http://localhost:5000/api/admin/recent-activity')
+          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/stats`),
+          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/recent-activity`)
         ]);
         if (statsRes.ok) setStatsData(await statsRes.json());
         if (activityRes.ok) setRecentActivity(await activityRes.json());

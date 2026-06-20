@@ -38,9 +38,9 @@ const BrowseMarketplace = ({ setActiveTab }) => {
       }).toString();
 
       const [productsRes, statsRes, trendingRes] = await Promise.all([
-        fetch(`http://localhost:5000/api/marketplace/products?${query}`),
-        fetch(`http://localhost:5000/api/marketplace/stats`),
-        fetch(`http://localhost:5000/api/marketplace/trending-categories`)
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/products?${query}`),
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/stats`),
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/trending-categories`)
       ]);
 
       if (productsRes.ok) {
@@ -94,7 +94,7 @@ const BrowseMarketplace = ({ setActiveTab }) => {
 
   const handleMessageSeller = async (product) => {
     try {
-      const res = await fetch('http://localhost:5000/api/messages/conversation', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/conversation`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -224,7 +224,7 @@ const BrowseMarketplace = ({ setActiveTab }) => {
                 product={product} 
                 onViewDetails={(p) => {
                   setSelectedProduct(p);
-                  fetch(`http://localhost:5000/api/marketplace/products/${p._id}`).catch(e => console.error(e));
+                  fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/products/${p._id}`).catch(e => console.error(e));
                 }} 
                 onWishlist={(id) => console.log('Wishlist', id)} 
                 onMessage={handleMessageSeller}

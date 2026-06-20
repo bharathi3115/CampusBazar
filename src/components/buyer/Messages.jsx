@@ -18,7 +18,7 @@ const Messages = ({ initialChatId }) => {
   const fetchConversations = async () => {
     if (!user) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/messages/conversations/${user._id}?role=buyer`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/conversations/${user._id}?role=buyer`);
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
@@ -39,7 +39,7 @@ const Messages = ({ initialChatId }) => {
 
   useEffect(() => {
     if (!user) return;
-    const newSocket = io('http://localhost:5000');
+    const newSocket = io(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}`);
     setSocket(newSocket);
 
     newSocket.emit('join_chat', { userId: user._id, role: 'buyer' });
@@ -65,7 +65,7 @@ const Messages = ({ initialChatId }) => {
     if (activeChatId && user) {
       const fetchMessages = async () => {
         try {
-          const res = await fetch(`http://localhost:5000/api/messages/${activeChatId}`);
+          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/${activeChatId}`);
           if (res.ok) {
             const data = await res.json();
             setMessages(Array.isArray(data) ? data : []);
@@ -74,7 +74,7 @@ const Messages = ({ initialChatId }) => {
           }
           
           // Mark read
-          await fetch(`http://localhost:5000/api/messages/${activeChatId}/read`, {
+          await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/${activeChatId}/read`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: user._id, role: 'buyer' })

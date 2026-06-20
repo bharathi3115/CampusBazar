@@ -13,7 +13,7 @@ const ReportedListings = () => {
 
   const fetchReports = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/reports');
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/reports`);
       if (res.ok) {
         const data = await res.json();
         setReports(data);
@@ -27,7 +27,7 @@ const ReportedListings = () => {
 
   const handleIgnoreReport = async (reportId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/reports/${reportId}/ignore`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/reports/${reportId}/ignore`, {
         method: 'PUT'
       });
       if (res.ok) {
@@ -41,7 +41,7 @@ const ReportedListings = () => {
   const handleRemoveListing = async (productId, reportId) => {
     if (!window.confirm("Are you sure you want to permanently delete this listing?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/marketplace/products/${productId._id || productId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/products/${productId._id || productId}`, {
         method: 'DELETE'
       });
       if (res.ok) {
