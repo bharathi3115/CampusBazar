@@ -3,6 +3,13 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { User } from '../models/User.js';
+import { v2 as cloudinary } from 'cloudinary';
+
+cloudinary.config({ 
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET 
+});
 
 const router = express.Router();
 
@@ -71,10 +78,30 @@ router.put('/:id', upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'cove
     // If files were uploaded, add their URLs to updateData
     if (req.files) {
       if (req.files.avatar && req.files.avatar.length > 0) {
-        updateData.avatarUrl = `http://localhost:5000/uploads/${req.files.avatar[0].filename}`;
+        if (process.env.CLOUDINARY_CLOUD_NAME) {
+          try {
+            const res = await cloudinary.uploader.upload(req.files.avatar[0].path, { folder: 'campusbazaar_users' });
+            updateData.avatarUrl = res.secure_url;
+          } catch (e) {
+            console.error('Cloudinary upload error:', e);
+            updateData.avatarUrl = `http://localhost:5000/uploads/${req.files.avatar[0].filename}`;
+          }
+        } else {
+          updateData.avatarUrl = `http://localhost:5000/uploads/${req.files.avatar[0].filename}`;
+        }
       }
       if (req.files.cover && req.files.cover.length > 0) {
-        updateData.coverUrl = `http://localhost:5000/uploads/${req.files.cover[0].filename}`;
+        if (process.env.CLOUDINARY_CLOUD_NAME) {
+          try {
+            const res = await cloudinary.uploader.upload(req.files.cover[0].path, { folder: 'campusbazaar_users' });
+            updateData.coverUrl = res.secure_url;
+          } catch (e) {
+            console.error('Cloudinary upload error:', e);
+            updateData.coverUrl = `http://localhost:5000/uploads/${req.files.cover[0].filename}`;
+          }
+        } else {
+          updateData.coverUrl = `http://localhost:5000/uploads/${req.files.cover[0].filename}`;
+        }
       }
     }
 
