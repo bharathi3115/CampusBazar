@@ -347,6 +347,30 @@ router.put('/products/:id', async (req, res) => {
 
     const updatedProduct = await Product.findByIdAndUpdate(req.params.id, updateData, { new: true });
     if (!updatedProduct) return res.status(404).json({ message: 'Product not found' });
+
+    // If marked as Sold, create a Purchase record for the demo buyer
+    if (updateData.status === 'Sold') {
+      const defaultBuyer = await User.findOne({ email: 'buyer@campusbazar.com' });
+      if (defaultBuyer) {
+        const existingPurchase = await Purchase.findOne({ productId: updatedProduct._id });
+        if (!existingPurchase) {
+          await Purchase.create({
+            buyerId: defaultBuyer._id,
+            productId: updatedProduct._id,
+            productName: updatedProduct.title,
+            category: updatedProduct.category,
+            productImage: updatedProduct.img || (updatedProduct.images && updatedProduct.images[0]) || '',
+            purchasePrice: updatedProduct.price,
+            sellerName: updatedProduct.seller?.name || 'Unknown Seller',
+            sellerRating: updatedProduct.seller?.rating || 0,
+            purchaseDate: new Date(),
+            status: 'Completed',
+            transactionId: 'TXN-' + Math.floor(Math.random() * 1000000)
+          });
+        }
+      }
+    }
+
     res.json(updatedProduct);
   } catch (error) {
     res.status(500).json({ message: error.message });
