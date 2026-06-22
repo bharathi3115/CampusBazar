@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  LayoutDashboard, ShoppingBag, Heart, Clock, MessageSquare, User, 
-  Search, Bell, Menu, X, ChevronDown, LogOut
+  Home, Search, PlusCircle, Bell, MessageSquare, Heart, 
+  ShoppingBag, Settings, LogOut, ChevronRight, TrendingUp,
+  Tag, MapPin, Eye, Star, Clock, CheckCircle, Package, User, ShoppingCart, ChevronDown, Menu, X, LayoutDashboard
 } from 'lucide-react';
 import { getSafeAvatarUrl } from '../utils/avatarUtils';
 import { useAuth } from '../context/AuthContext';
