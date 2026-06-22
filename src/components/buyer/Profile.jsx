@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { 
   User, Mail, MapPin, Building, BookOpen, Clock, ShieldCheck, 
-  Edit3, Camera, CheckCircle2, TrendingUp, Package, Star, Settings, X, Save
+  Edit3, Camera, CheckCircle2, TrendingUp, Package, Star, Settings, X, Save, Loader2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { getSafeAvatarUrl } from '../../utils/avatarUtils';
 
 const Profile = () => {
   const { user, role, updateUser } = useAuth();
@@ -11,6 +12,8 @@ const Profile = () => {
   const [avatarFile, setAvatarFile] = useState(null);
   const [coverFile, setCoverFile] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
   
   const [profileData, setProfileData] = useState({
     name: user?.name || 'John Doe',
@@ -142,6 +145,7 @@ const Profile = () => {
     const file = e.target.files[0];
     if (file) {
       setAvatarFile(file);
+      setIsUploadingAvatar(true);
       const url = URL.createObjectURL(file);
       setProfileData(prev => ({ ...prev, avatarUrl: url }));
       
@@ -160,7 +164,11 @@ const Profile = () => {
           }
         } catch (err) {
           console.error('Failed to upload avatar', err);
+        } finally {
+          setIsUploadingAvatar(false);
         }
+      } else {
+        setIsUploadingAvatar(false);
       }
     }
   };
@@ -169,6 +177,7 @@ const Profile = () => {
     const file = e.target.files[0];
     if (file) {
       setCoverFile(file);
+      setIsUploadingCover(true);
       const url = URL.createObjectURL(file);
       setProfileData(prev => ({ ...prev, coverUrl: url }));
       
@@ -187,17 +196,13 @@ const Profile = () => {
           }
         } catch (err) {
           console.error('Failed to upload cover', err);
+        } finally {
+          setIsUploadingCover(false);
         }
+      } else {
+        setIsUploadingCover(false);
       }
     }
-  };
-
-  const getAvatarUrl = () => {
-    if (!profileData.avatarUrl || profileData.avatarUrl === 'null' || profileData.avatarUrl === 'undefined') {
-      const nameStr = encodeURIComponent(profileData.name || profileData.email || 'User');
-      return `https://ui-avatars.com/api/?name=${nameStr}&background=random&color=fff&size=200`;
-    }
-    return profileData.avatarUrl;
   };
 
   const getCoverUrl = () => {
@@ -236,7 +241,7 @@ const Profile = () => {
             onClick={() => coverInputRef.current?.click()}
             className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-md transition-colors"
           >
-            <Edit3 className="w-4 h-4" />
+            <Edit3 className={`w-4 h-4 ${isUploadingCover ? 'animate-pulse' : ''}`} />
           </button>
         </div>
 
@@ -245,7 +250,7 @@ const Profile = () => {
           <div className="flex flex-col sm:flex-row sm:items-end gap-6 sm:gap-8 -mt-16 sm:-mt-20 mb-6">
             <div className="relative inline-block group">
               <img 
-                src={getAvatarUrl()} 
+                src={getSafeAvatarUrl(profileData.avatarUrl, profileData.name, profileData.email)} 
                 alt="Profile" 
                 className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-white border-4 border-white shadow-xl object-cover"
               />
@@ -257,10 +262,11 @@ const Profile = () => {
                 className="hidden" 
               />
               <button 
-                onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-2 right-2 p-2.5 bg-theme-maroon hover:bg-theme-dark-maroon text-white rounded-full shadow-lg transition-colors scale-0 group-hover:scale-100 origin-center duration-200"
+                onClick={() => !isUploadingAvatar && fileInputRef.current?.click()}
+                disabled={isUploadingAvatar}
+                className={`absolute bottom-2 right-2 p-2.5 bg-theme-maroon text-white rounded-full shadow-lg transition-colors scale-0 group-hover:scale-100 origin-center duration-200 ${isUploadingAvatar ? 'opacity-70 cursor-not-allowed scale-100' : 'hover:bg-theme-dark-maroon'}`}
               >
-                <Camera className="w-4 h-4" />
+                {isUploadingAvatar ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
               </button>
             </div>
             

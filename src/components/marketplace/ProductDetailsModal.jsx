@@ -3,6 +3,7 @@ import { X, Heart, MessageSquare, Share2, Flag, ShieldCheck, MapPin, Clock, Eye,
 import { useWishlist } from '../../context/WishlistContext';
 import { useAuth } from '../../context/AuthContext';
 import { getFallbackImage } from '../../utils/imageFallback';
+import { getSafeAvatarUrl } from '../../utils/avatarUtils';
 
 const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab, onMessage }) => {
   const { isWishlisted, toggleWishlist } = useWishlist();
@@ -137,7 +138,7 @@ const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab, onMessage
             <div className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl mb-8 hover:border-theme-maroon/30 transition-colors cursor-pointer group">
               <div className="flex items-center gap-3">
                 <img 
-                  src={(!product.seller?.avatarUrl || product.seller.avatarUrl === 'null' || product.seller.avatarUrl === 'undefined') ? `https://ui-avatars.com/api/?name=${encodeURIComponent(product.seller?.name || 'Seller')}&background=random&color=fff` : product.seller.avatarUrl} 
+                  src={getSafeAvatarUrl(product.seller?.avatarUrl, product.seller?.name)}
                   alt={product.seller?.name}
                   className="w-12 h-12 rounded-full bg-slate-100 border border-slate-200"
                 />

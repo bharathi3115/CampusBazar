@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { io } from 'socket.io-client';
+import { getSafeAvatarUrl } from '../../utils/avatarUtils';
 
 const Messages = ({ initialChatId }) => {
   const { user } = useAuth();
@@ -96,7 +97,7 @@ const Messages = ({ initialChatId }) => {
 
   const activeChat = conversations.find(c => c._id === activeChatId);
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !activeChat || !socket) return;
 
@@ -154,7 +155,7 @@ const Messages = ({ initialChatId }) => {
     const isMeBuyer = chat.buyerId._id === user._id;
     const otherUser = isMeBuyer ? chat.sellerId : chat.buyerId;
     const unread = isMeBuyer ? chat.unreadByBuyer : chat.unreadBySeller;
-    const avatar = (!otherUser?.avatarUrl || otherUser.avatarUrl === 'null' || otherUser.avatarUrl === 'undefined') ? `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.name || 'User')}&background=random&color=fff` : otherUser.avatarUrl;
+    const avatar = getSafeAvatarUrl(otherUser?.avatarUrl, otherUser?.name);
     
     // Formatting relative time simply for UI
     let lastActive = 'Just now';

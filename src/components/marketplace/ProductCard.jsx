@@ -2,6 +2,7 @@ import React from 'react';
 import { Heart, Eye, MessageSquare, Flag, Share2, ShieldCheck, MapPin, Clock } from 'lucide-react';
 import { useWishlist } from '../../context/WishlistContext';
 import { getFallbackImage } from '../../utils/imageFallback';
+import { getSafeAvatarUrl } from '../../utils/avatarUtils';
 
 const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
   const { isWishlisted, toggleWishlist } = useWishlist();
@@ -68,7 +69,7 @@ const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
         <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img 
-              src={(!product.seller?.avatarUrl || product.seller.avatarUrl === 'null' || product.seller.avatarUrl === 'undefined') ? `https://ui-avatars.com/api/?name=${encodeURIComponent(product.seller?.name || 'Seller')}&background=random&color=fff` : product.seller.avatarUrl} 
+              src={getSafeAvatarUrl(product.seller?.avatarUrl, product.seller?.name)} 
               className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200" 
               alt="" 
             />

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Home, Search, PlusCircle, Bell, MessageSquare, Heart, 
-  ShoppingBag, Settings, LogOut, ChevronRight, TrendingUp,
-  Tag, MapPin, Eye, Star, Clock, CheckCircle, Package, User, ShoppingCart, ChevronDown
+  LayoutDashboard, ShoppingBag, Heart, Clock, MessageSquare, User, 
+  Search, Bell, Menu, X, ChevronDown, LogOut
 } from 'lucide-react';
+import { getSafeAvatarUrl } from '../utils/avatarUtils';
 import { useAuth } from '../context/AuthContext';
 import { io } from 'socket.io-client';
 import DashboardOverview from '../components/buyer/DashboardOverview';
@@ -137,7 +137,7 @@ const BuyerDashboard = () => {
                 onClick={() => setShowRoleMenu(!showRoleMenu)}
               >
                 <img 
-                  src={(!user?.avatarUrl || user.avatarUrl === 'null' || user.avatarUrl === 'undefined') ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || user?.email || 'User')}&background=random&color=fff` : user.avatarUrl} 
+                  src={getSafeAvatarUrl(user?.avatarUrl, user?.name, user?.email)} 
                   alt="Profile" 
                   className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 object-cover"
                 />

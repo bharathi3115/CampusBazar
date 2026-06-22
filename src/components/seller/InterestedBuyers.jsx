@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, MessageSquare, Star, TrendingUp, Eye, User, Clock, ChevronRight, X, Calendar, MapPin, Award } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { getSafeAvatarUrl } from '../../utils/avatarUtils';
 
 const InterestedBuyers = ({ setActiveTab, setSelectedConversationId }) => {
   const { user } = useAuth();
@@ -52,7 +53,7 @@ const InterestedBuyers = ({ setActiveTab, setSelectedConversationId }) => {
             name: b?.name || 'Unknown Buyer',
             product: conv.productId?.title || 'Unknown Product',
             lastContact: lastContactStr,
-            avatar: (!b?.avatarUrl || b.avatarUrl === 'null' || b.avatarUrl === 'undefined') ? `https://ui-avatars.com/api/?name=${encodeURIComponent(b?.name || b?.email || 'Buyer')}&background=random&color=fff` : b.avatarUrl,
+            avatar: getSafeAvatarUrl(b?.avatarUrl, b?.name || b?.email || 'Buyer'),
             isRepeat,
             profile: b // store full buyer object for modal
           };
