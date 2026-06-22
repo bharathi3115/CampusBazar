@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { ShoppingCart, Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const NAV_ITEMS = [
-  { label: 'Home', id: 'home' },
-  { label: 'About', id: 'about-us' },
-  { label: 'Categories', id: 'categories' },
-  { label: 'How It Works', id: 'how-it-works' },
+  { label: "Home", id: "home" },
+  { label: "About", id: "about-us" },
+  { label: "Categories", id: "categories" },
+  { label: "How It Works", id: "how-it-works" },
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const handleScroll = () => {
       // 100px offset to detect active section when it's slightly below the navbar
       const scrollPosition = window.scrollY + 100;
 
-      let currentActive = 'home';
+      let currentActive = "home";
       for (const item of NAV_ITEMS) {
         const section = document.getElementById(item.id);
         if (section) {
@@ -31,15 +31,15 @@ const Navbar = () => {
       setActiveSection(currentActive);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToSection = (e, id) => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
     setIsOpen(false);
   };
@@ -49,14 +49,16 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           {/* Logo */}
-          <div 
+          <div
             className="flex-shrink-0 flex items-center gap-2 cursor-pointer group"
-            onClick={(e) => scrollToSection(e, 'home')}
+            onClick={(e) => scrollToSection(e, "home")}
           >
             <div className="w-10 h-10 bg-theme-maroon rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-theme-maroon/30">
               <ShoppingCart className="text-white w-6 h-6" />
             </div>
-            <span className="font-extrabold text-2xl text-slate-900 tracking-tight">Campus<span className="text-theme-maroon">Bazar</span></span>
+            <span className="font-extrabold text-2xl text-slate-900 tracking-tight">
+              Campus<span className="text-theme-maroon">Bazar</span>
+            </span>
           </div>
 
           {/* Desktop Menu */}
@@ -67,9 +69,10 @@ const Navbar = () => {
                 href={`#${item.id}`}
                 onClick={(e) => scrollToSection(e, item.id)}
                 className={`px-1 py-6 transition-all relative font-medium
-                  ${activeSection === item.id 
-                    ? 'text-theme-maroon font-semibold' 
-                    : 'text-slate-600 hover:text-theme-dark-maroon'
+                  ${
+                    activeSection === item.id
+                      ? "text-theme-maroon font-semibold"
+                      : "text-slate-600 hover:text-theme-dark-maroon"
                   }`}
               >
                 {item.label}
@@ -79,21 +82,31 @@ const Navbar = () => {
 
           {/* Actions */}
           <div className="hidden lg:flex items-center space-x-4">
-            <Link to="/register" className="flex items-center gap-2 bg-theme-maroon text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-0.5 shadow-md shadow-theme-maroon/30">
+            <Link
+              to="/register"
+              className="flex items-center gap-2 bg-theme-maroon text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-0.5 shadow-md shadow-theme-maroon/30"
+            >
               User
             </Link>
-            <Link to="/admin/login" className="flex items-center gap-2 bg-theme-maroon text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-0.5 shadow-md shadow-theme-maroon/30">
+            <Link
+              to="/admin/login"
+              className="flex items-center gap-2 bg-theme-maroon text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-dark-maroon transition-all transform hover:-translate-y-0.5 shadow-md shadow-theme-maroon/30"
+            >
               Admin
             </Link>
           </div>
 
           {/* Mobile menu button */}
           <div className="lg:hidden flex items-center gap-4">
-            <button 
+            <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 text-slate-500 hover:text-theme-dark-maroon rounded-md transition-colors"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -109,17 +122,28 @@ const Navbar = () => {
                 href={`#${item.id}`}
                 onClick={(e) => scrollToSection(e, item.id)}
                 className={`block px-3 py-3 text-base font-medium rounded-lg transition-colors
-                  ${activeSection === item.id 
-                    ? 'text-theme-maroon bg-theme-maroon/10' 
-                    : 'text-slate-600 hover:text-theme-dark-maroon hover:bg-slate-50'
+                  ${
+                    activeSection === item.id
+                      ? "text-theme-maroon bg-theme-maroon/10"
+                      : "text-slate-600 hover:text-theme-dark-maroon hover:bg-slate-50"
                   }`}
               >
                 {item.label}
               </a>
             ))}
             <div className="pt-4 flex gap-3">
-               <Link to="/register" className="flex-1 text-center bg-theme-maroon text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-theme-dark-maroon transition-colors">User</Link>
-               <Link to="/admin/login" className="flex-1 text-center bg-theme-maroon text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-theme-dark-maroon transition-colors">Admin</Link>
+              <Link
+                to="/register"
+                className="flex-1 text-center bg-theme-maroon text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-theme-dark-maroon transition-colors"
+              >
+                User
+              </Link>
+              <Link
+                to="/admin/login"
+                className="flex-1 text-center bg-theme-maroon text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-theme-dark-maroon transition-colors"
+              >
+                Admin
+              </Link>
             </div>
           </div>
         </div>
