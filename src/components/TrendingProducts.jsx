@@ -1,38 +1,38 @@
-import React from 'react';
-import { Star, ChevronRight, ChevronLeft } from 'lucide-react';
+import React from "react";
+import { Star, ChevronRight, ChevronLeft } from "lucide-react";
 
 const trendingProducts = [
   {
     id: 1,
-    title: 'Apple iPad Air (4th Gen) 64GB',
-    price: '₹32,000',
+    title: "Apple iPad Air (4th Gen) 64GB",
+    price: "₹32,000",
     rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-    category: 'Electronics'
+    image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    category: "Electronics"
   },
   {
     id: 2,
-    title: 'Concepts of Physics by H.C. Verma Vol 1',
-    price: '₹250',
+    title: "Concepts of Physics by H.C. Verma Vol 1",
+    price: "₹250",
     rating: 4.8,
-    image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-    category: 'Books'
+    image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    category: "Books"
   },
   {
     id: 3,
-    title: 'Drafting Board (A2 Size) + T-Square',
-    price: '₹600',
+    title: "Drafting Board (A2 Size) + T-Square",
+    price: "₹600",
     rating: 4.5,
-    image: 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c848?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-    category: 'Stationery'
+    image: "https://images.unsplash.com/photo-1628155930542-3c7a64e2c848?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    category: "Stationery"
   },
   {
     id: 4,
-    title: 'Study Table Lamp (Rechargeable)',
-    price: '₹400',
+    title: "Study Table Lamp (Rechargeable)",
+    price: "₹400",
     rating: 4.7,
-    image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e9d15?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-    category: 'Hostel'
+    image: "https://images.unsplash.com/photo-1513506003901-1e6a229e9d15?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    category: "Hostel"
   }
 ];
 
@@ -42,7 +42,9 @@ const TrendingProducts = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-12">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Trending <span className="text-theme-maroon">Products</span></h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+              Trending <span className="text-theme-maroon">Products</span>
+            </h2>
             <p className="text-slate-600 text-lg">Most viewed and requested items this week.</p>
           </div>
           <div className="hidden md:flex gap-3">

@@ -1,24 +1,24 @@
-import React from 'react';
-import { BarChart3, TrendingUp, Users, Heart, MessageSquare, Plus } from 'lucide-react';
-import CampusInsights from './CampusInsights';
+import React from "react";
+import { BarChart3, TrendingUp, Users, Heart, MessageSquare, Plus } from "lucide-react";
+import CampusInsights from "./CampusInsights";
 
 const MarketplaceAnalytics = () => {
   const analytics = [
-    { title: 'Listings Created', value: '145', icon: Plus, color: 'text-sky-600', bg: 'bg-sky-100', subtitle: 'This Month' },
-    { title: 'Items Sold', value: '86', icon: TrendingUp, color: 'text-sky-600', bg: 'bg-sky-100', subtitle: 'This Month' },
-    { title: 'New Students', value: '124', icon: Users, color: 'text-sky-600', bg: 'bg-sky-100', subtitle: 'Registered' },
-    { title: 'Wishlist Adds', value: '350', icon: Heart, color: 'text-sky-600', bg: 'bg-sky-100', subtitle: 'Activity' },
-    { title: 'Messages', value: '1,240', icon: MessageSquare, color: 'text-sky-600', bg: 'bg-sky-100', subtitle: 'Exchanged' },
+    { title: "Listings Created", value: "145", icon: Plus, color: "text-sky-600", bg: "bg-sky-100", subtitle: "This Month" },
+    { title: "Items Sold", value: "86", icon: TrendingUp, color: "text-sky-600", bg: "bg-sky-100", subtitle: "This Month" },
+    { title: "New Students", value: "124", icon: Users, color: "text-sky-600", bg: "bg-sky-100", subtitle: "Registered" },
+    { title: "Wishlist Adds", value: "350", icon: Heart, color: "text-sky-600", bg: "bg-sky-100", subtitle: "Activity" },
+    { title: "Messages", value: "1,240", icon: MessageSquare, color: "text-sky-600", bg: "bg-sky-100", subtitle: "Exchanged" }
   ];
 
   const monthlyData = [];
 
   const categoryData = [
-    { name: 'Books', percentage: 45, color: 'bg-theme-maroon' },
-    { name: 'Electronics', percentage: 25, color: 'bg-blue-500' },
-    { name: 'Calculators', percentage: 15, color: 'bg-emerald-500' },
-    { name: 'Cycles', percentage: 10, color: 'bg-amber-500' },
-    { name: 'Others', percentage: 5, color: 'bg-slate-400' },
+    { name: "Books", percentage: 45, color: "bg-theme-maroon" },
+    { name: "Electronics", percentage: 25, color: "bg-blue-500" },
+    { name: "Calculators", percentage: 15, color: "bg-emerald-500" },
+    { name: "Cycles", percentage: 10, color: "bg-amber-500" },
+    { name: "Others", percentage: 5, color: "bg-slate-400" }
   ];
 
   return (

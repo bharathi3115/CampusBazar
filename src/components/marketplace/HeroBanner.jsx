@@ -1,5 +1,5 @@
-import React from 'react';
-import { Users, Tag, CheckCircle, TrendingUp, Sparkles } from 'lucide-react';
+import React from "react";
+import { Users, Tag, CheckCircle, TrendingUp, Sparkles } from "lucide-react";
 
 const HeroBanner = ({ stats }) => {
   return (
@@ -27,10 +27,10 @@ const HeroBanner = ({ stats }) => {
 
         <div className="grid grid-cols-2 gap-4 w-full lg:w-auto">
           {[
-            { label: 'Active Listings', value: stats.activeListings || '1,240+', icon: Tag, color: 'text-blue-500' },
-            { label: 'Students Online', value: stats.studentsOnline || '342', icon: Users, color: 'text-amber-500' },
-            { label: 'Verified Sellers', value: stats.verifiedSellers || '89', icon: CheckCircle, color: 'text-green-500' },
-            { label: 'Items Sold This Month', value: stats.itemsSoldThisWeek || '450+', icon: TrendingUp, color: 'text-purple-500' }
+            { label: "Active Listings", value: stats.activeListings || "1,240+", icon: Tag, color: "text-blue-500" },
+            { label: "Students Online", value: stats.studentsOnline || "342", icon: Users, color: "text-amber-500" },
+            { label: "Verified Sellers", value: stats.verifiedSellers || "89", icon: CheckCircle, color: "text-green-500" },
+            { label: "Items Sold This Month", value: stats.itemsSoldThisWeek || "450+", icon: TrendingUp, color: "text-purple-500" }
           ].map((stat, i) => (
             <div key={i} className="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/20 transition-colors">
               <stat.icon className={`w-8 h-8 mb-2 ${stat.color} drop-shadow-md`} />

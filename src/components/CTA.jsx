@@ -1,6 +1,6 @@
-import React from 'react';
-import { ArrowRight, ShoppingBag } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { ArrowRight, ShoppingBag } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTA = () => {
   return (
@@ -19,9 +19,11 @@ const CTA = () => {
             <p className="text-lg text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
               Buy affordable resources, sell unused items, connect with fellow students, and promote sustainable resource sharing through CampusBazar.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link to="/login" className="bg-white text-theme-maroon px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-50 transition-colors shadow-xl flex items-center justify-center gap-2 transform hover:-translate-y-1">
+              <Link
+                to="/login"
+                className="bg-white text-theme-maroon px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-50 transition-colors shadow-xl flex items-center justify-center gap-2 transform hover:-translate-y-1">
                 Get Started
                 <ArrowRight className="w-5 h-5" />
               </Link>

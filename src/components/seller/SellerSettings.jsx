@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { User, Bell, Lock, Shield, MapPin, Trash2, Save, ShoppingBag } from 'lucide-react';
+import React, { useState } from "react";
+import { User, Bell, Lock, Shield, MapPin, Trash2, Save, ShoppingBag } from "lucide-react";
 
 const SellerSettings = () => {
   const [notifications, setNotifications] = useState({
@@ -9,7 +9,7 @@ const SellerSettings = () => {
   });
 
   const [privacy, setPrivacy] = useState({
-    profileVisibility: 'Public',
+    profileVisibility: "Public",
     showContact: false
   });
 
@@ -30,17 +30,29 @@ const SellerSettings = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-1.5">Full Name</label>
-              <input type="text" defaultValue="John Doe" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-theme-maroon focus:bg-white transition-all" />
+              <input
+                type="text"
+                defaultValue="John Doe"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-theme-maroon focus:bg-white transition-all"
+              />
             </div>
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-1.5">Email Address</label>
-              <input type="email" defaultValue="john@campus.edu" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-theme-maroon focus:bg-white transition-all" />
+              <input
+                type="email"
+                defaultValue="john@campus.edu"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-theme-maroon focus:bg-white transition-all"
+              />
             </div>
           </div>
           <div>
             <label className="block text-sm font-bold text-slate-700 mb-1.5">Change Password</label>
             <div className="flex items-center gap-3">
-              <input type="password" placeholder="Enter new password" className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-theme-maroon focus:bg-white transition-all" />
+              <input
+                type="password"
+                placeholder="Enter new password"
+                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-theme-maroon focus:bg-white transition-all"
+              />
               <button className="px-4 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors text-sm">Update</button>
             </div>
           </div>
@@ -60,7 +72,7 @@ const SellerSettings = () => {
               <p className="text-xs font-medium text-slate-500">Receive daily summaries and important updates.</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" checked={notifications.email} onChange={() => setNotifications({...notifications, email: !notifications.email})} className="sr-only peer" />
+              <input type="checkbox" checked={notifications.email} onChange={() => setNotifications({ ...notifications, email: !notifications.email })} className="sr-only peer" />
               <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-maroon"></div>
             </label>
           </div>
@@ -70,7 +82,7 @@ const SellerSettings = () => {
               <p className="text-xs font-medium text-slate-500">Get notified immediately when a buyer messages you.</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" checked={notifications.messages} onChange={() => setNotifications({...notifications, messages: !notifications.messages})} className="sr-only peer" />
+              <input type="checkbox" checked={notifications.messages} onChange={() => setNotifications({ ...notifications, messages: !notifications.messages })} className="sr-only peer" />
               <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-maroon"></div>
             </label>
           </div>
@@ -80,7 +92,7 @@ const SellerSettings = () => {
               <p className="text-xs font-medium text-slate-500">Get notified when someone wants to buy your item.</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" checked={notifications.sales} onChange={() => setNotifications({...notifications, sales: !notifications.sales})} className="sr-only peer" />
+              <input type="checkbox" checked={notifications.sales} onChange={() => setNotifications({ ...notifications, sales: !notifications.sales })} className="sr-only peer" />
               <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-maroon"></div>
             </label>
           </div>
@@ -97,11 +109,10 @@ const SellerSettings = () => {
           <div className="p-6 space-y-5">
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-1.5">Profile Visibility</label>
-              <select 
-                value={privacy.profileVisibility} 
-                onChange={(e) => setPrivacy({...privacy, profileVisibility: e.target.value})}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-theme-maroon focus:bg-white transition-all font-medium"
-              >
+              <select
+                value={privacy.profileVisibility}
+                onChange={(e) => setPrivacy({ ...privacy, profileVisibility: e.target.value })}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-theme-maroon focus:bg-white transition-all font-medium">
                 <option value="Public">Public (Everyone can see)</option>
                 <option value="Campus">Campus Only (Logged in students)</option>
                 <option value="Private">Private (Hidden)</option>
@@ -110,7 +121,7 @@ const SellerSettings = () => {
             <div className="flex items-center justify-between">
               <span className="text-sm font-bold text-slate-700">Show Contact Info</span>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" checked={privacy.showContact} onChange={() => setPrivacy({...privacy, showContact: !privacy.showContact})} className="sr-only peer" />
+                <input type="checkbox" checked={privacy.showContact} onChange={() => setPrivacy({ ...privacy, showContact: !privacy.showContact })} className="sr-only peer" />
                 <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-maroon"></div>
               </label>
             </div>
@@ -133,8 +144,14 @@ const SellerSettings = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-1.5 flex items-center gap-2"><MapPin className="w-4 h-4 text-slate-400"/> Default Meeting Location</label>
-              <input type="text" defaultValue="Central Library" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-theme-maroon focus:bg-white transition-all" />
+              <label className="block text-sm font-bold text-slate-700 mb-1.5 flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-slate-400" /> Default Meeting Location
+              </label>
+              <input
+                type="text"
+                defaultValue="Central Library"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-theme-maroon focus:bg-white transition-all"
+              />
             </div>
           </div>
         </div>
@@ -159,7 +176,6 @@ const SellerSettings = () => {
           </button>
         </div>
       </div>
-
     </div>
   );
 };

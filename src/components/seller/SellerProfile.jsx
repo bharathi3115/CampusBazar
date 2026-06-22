@@ -1,16 +1,16 @@
-import React from 'react';
-import { Star, Package, DollarSign, Eye, Heart, Award, CheckCircle, Edit3, MapPin, Building, Calendar, ShieldCheck } from 'lucide-react';
-import { getSafeAvatarUrl } from '../../utils/avatarUtils';
+import React from "react";
+import { Star, Package, DollarSign, Eye, Heart, Award, CheckCircle, Edit3, MapPin, Building, Calendar, ShieldCheck } from "lucide-react";
+import { getSafeAvatarUrl } from "../../utils/avatarUtils";
 
 const SellerProfile = () => {
   const seller = {
-    name: 'John Doe',
-    email: 'john@campus.edu',
-    department: 'Computer Science',
-    college: 'Campus University',
-    joined: 'Jan 2025',
-    avatar: getSafeAvatarUrl(null, 'John Doe'),
-    bio: 'Hi, I am a 3rd-year CS student. I sell textbooks and electronics in good condition. Open to negotiations but please be reasonable. Meetups usually near the central library.',
+    name: "John Doe",
+    email: "john@campus.edu",
+    department: "Computer Science",
+    college: "Campus University",
+    joined: "Jan 2025",
+    avatar: getSafeAvatarUrl(null, "John Doe"),
+    bio: "Hi, I am a 3rd-year CS student. I sell textbooks and electronics in good condition. Open to negotiations but please be reasonable. Meetups usually near the central library.",
     stats: {
       rating: 4.8,
       itemsSold: 24,
@@ -19,15 +19,14 @@ const SellerProfile = () => {
       wishlistSaves: 87
     },
     reviews: [
-      { id: 1, buyer: 'Priya M.', rating: 5, comment: 'Great seller, quick response.', date: '1 week ago' },
-      { id: 2, buyer: 'Akash K.', rating: 5, comment: 'Product was exactly as described.', date: '2 weeks ago' },
-      { id: 3, buyer: 'Neha P.', rating: 4, comment: 'Smooth transaction.', date: '1 month ago' }
+      { id: 1, buyer: "Priya M.", rating: 5, comment: "Great seller, quick response.", date: "1 week ago" },
+      { id: 2, buyer: "Akash K.", rating: 5, comment: "Product was exactly as described.", date: "2 weeks ago" },
+      { id: 3, buyer: "Neha P.", rating: 4, comment: "Smooth transaction.", date: "1 month ago" }
     ]
   };
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
-      
       {/* Profile Header Card */}
       <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden relative">
         <div className="h-32 bg-gradient-to-r from-theme-maroon to-rose-600"></div>
@@ -44,9 +43,15 @@ const SellerProfile = () => {
                 <h1 className="text-3xl font-black text-slate-900">{seller.name}</h1>
                 <p className="text-slate-500 font-medium">{seller.email}</p>
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-2">
-                  <span className="flex items-center gap-1 text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full"><Building className="w-3 h-3"/> {seller.department}</span>
-                  <span className="flex items-center gap-1 text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full"><MapPin className="w-3 h-3"/> {seller.college}</span>
-                  <span className="flex items-center gap-1 text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full"><Calendar className="w-3 h-3"/> Since {seller.joined}</span>
+                  <span className="flex items-center gap-1 text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
+                    <Building className="w-3 h-3" /> {seller.department}
+                  </span>
+                  <span className="flex items-center gap-1 text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
+                    <MapPin className="w-3 h-3" /> {seller.college}
+                  </span>
+                  <span className="flex items-center gap-1 text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
+                    <Calendar className="w-3 h-3" /> Since {seller.joined}
+                  </span>
                 </div>
               </div>
             </div>
@@ -61,7 +66,10 @@ const SellerProfile = () => {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
           <Star className="w-6 h-6 text-amber-400 mb-2 fill-amber-400" />
-          <p className="text-2xl font-black text-slate-900">{seller.stats.rating}<span className="text-sm font-bold text-slate-400">/5</span></p>
+          <p className="text-2xl font-black text-slate-900">
+            {seller.stats.rating}
+            <span className="text-sm font-bold text-slate-400">/5</span>
+          </p>
           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Rating</p>
         </div>
         <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
@@ -90,29 +98,39 @@ const SellerProfile = () => {
         {/* Left Column: Bio & Achievements */}
         <div className="space-y-6">
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <h3 className="font-bold text-lg text-slate-900 mb-3 flex items-center gap-2"><User className="w-5 h-5 text-theme-maroon"/> About Me</h3>
+            <h3 className="font-bold text-lg text-slate-900 mb-3 flex items-center gap-2">
+              <User className="w-5 h-5 text-theme-maroon" /> About Me
+            </h3>
             <p className="text-slate-600 text-sm leading-relaxed">{seller.bio}</p>
           </div>
-          
+
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-            <h3 className="font-bold text-lg text-slate-900 mb-4 flex items-center gap-2"><Award className="w-5 h-5 text-theme-maroon"/> Achievements</h3>
+            <h3 className="font-bold text-lg text-slate-900 mb-4 flex items-center gap-2">
+              <Award className="w-5 h-5 text-theme-maroon" /> Achievements
+            </h3>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-amber-50 rounded-lg text-amber-500"><Award className="w-5 h-5"/></div>
+                <div className="p-2 bg-amber-50 rounded-lg text-amber-500">
+                  <Award className="w-5 h-5" />
+                </div>
                 <div>
                   <p className="font-bold text-sm text-slate-900">Top Rated Seller</p>
                   <p className="text-xs font-medium text-slate-500">Maintained 4.8+ rating for 6 months</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-emerald-50 rounded-lg text-emerald-500"><CheckCircle className="w-5 h-5"/></div>
+                <div className="p-2 bg-emerald-50 rounded-lg text-emerald-500">
+                  <CheckCircle className="w-5 h-5" />
+                </div>
                 <div>
                   <p className="font-bold text-sm text-slate-900">Fast Responder</p>
                   <p className="text-xs font-medium text-slate-500">Replies within 1 hour</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-50 rounded-lg text-blue-500"><ShieldCheck className="w-5 h-5"/></div>
+                <div className="p-2 bg-blue-50 rounded-lg text-blue-500">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
                 <div>
                   <p className="font-bold text-sm text-slate-900">Verified Student</p>
                   <p className="text-xs font-medium text-slate-500">University email confirmed</p>
@@ -126,18 +144,22 @@ const SellerProfile = () => {
         <div className="md:col-span-2 space-y-6">
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm h-full">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2"><Star className="w-5 h-5 text-theme-maroon"/> Recent Reviews</h3>
+              <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
+                <Star className="w-5 h-5 text-theme-maroon" /> Recent Reviews
+              </h3>
               <button className="text-sm font-bold text-theme-maroon hover:text-theme-dark-maroon">View All</button>
             </div>
-            
+
             <div className="space-y-4">
-              {seller.reviews.map(review => (
+              {seller.reviews.map((review) => (
                 <div key={review.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50">
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-slate-900">{review.buyer}</span>
                       <span className="flex items-center text-amber-400">
-                        {[...Array(review.rating)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />)}
+                        {[...Array(review.rating)].map((_, i) => (
+                          <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />
+                        ))}
                       </span>
                     </div>
                     <span className="text-xs font-medium text-slate-400">{review.date}</span>
@@ -146,10 +168,8 @@ const SellerProfile = () => {
                 </div>
               ))}
             </div>
-            
-            {seller.reviews.length === 0 && (
-               <div className="py-8 text-center text-slate-400">No reviews yet.</div>
-            )}
+
+            {seller.reviews.length === 0 && <div className="py-8 text-center text-slate-400">No reviews yet.</div>}
           </div>
         </div>
       </div>

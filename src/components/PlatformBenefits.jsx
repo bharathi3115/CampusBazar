@@ -1,30 +1,18 @@
-import React from 'react';
-import { XCircle, CheckCircle, AlertCircle, CheckCircle2 } from 'lucide-react';
+import React from "react";
+import { XCircle, CheckCircle, AlertCircle, CheckCircle2 } from "lucide-react";
 
-const problems = [
-  'Scattered WhatsApp groups',
-  'Telegram marketplace confusion',
-  'No centralized platform',
-  'Difficult product discovery',
-  'Lack of trust',
-  'No reviews or ratings'
-];
+const problems = ["Scattered WhatsApp groups", "Telegram marketplace confusion", "No centralized platform", "Difficult product discovery", "Lack of trust", "No reviews or ratings"];
 
-const solutions = [
-  'Centralized student marketplace',
-  'Organized product categories',
-  'Advanced search system',
-  'Verified student accounts',
-  'Secure communication',
-  'Review and rating system'
-];
+const solutions = ["Centralized student marketplace", "Organized product categories", "Advanced search system", "Verified student accounts", "Secure communication", "Review and rating system"];
 
 const PlatformBenefits = () => {
   return (
     <section className="py-24 bg-slate-50" id="benefits">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">Platform <span className="text-theme-maroon">Benefits</span></h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">
+            Platform <span className="text-theme-maroon">Benefits</span>
+          </h2>
           <p className="text-lg text-slate-600">See how CampusBazar solves everyday student marketplace problems.</p>
         </div>
 
@@ -51,7 +39,7 @@ const PlatformBenefits = () => {
           <div className="bg-slate-50 border border-theme-maroon/20 rounded-3xl p-8 lg:p-12 shadow-lg relative overflow-hidden">
             {/* Decorative background blob */}
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-theme-maroon/5 rounded-full blur-3xl"></div>
-            
+
             <div className="flex items-center gap-4 mb-8 relative z-10">
               <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-sm">
                 <CheckCircle2 className="w-8 h-8 text-theme-maroon" />

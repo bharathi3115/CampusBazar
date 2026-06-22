@@ -1,6 +1,6 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = ({ requireRole }) => {
   const { isAuthenticated, role } = useAuth();
@@ -23,7 +23,7 @@ const ProtectedRoute = ({ requireRole }) => {
   // But wait, the user should be able to go to /choose-role to change it?
   // The requirements say they can switch from the dashboard navbar.
   // We'll let them access /choose-role if they want, but if requireRole is not passed, it's just a general auth check.
-  
+
   return <Outlet />;
 };
 

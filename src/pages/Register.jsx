@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, User, Mail, Phone, Hash, Lock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import authIllustration from '../assets/auth-illustration.png';
-import { useAuth } from '../context/AuthContext';
-import { useGoogleLogin } from '@react-oauth/google';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, User, Mail, Phone, Hash, Lock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import authIllustration from "../assets/auth-illustration.png";
+import { useAuth } from "../context/AuthContext";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Register = () => {
   const navigate = useNavigate();
   const { login, selectRole } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: '',
-    rollNumber: '',
-    email: '',
-    mobile: '',
-    password: ''
+    fullName: "",
+    rollNumber: "",
+    email: "",
+    mobile: "",
+    password: ""
   });
   const [errors, setErrors] = useState({});
-  const [globalError, setGlobalError] = useState('');
+  const [globalError, setGlobalError] = useState("");
 
   const validatePassword = (pwd) => {
     const minLength = pwd.length >= 8;
@@ -31,7 +31,7 @@ const Register = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
+      setErrors({ ...errors, [e.target.name]: "" });
     }
   };
 
@@ -39,23 +39,23 @@ const Register = () => {
     e.preventDefault();
     const newErrors = {};
 
-    if (!formData.fullName.trim()) newErrors.fullName = 'Full Name is required';
-    if (!formData.rollNumber.trim()) newErrors.rollNumber = 'Roll Number is required';
+    if (!formData.fullName.trim()) newErrors.fullName = "Full Name is required";
+    if (!formData.rollNumber.trim()) newErrors.rollNumber = "Roll Number is required";
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
     }
     if (!formData.mobile.trim()) {
-      newErrors.mobile = 'Mobile number is required';
+      newErrors.mobile = "Mobile number is required";
     } else if (!/^\d{10}$/.test(formData.mobile)) {
-      newErrors.mobile = 'Mobile number must be 10 digits';
+      newErrors.mobile = "Mobile number must be 10 digits";
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (!validatePassword(formData.password)) {
-      newErrors.password = 'Password does not meet requirements';
+      newErrors.password = "Password does not meet requirements";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -64,9 +64,9 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       });
 
@@ -74,43 +74,43 @@ const Register = () => {
 
       if (response.ok) {
         // Success -> Redirect to Login
-        navigate('/login');
+        navigate("/login");
       } else {
-        setGlobalError(data.message || 'Registration failed. Please try again.');
+        setGlobalError(data.message || "Registration failed. Please try again.");
       }
     } catch (error) {
-      setGlobalError('Network error. Please make sure the server is running.');
-      console.error('Registration error:', error);
+      setGlobalError("Network error. Please make sure the server is running.");
+      console.error("Registration error:", error);
     }
   };
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        setGlobalError('');
-        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        setGlobalError("");
+        const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
         });
         const googleUser = await res.json();
-        
-        const fullUser = await login({ 
-          email: googleUser.email, 
+
+        const fullUser = await login({
+          email: googleUser.email,
           name: googleUser.name,
           googleId: googleUser.sub,
           picture: googleUser.picture
         });
 
         // Redirect based on whether the user has a defined role
-        if (fullUser && fullUser.role && (fullUser.role === 'buyer' || fullUser.role === 'seller')) {
+        if (fullUser && fullUser.role && (fullUser.role === "buyer" || fullUser.role === "seller")) {
           selectRole(fullUser.role);
         } else {
-          navigate('/choose-role');
+          navigate("/choose-role");
         }
       } catch (err) {
-        setGlobalError('Failed to authenticate with Google.');
+        setGlobalError("Failed to authenticate with Google.");
       }
     },
-    onError: () => setGlobalError('Google Sign-In was cancelled or failed.'),
+    onError: () => setGlobalError("Google Sign-In was cancelled or failed.")
   });
 
   return (
@@ -119,10 +119,7 @@ const Register = () => {
         {/* Left Panel */}
         <div className="md:w-5/12 bg-theme-dark-maroon text-white flex flex-col justify-end relative overflow-hidden group">
           {/* Background Image */}
-          <div
-            className="absolute inset-0 z-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${authIllustration})` }}
-          ></div>
+          <div className="absolute inset-0 z-0 bg-cover bg-center" style={{ backgroundImage: `url(${authIllustration})` }}></div>
           {/* Gradient Overlay */}
           <div className="absolute inset-0 z-0"></div>
 
@@ -170,7 +167,7 @@ const Register = () => {
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleChange}
-                      className={`block w-full pl-11 pr-4 py-3 bg-slate-50 border ${errors.fullName ? 'border-red-300 focus:ring-red-500' : 'border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon'} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
+                      className={`block w-full pl-11 pr-4 py-3 bg-slate-50 border ${errors.fullName ? "border-red-300 focus:ring-red-500" : "border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon"} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
                       placeholder="John Doe"
                     />
                   </div>
@@ -188,7 +185,7 @@ const Register = () => {
                       name="rollNumber"
                       value={formData.rollNumber}
                       onChange={handleChange}
-                      className={`block w-full pl-11 pr-4 py-3 bg-slate-50 border ${errors.rollNumber ? 'border-red-300 focus:ring-red-500' : 'border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon'} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
+                      className={`block w-full pl-11 pr-4 py-3 bg-slate-50 border ${errors.rollNumber ? "border-red-300 focus:ring-red-500" : "border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon"} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
                       placeholder="e.g. 21BCE123"
                     />
                   </div>
@@ -207,7 +204,7 @@ const Register = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`block w-full pl-11 pr-4 py-3 bg-slate-50 border ${errors.email ? 'border-red-300 focus:ring-red-500' : 'border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon'} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
+                    className={`block w-full pl-11 pr-4 py-3 bg-slate-50 border ${errors.email ? "border-red-300 focus:ring-red-500" : "border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon"} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
                     placeholder="student@campus.edu"
                   />
                 </div>
@@ -225,7 +222,7 @@ const Register = () => {
                     name="mobile"
                     value={formData.mobile}
                     onChange={handleChange}
-                    className={`block w-full pl-11 pr-4 py-3 bg-slate-50 border ${errors.mobile ? 'border-red-300 focus:ring-red-500' : 'border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon'} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
+                    className={`block w-full pl-11 pr-4 py-3 bg-slate-50 border ${errors.mobile ? "border-red-300 focus:ring-red-500" : "border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon"} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
                     placeholder="9876543210"
                   />
                 </div>
@@ -243,14 +240,13 @@ const Register = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className={`block w-full pl-11 pr-12 py-3 bg-slate-50 border ${errors.password ? 'border-red-300 focus:ring-red-500' : 'border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon'} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
+                    className={`block w-full pl-11 pr-12 py-3 bg-slate-50 border ${errors.password ? "border-red-300 focus:ring-red-500" : "border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon"} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
                     placeholder="Create a strong password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-theme-maroon transition-colors"
-                  >
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-theme-maroon transition-colors">
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
@@ -260,23 +256,23 @@ const Register = () => {
                   <div className="mt-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Security Checklist</p>
                     <div className="grid grid-cols-2 gap-2">
-                      <div className={`flex items-center gap-2 text-xs font-bold ${formData.password.length >= 8 ? 'text-theme-maroon' : 'text-slate-400'}`}>
+                      <div className={`flex items-center gap-2 text-xs font-bold ${formData.password.length >= 8 ? "text-theme-maroon" : "text-slate-400"}`}>
                         {formData.password.length >= 8 ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4 text-red-400" />}
                         8+ CHARACTERS
                       </div>
-                      <div className={`flex items-center gap-2 text-xs font-bold ${/[A-Z]/.test(formData.password) ? 'text-theme-maroon' : 'text-slate-400'}`}>
+                      <div className={`flex items-center gap-2 text-xs font-bold ${/[A-Z]/.test(formData.password) ? "text-theme-maroon" : "text-slate-400"}`}>
                         {/[A-Z]/.test(formData.password) ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4 text-red-400" />}
                         UPPERCASE
                       </div>
-                      <div className={`flex items-center gap-2 text-xs font-bold ${/[a-z]/.test(formData.password) ? 'text-theme-maroon' : 'text-slate-400'}`}>
+                      <div className={`flex items-center gap-2 text-xs font-bold ${/[a-z]/.test(formData.password) ? "text-theme-maroon" : "text-slate-400"}`}>
                         {/[a-z]/.test(formData.password) ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4 text-red-400" />}
                         LOWERCASE
                       </div>
-                      <div className={`flex items-center gap-2 text-xs font-bold ${/\d/.test(formData.password) ? 'text-theme-maroon' : 'text-slate-400'}`}>
+                      <div className={`flex items-center gap-2 text-xs font-bold ${/\d/.test(formData.password) ? "text-theme-maroon" : "text-slate-400"}`}>
                         {/\d/.test(formData.password) ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4 text-red-400" />}
                         NUMBER
                       </div>
-                      <div className={`flex items-center gap-2 text-xs font-bold ${/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? 'text-theme-maroon' : 'text-slate-400'}`}>
+                      <div className={`flex items-center gap-2 text-xs font-bold ${/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? "text-theme-maroon" : "text-slate-400"}`}>
                         {/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4 text-red-400" />}
                         SPECIAL CHAR
                       </div>
@@ -287,13 +283,10 @@ const Register = () => {
 
               <button
                 type="submit"
-                className="w-full bg-theme-maroon text-white font-bold py-3.5 px-4 rounded-xl shadow-md hover:bg-theme-dark-maroon hover:shadow-lg hover:shadow-theme-maroon/30 transition-all flex justify-center items-center gap-2 mt-8"
-              >
+                className="w-full bg-theme-maroon text-white font-bold py-3.5 px-4 rounded-xl shadow-md hover:bg-theme-dark-maroon hover:shadow-lg hover:shadow-theme-maroon/30 transition-all flex justify-center items-center gap-2 mt-8">
                 CREATE ACCOUNT <span>&rarr;</span>
               </button>
             </form>
-
-
           </div>
         </div>
       </div>

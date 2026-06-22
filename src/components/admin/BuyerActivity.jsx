@@ -1,12 +1,12 @@
-import React from 'react';
-import { ShoppingBag, Heart, MessageSquare, Activity } from 'lucide-react';
+import React from "react";
+import { ShoppingBag, Heart, MessageSquare, Activity } from "lucide-react";
 
 const BuyerActivity = () => {
   const buyers = [
-    { id: 1, name: 'Suresh Kumar', purchases: 15, wishlist: 22, messages: 45, score: 98 },
-    { id: 2, name: 'Neha Gupta', purchases: 12, wishlist: 18, messages: 32, score: 85 },
-    { id: 3, name: 'Vikas Singh', purchases: 8, wishlist: 35, messages: 28, score: 76 },
-    { id: 4, name: 'Anjali Sharma', purchases: 5, wishlist: 12, messages: 15, score: 60 },
+    { id: 1, name: "Suresh Kumar", purchases: 15, wishlist: 22, messages: 45, score: 98 },
+    { id: 2, name: "Neha Gupta", purchases: 12, wishlist: 18, messages: 32, score: 85 },
+    { id: 3, name: "Vikas Singh", purchases: 8, wishlist: 35, messages: 28, score: 76 },
+    { id: 4, name: "Anjali Sharma", purchases: 5, wishlist: 12, messages: 15, score: 60 }
   ];
 
   return (
@@ -16,7 +16,7 @@ const BuyerActivity = () => {
           <Activity className="w-5 h-5 text-blue-500" /> Buyer Engagement & Activity
         </h3>
       </div>
-      
+
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-xs border-b border-slate-200">
@@ -50,7 +50,7 @@ const BuyerActivity = () => {
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
                     <div className="w-16 h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div className={`h-full ${buyer.score > 80 ? 'bg-emerald-500' : buyer.score > 60 ? 'bg-amber-500' : 'bg-slate-300'}`} style={{ width: `${buyer.score}%` }}></div>
+                      <div className={`h-full ${buyer.score > 80 ? "bg-emerald-500" : buyer.score > 60 ? "bg-amber-500" : "bg-slate-300"}`} style={{ width: `${buyer.score}%` }}></div>
                     </div>
                     <span className="font-black text-slate-700">{buyer.score}</span>
                   </div>

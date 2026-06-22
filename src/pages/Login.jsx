@@ -1,70 +1,70 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, User, Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react';
-import authIllustration from '../assets/auth-illustration.png';
-import { useAuth } from '../context/AuthContext';
-import { useGoogleLogin } from '@react-oauth/google';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, User, Mail, Lock, AlertCircle, CheckCircle } from "lucide-react";
+import authIllustration from "../assets/auth-illustration.png";
+import { useAuth } from "../context/AuthContext";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const navigate = useNavigate();
   const { login, loginWithPassword, selectRole } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     rememberMe: false
   });
   const [errors, setErrors] = useState({});
-  const [globalError, setGlobalError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [globalError, setGlobalError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
     setFormData({ ...formData, [e.target.name]: value });
     if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
+      setErrors({ ...errors, [e.target.name]: "" });
     }
   };
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
-    setGlobalError('');
-    setSuccessMessage('');
+    setGlobalError("");
+    setSuccessMessage("");
     if (!formData.email) {
-      setErrors({ email: 'Email is required to reset password.' });
+      setErrors({ email: "Email is required to reset password." });
       return;
     }
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/forgot-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/auth/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email })
       });
       const data = await res.json();
       if (res.ok) {
         setSuccessMessage(data.message);
       } else {
-        setGlobalError(data.message || 'Failed to request password reset.');
+        setGlobalError(data.message || "Failed to request password reset.");
       }
     } catch (err) {
-      setGlobalError('Network error. Please try again.');
+      setGlobalError("Network error. Please try again.");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setGlobalError('');
-    setSuccessMessage('');
+    setGlobalError("");
+    setSuccessMessage("");
     const newErrors = {};
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -75,12 +75,12 @@ const Login = () => {
     const res = await loginWithPassword(formData.email, formData.password, formData.rememberMe);
     if (res.success) {
       const fullUser = res.user;
-      if (fullUser && fullUser.role && fullUser.role !== 'buyer' && fullUser.role !== 'seller') {
-        navigate('/choose-role');
+      if (fullUser && fullUser.role && fullUser.role !== "buyer" && fullUser.role !== "seller") {
+        navigate("/choose-role");
       } else if (fullUser && fullUser.role) {
         selectRole(fullUser.role);
       } else {
-        navigate('/choose-role');
+        navigate("/choose-role");
       }
     } else {
       setGlobalError(res.message);
@@ -90,30 +90,30 @@ const Login = () => {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        setGlobalError('');
-        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        setGlobalError("");
+        const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
         });
         const googleUser = await res.json();
-        
-        const fullUser = await login({ 
-          email: googleUser.email, 
+
+        const fullUser = await login({
+          email: googleUser.email,
           name: googleUser.name,
           googleId: googleUser.sub,
           picture: googleUser.picture
         });
 
         // Redirect based on whether the user has a defined role
-        if (fullUser && fullUser.role && (fullUser.role === 'buyer' || fullUser.role === 'seller')) {
+        if (fullUser && fullUser.role && (fullUser.role === "buyer" || fullUser.role === "seller")) {
           selectRole(fullUser.role);
         } else {
-          navigate('/choose-role');
+          navigate("/choose-role");
         }
       } catch (err) {
-        setGlobalError('Failed to authenticate with Google.');
+        setGlobalError("Failed to authenticate with Google.");
       }
     },
-    onError: () => setGlobalError('Google Sign-In was cancelled or failed.'),
+    onError: () => setGlobalError("Google Sign-In was cancelled or failed.")
   });
 
   return (
@@ -122,10 +122,7 @@ const Login = () => {
         {/* Left Panel */}
         <div className="md:w-5/12 bg-theme-dark-maroon text-white flex flex-col justify-end relative overflow-hidden group">
           {/* Background Image */}
-          <div
-            className="absolute inset-0 z-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${authIllustration})` }}
-          ></div>
+          <div className="absolute inset-0 z-0 bg-cover bg-center" style={{ backgroundImage: `url(${authIllustration})` }}></div>
           {/* Gradient Overlay */}
           <div className="absolute inset-0 z-0"></div>
 
@@ -159,7 +156,7 @@ const Login = () => {
                 <p className="text-sm text-red-700">{globalError}</p>
               </div>
             )}
-            
+
             {successMessage && (
               <div className="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg flex items-start gap-3">
                 <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
@@ -179,7 +176,7 @@ const Login = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`block w-full pl-11 pr-4 py-3 bg-slate-50 border ${errors.email ? 'border-red-300 focus:ring-red-500' : 'border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon'} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
+                    className={`block w-full pl-11 pr-4 py-3 bg-slate-50 border ${errors.email ? "border-red-300 focus:ring-red-500" : "border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon"} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
                     placeholder="student@campus.edu"
                   />
                 </div>
@@ -197,14 +194,13 @@ const Login = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className={`block w-full pl-11 pr-12 py-3 bg-slate-50 border ${errors.password ? 'border-red-300 focus:ring-red-500' : 'border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon'} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
+                    className={`block w-full pl-11 pr-12 py-3 bg-slate-50 border ${errors.password ? "border-red-300 focus:ring-red-500" : "border-slate-100 focus:border-theme-maroon focus:ring-theme-maroon"} rounded-xl text-slate-900 focus:ring-2 focus:outline-none transition-all`}
                     placeholder="Enter your password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-theme-maroon transition-colors"
-                  >
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-theme-maroon transition-colors">
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
@@ -235,13 +231,10 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="w-full bg-theme-maroon text-white font-bold py-3.5 px-4 rounded-xl shadow-md hover:bg-theme-dark-maroon hover:shadow-lg hover:shadow-theme-maroon/30 transition-all flex justify-center items-center gap-2 mt-8"
-              >
+                className="w-full bg-theme-maroon text-white font-bold py-3.5 px-4 rounded-xl shadow-md hover:bg-theme-dark-maroon hover:shadow-lg hover:shadow-theme-maroon/30 transition-all flex justify-center items-center gap-2 mt-8">
                 LOG IN <span>&rarr;</span>
               </button>
             </form>
-
-
           </div>
         </div>
       </div>

@@ -1,25 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Search, MoreVertical, Phone, Video, Info, Paperclip, 
-  Image as ImageIcon, Smile, Send, CheckCircle2, Clock, MessageSquare
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { io } from 'socket.io-client';
-import { getSafeAvatarUrl } from '../../utils/avatarUtils';
+import React, { useState, useEffect, useRef } from "react";
+import { Search, MoreVertical, Phone, Video, Info, Paperclip, Image as ImageIcon, Smile, Send, CheckCircle2, Clock, MessageSquare } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import { io } from "socket.io-client";
+import { getSafeAvatarUrl } from "../../utils/avatarUtils";
 
 const Messages = ({ initialChatId }) => {
   const { user } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [activeChatId, setActiveChatId] = useState(initialChatId || null);
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
   const [socket, setSocket] = useState(null);
 
   const fetchConversations = async () => {
     if (!user) return;
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/conversations/${user._id}?role=buyer`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/messages/conversations/${user._id}?role=buyer`);
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
@@ -40,13 +37,13 @@ const Messages = ({ initialChatId }) => {
 
   useEffect(() => {
     if (!user) return;
-    const newSocket = io(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}`);
+    const newSocket = io(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}`);
     setSocket(newSocket);
 
-    newSocket.emit('join_chat', { userId: user._id, role: 'buyer' });
+    newSocket.emit("join_chat", { userId: user._id, role: "buyer" });
 
-    newSocket.on('receive_message', (msg) => {
-      setMessages(prev => {
+    newSocket.on("receive_message", (msg) => {
+      setMessages((prev) => {
         if (msg.conversationId === activeChatId) {
           return [...prev, msg];
         }
@@ -66,19 +63,19 @@ const Messages = ({ initialChatId }) => {
     if (activeChatId && user) {
       const fetchMessages = async () => {
         try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/${activeChatId}`);
+          const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/messages/${activeChatId}`);
           if (res.ok) {
             const data = await res.json();
             setMessages(Array.isArray(data) ? data : []);
           } else {
             setMessages([]);
           }
-          
+
           // Mark read
-          await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/${activeChatId}/read`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: user._id, role: 'buyer' })
+          await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/messages/${activeChatId}/read`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: user._id, role: "buyer" })
           });
           fetchConversations();
         } catch (err) {
@@ -91,11 +88,11 @@ const Messages = ({ initialChatId }) => {
 
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
-  const activeChat = conversations.find(c => c._id === activeChatId);
+  const activeChat = conversations.find((c) => c._id === activeChatId);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -109,45 +106,48 @@ const Messages = ({ initialChatId }) => {
       productId: activeChat.productId._id,
       senderId: user._id,
       receiverId,
-      senderRole: 'buyer',
-      receiverRole: 'seller',
+      senderRole: "buyer",
+      receiverRole: "seller",
       text: newMessage
     };
 
     // Optimistic UI update
     const tempId = Date.now().toString();
-    setMessages(prev => [...prev, {
-      ...messageData,
-      _id: tempId,
-      createdAt: new Date().toISOString(),
-      status: 'sending'
-    }]);
-    setNewMessage('');
+    setMessages((prev) => [
+      ...prev,
+      {
+        ...messageData,
+        _id: tempId,
+        createdAt: new Date().toISOString(),
+        status: "sending"
+      }
+    ]);
+    setNewMessage("");
 
     try {
       // 1. Save to Database via REST API
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/messages`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(messageData)
       });
-      
+
       if (res.ok) {
         const savedMessage = await res.json();
         // Update optimistic message with real DB message
-        setMessages(prev => prev.map(m => m._id === tempId ? savedMessage : m));
-        
+        setMessages((prev) => prev.map((m) => (m._id === tempId ? savedMessage : m)));
+
         // 2. Notify the receiver via Socket.io
-        socket.emit('new_message_notification', savedMessage);
+        socket.emit("new_message_notification", savedMessage);
       } else {
-        throw new Error('Failed to send message');
+        throw new Error("Failed to send message");
       }
     } catch (error) {
       console.error(error);
       // Mark as failed
-      setMessages(prev => prev.map(m => m._id === tempId ? { ...m, status: 'failed' } : m));
+      setMessages((prev) => prev.map((m) => (m._id === tempId ? { ...m, status: "failed" } : m)));
     }
-    
+
     fetchConversations();
   };
 
@@ -156,26 +156,24 @@ const Messages = ({ initialChatId }) => {
     const otherUser = isMeBuyer ? chat.sellerId : chat.buyerId;
     const unread = isMeBuyer ? chat.unreadByBuyer : chat.unreadBySeller;
     const avatar = getSafeAvatarUrl(otherUser?.avatarUrl, otherUser?.name);
-    
+
     // Formatting relative time simply for UI
-    let lastActive = 'Just now';
+    let lastActive = "Just now";
     if (chat.lastMessageAt) {
       const diff = Date.now() - new Date(chat.lastMessageAt).getTime();
       const mins = Math.floor(diff / 60000);
-      if (mins > 1440) lastActive = `${Math.floor(mins/1440)}d ago`;
-      else if (mins > 60) lastActive = `${Math.floor(mins/60)}h ago`;
+      if (mins > 1440) lastActive = `${Math.floor(mins / 1440)}d ago`;
+      else if (mins > 60) lastActive = `${Math.floor(mins / 60)}h ago`;
       else if (mins > 0) lastActive = `${mins}m ago`;
     }
 
-    return { name: otherUser?.name || 'Unknown', avatar, unread, item: chat.productId?.title || 'Unknown Product', lastActive };
+    return { name: otherUser?.name || "Unknown", avatar, unread, item: chat.productId?.title || "Unknown Product", lastActive };
   };
 
   return (
     <div className="h-[calc(100vh-120px)] bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex max-w-7xl mx-auto">
-      
       {/* Left Sidebar - Chat List */}
       <div className="w-full md:w-80 lg:w-96 border-r border-slate-200 flex flex-col bg-slate-50 flex-shrink-0">
-        
         {/* Sidebar Header */}
         <div className="p-4 sm:p-5 border-b border-slate-200 bg-white">
           <h2 className="text-xl font-extrabold text-slate-900 mb-4 flex items-center gap-2">
@@ -183,9 +181,9 @@ const Messages = ({ initialChatId }) => {
           </h2>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input 
-              type="text" 
-              placeholder="Search conversations..." 
+            <input
+              type="text"
+              placeholder="Search conversations..."
               className="w-full pl-9 pr-4 py-2.5 bg-slate-100 border-transparent focus:bg-white focus:border-theme-maroon focus:ring-2 focus:ring-theme-maroon/20 rounded-xl transition-all outline-none text-sm font-medium"
             />
           </div>
@@ -193,14 +191,13 @@ const Messages = ({ initialChatId }) => {
 
         {/* Chat List */}
         <div className="flex-1 overflow-y-auto">
-          {conversations.map(chat => {
+          {conversations.map((chat) => {
             const display = getChatDisplay(chat);
             return (
-              <div 
+              <div
                 key={chat._id}
                 onClick={() => setActiveChatId(chat._id)}
-                className={`p-4 border-b border-slate-100 cursor-pointer transition-all hover:bg-slate-100 ${activeChatId === chat._id ? 'bg-theme-maroon/5 border-l-4 border-l-theme-maroon' : 'border-l-4 border-l-transparent'}`}
-              >
+                className={`p-4 border-b border-slate-100 cursor-pointer transition-all hover:bg-slate-100 ${activeChatId === chat._id ? "bg-theme-maroon/5 border-l-4 border-l-theme-maroon" : "border-l-4 border-l-transparent"}`}>
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <img src={display.avatar} alt={display.name} className="w-12 h-12 rounded-full bg-white border-2 border-white shadow-sm" />
@@ -208,19 +205,13 @@ const Messages = ({ initialChatId }) => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-0.5">
-                      <h3 className={`text-sm truncate ${display.unread > 0 ? 'font-extrabold text-slate-900' : 'font-bold text-slate-700'}`}>
-                        {display.name}
-                      </h3>
+                      <h3 className={`text-sm truncate ${display.unread > 0 ? "font-extrabold text-slate-900" : "font-bold text-slate-700"}`}>{display.name}</h3>
                       <span className="text-xs font-bold text-slate-400">{display.lastActive}</span>
                     </div>
                     <div className="flex items-center justify-between gap-2">
-                      <p className={`text-xs truncate ${display.unread > 0 ? 'font-bold text-slate-800' : 'font-medium text-slate-500'}`}>
-                        {display.item}
-                      </p>
+                      <p className={`text-xs truncate ${display.unread > 0 ? "font-bold text-slate-800" : "font-medium text-slate-500"}`}>{display.item}</p>
                       {display.unread > 0 && (
-                        <span className="w-5 h-5 bg-theme-maroon text-white text-[10px] font-bold rounded-full flex items-center justify-center flex-shrink-0">
-                          {display.unread}
-                        </span>
+                        <span className="w-5 h-5 bg-theme-maroon text-white text-[10px] font-bold rounded-full flex items-center justify-center flex-shrink-0">{display.unread}</span>
                       )}
                     </div>
                   </div>
@@ -253,8 +244,7 @@ const Messages = ({ initialChatId }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 sm:gap-2">
-                  </div>
+                  <div className="flex items-center gap-1 sm:gap-2"></div>
                 </div>
 
                 {/* Chat Messages */}
@@ -265,34 +255,27 @@ const Messages = ({ initialChatId }) => {
 
                   {messages.map((msg, idx) => {
                     const isMe = msg.senderId === user._id;
-                    const showAvatar = !isMe && (idx === 0 || messages[idx-1].senderId !== msg.senderId);
-                    const timeString = new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    
+                    const showAvatar = !isMe && (idx === 0 || messages[idx - 1].senderId !== msg.senderId);
+                    const timeString = new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
                     return (
-                      <div key={msg._id} className={`flex gap-3 ${isMe ? 'justify-end' : 'justify-start'}`}>
-                        {!isMe && (
-                          <div className="w-8 flex-shrink-0">
-                            {showAvatar && <img src={display.avatar} alt="" className="w-8 h-8 rounded-full shadow-sm" />}
-                          </div>
-                        )}
-                        
-                        <div className={`flex flex-col max-w-[70%] ${isMe ? 'items-end' : 'items-start'}`}>
-                          <div 
-                            className={`px-4 py-2.5 rounded-2xl shadow-sm ${
-                              isMe 
-                              ? 'bg-theme-maroon text-white rounded-br-sm' 
-                              : 'bg-white border border-slate-200 text-slate-800 rounded-bl-sm'
-                            }`}
-                          >
+                      <div key={msg._id} className={`flex gap-3 ${isMe ? "justify-end" : "justify-start"}`}>
+                        {!isMe && <div className="w-8 flex-shrink-0">{showAvatar && <img src={display.avatar} alt="" className="w-8 h-8 rounded-full shadow-sm" />}</div>}
+
+                        <div className={`flex flex-col max-w-[70%] ${isMe ? "items-end" : "items-start"}`}>
+                          <div className={`px-4 py-2.5 rounded-2xl shadow-sm ${isMe ? "bg-theme-maroon text-white rounded-br-sm" : "bg-white border border-slate-200 text-slate-800 rounded-bl-sm"}`}>
                             <p className="text-sm">{msg.text}</p>
                           </div>
                           <div className="flex items-center gap-1 mt-1 px-1">
                             <span className="text-[10px] font-bold text-slate-400">{timeString}</span>
-                            {isMe && (
-                              msg.status === 'read' ? <CheckCircle2 className="w-3 h-3 text-blue-500" /> : 
-                              msg.status === 'sent' ? <CheckCircle2 className="w-3 h-3 text-slate-300" /> :
-                              <Clock className="w-3 h-3 text-slate-300" />
-                            )}
+                            {isMe &&
+                              (msg.status === "read" ? (
+                                <CheckCircle2 className="w-3 h-3 text-blue-500" />
+                              ) : msg.status === "sent" ? (
+                                <CheckCircle2 className="w-3 h-3 text-slate-300" />
+                              ) : (
+                                <Clock className="w-3 h-3 text-slate-300" />
+                              ))}
                           </div>
                         </div>
                       </div>
@@ -303,21 +286,21 @@ const Messages = ({ initialChatId }) => {
 
                 {/* Message Input Area */}
                 <div className="p-4 bg-white border-t border-slate-200">
-                  <form onSubmit={handleSendMessage} className="flex items-end gap-2 sm:gap-3 bg-slate-50 p-2 sm:p-2 rounded-2xl border border-slate-200 focus-within:border-theme-maroon focus-within:ring-1 focus-within:ring-theme-maroon transition-all">
-                    <div className="flex gap-1 pb-1 px-1 text-slate-400">
-                    </div>
-                    <input 
-                      type="text" 
+                  <form
+                    onSubmit={handleSendMessage}
+                    className="flex items-end gap-2 sm:gap-3 bg-slate-50 p-2 sm:p-2 rounded-2xl border border-slate-200 focus-within:border-theme-maroon focus-within:ring-1 focus-within:ring-theme-maroon transition-all">
+                    <div className="flex gap-1 pb-1 px-1 text-slate-400"></div>
+                    <input
+                      type="text"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
-                      placeholder="Type a message..." 
+                      placeholder="Type a message..."
                       className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 py-2.5 text-sm"
                     />
-                    <button 
-                      type="submit" 
+                    <button
+                      type="submit"
                       disabled={!newMessage.trim()}
-                      className="p-2.5 bg-theme-maroon text-white rounded-xl hover:bg-theme-dark-maroon transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-theme-maroon/20"
-                    >
+                      className="p-2.5 bg-theme-maroon text-white rounded-xl hover:bg-theme-dark-maroon transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-theme-maroon/20">
                       <Send className="w-5 h-5 ml-0.5" />
                     </button>
                   </form>
@@ -333,7 +316,6 @@ const Messages = ({ initialChatId }) => {
           </div>
         )}
       </div>
-
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Users, ShoppingBag, CheckCircle, DollarSign, Flag, Activity, Clock, Trash2, Edit } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Users, ShoppingBag, CheckCircle, DollarSign, Flag, Activity, Clock, Trash2, Edit } from "lucide-react";
 
 const AdminOverview = () => {
   const [statsData, setStatsData] = useState(null);
@@ -10,13 +10,13 @@ const AdminOverview = () => {
     const fetchAdminData = async () => {
       try {
         const [statsRes, activityRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/stats`),
-          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/admin/recent-activity`)
+          fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/admin/stats`),
+          fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/admin/recent-activity`)
         ]);
         if (statsRes.ok) setStatsData(await statsRes.json());
         if (activityRes.ok) setRecentActivity(await activityRes.json());
       } catch (err) {
-        console.error('Failed to fetch admin data', err);
+        console.error("Failed to fetch admin data", err);
       } finally {
         setLoading(false);
       }
@@ -24,29 +24,31 @@ const AdminOverview = () => {
     fetchAdminData();
   }, []);
 
-  const stats = statsData ? [
-    { title: 'Total Students', value: statsData.totalStudents, icon: Users, color: 'text-blue-600', bg: 'bg-blue-100', trend: '' },
-    { title: 'Total Listings', value: statsData.totalListings, icon: ShoppingBag, color: 'text-purple-600', bg: 'bg-purple-100', trend: '' },
-    { title: 'Active Listings', value: statsData.activeListings, icon: CheckCircle, color: 'text-emerald-600', bg: 'bg-emerald-100', trend: '' },
-    { title: 'Items Sold', value: statsData.itemsSold, icon: DollarSign, color: 'text-amber-600', bg: 'bg-amber-100', trend: '' },
-    { title: 'Reported Listings', value: statsData.reportedListings, icon: Flag, color: 'text-red-600', bg: 'bg-red-100', trend: '' },
-    { title: 'Active Users Today', value: statsData.activeUsersToday, icon: Activity, color: 'text-indigo-600', bg: 'bg-indigo-100', trend: '' },
-  ] : [];
+  const stats = statsData
+    ? [
+        { title: "Total Students", value: statsData.totalStudents, icon: Users, color: "text-blue-600", bg: "bg-blue-100", trend: "" },
+        { title: "Total Listings", value: statsData.totalListings, icon: ShoppingBag, color: "text-purple-600", bg: "bg-purple-100", trend: "" },
+        { title: "Active Listings", value: statsData.activeListings, icon: CheckCircle, color: "text-emerald-600", bg: "bg-emerald-100", trend: "" },
+        { title: "Items Sold", value: statsData.itemsSold, icon: DollarSign, color: "text-amber-600", bg: "bg-amber-100", trend: "" },
+        { title: "Reported Listings", value: statsData.reportedListings, icon: Flag, color: "text-red-600", bg: "bg-red-100", trend: "" },
+        { title: "Active Users Today", value: statsData.activeUsersToday, icon: Activity, color: "text-indigo-600", bg: "bg-indigo-100", trend: "" }
+      ]
+    : [];
 
   const getIconForAction = (action) => {
-    if (action === 'sold') return DollarSign;
-    if (action === 'reported') return Flag;
-    if (action === 'removed') return Trash2;
-    if (action === 'registered') return Users;
+    if (action === "sold") return DollarSign;
+    if (action === "reported") return Flag;
+    if (action === "removed") return Trash2;
+    if (action === "registered") return Users;
     return ShoppingBag; // posted
   };
 
   const getColorForAction = (action) => {
-    if (action === 'sold') return { text: 'text-emerald-500', bg: 'bg-emerald-50' };
-    if (action === 'reported') return { text: 'text-amber-500', bg: 'bg-amber-50' };
-    if (action === 'removed') return { text: 'text-red-500', bg: 'bg-red-50' };
-    if (action === 'registered') return { text: 'text-purple-500', bg: 'bg-purple-50' };
-    return { text: 'text-blue-500', bg: 'bg-blue-50' }; // posted
+    if (action === "sold") return { text: "text-emerald-500", bg: "bg-emerald-50" };
+    if (action === "reported") return { text: "text-amber-500", bg: "bg-amber-50" };
+    if (action === "removed") return { text: "text-red-500", bg: "bg-red-50" };
+    if (action === "registered") return { text: "text-purple-500", bg: "bg-purple-50" };
+    return { text: "text-blue-500", bg: "bg-blue-50" }; // posted
   };
 
   return (
@@ -69,9 +71,7 @@ const AdminOverview = () => {
                   <stat.icon className="w-5 h-5" />
                 </div>
                 {stat.trend && (
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${stat.trend.startsWith('+') ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
-                    {stat.trend}
-                  </span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${stat.trend.startsWith("+") ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"}`}>{stat.trend}</span>
                 )}
               </div>
               <div className="relative z-10">

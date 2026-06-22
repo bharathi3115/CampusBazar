@@ -1,12 +1,12 @@
-import React from 'react';
-import { Star, Award, TrendingUp, Package } from 'lucide-react';
+import React from "react";
+import { Star, Award, TrendingUp, Package } from "lucide-react";
 
 const SellerMonitoring = () => {
   const sellers = [
-    { id: 1, name: 'John Doe', listings: 25, sold: 18, rating: 4.8, revenue: '₹4,500', rank: 1 },
-    { id: 2, name: 'Rahul Sharma', listings: 18, sold: 12, rating: 4.5, revenue: '₹3,200', rank: 2 },
-    { id: 3, name: 'Priya Patel', listings: 15, sold: 10, rating: 4.9, revenue: '₹2,800', rank: 3 },
-    { id: 4, name: 'Amit Kumar', listings: 8, sold: 5, rating: 4.2, revenue: '₹1,500', rank: 4 },
+    { id: 1, name: "John Doe", listings: 25, sold: 18, rating: 4.8, revenue: "₹4,500", rank: 1 },
+    { id: 2, name: "Rahul Sharma", listings: 18, sold: 12, rating: 4.5, revenue: "₹3,200", rank: 2 },
+    { id: 3, name: "Priya Patel", listings: 15, sold: 10, rating: 4.9, revenue: "₹2,800", rank: 3 },
+    { id: 4, name: "Amit Kumar", listings: 8, sold: 5, rating: 4.2, revenue: "₹1,500", rank: 4 }
   ];
 
   return (
@@ -16,7 +16,7 @@ const SellerMonitoring = () => {
           <Award className="w-5 h-5 text-amber-500" /> Top Performing Sellers
         </h3>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6 border-b border-slate-100">
         <div className="bg-amber-50 p-4 rounded-xl border border-amber-100">
           <p className="text-sm font-bold text-amber-800 mb-1">Highest Rated</p>
@@ -52,7 +52,8 @@ const SellerMonitoring = () => {
             {sellers.map((seller) => (
               <tr key={seller.id} className="hover:bg-slate-50 transition-colors">
                 <td className="px-6 py-4">
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${seller.rank === 1 ? 'bg-amber-100 text-amber-600' : seller.rank === 2 ? 'bg-slate-200 text-slate-600' : seller.rank === 3 ? 'bg-orange-100 text-orange-600' : 'bg-slate-100 text-slate-500'}`}>
+                  <span
+                    className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${seller.rank === 1 ? "bg-amber-100 text-amber-600" : seller.rank === 2 ? "bg-slate-200 text-slate-600" : seller.rank === 3 ? "bg-orange-100 text-orange-600" : "bg-slate-100 text-slate-500"}`}>
                     #{seller.rank}
                   </span>
                 </td>

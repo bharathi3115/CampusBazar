@@ -1,48 +1,42 @@
-import React from 'react';
-import { Heart, Eye, MessageSquare, Flag, Share2, ShieldCheck, MapPin, Clock } from 'lucide-react';
-import { useWishlist } from '../../context/WishlistContext';
-import { getFallbackImage } from '../../utils/imageFallback';
-import { getSafeAvatarUrl } from '../../utils/avatarUtils';
+import React from "react";
+import { Heart, Eye, MessageSquare, Flag, Share2, ShieldCheck, MapPin, Clock } from "lucide-react";
+import { useWishlist } from "../../context/WishlistContext";
+import { getFallbackImage } from "../../utils/imageFallback";
+import { getSafeAvatarUrl } from "../../utils/avatarUtils";
 
 const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
   const { isWishlisted, toggleWishlist } = useWishlist();
   const wishlisted = isWishlisted(product._id);
 
   return (
-    <div 
+    <div
       onClick={() => onViewDetails(product)}
-      className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col"
-    >
+      className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col">
       {/* Image Container */}
       <div className="relative aspect-square overflow-hidden bg-slate-100">
-        <img 
-          src={product.img || getFallbackImage(product.category, product.title)} 
+        <img
+          src={product.img || getFallbackImage(product.category, product.title)}
           alt={product.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
-          {product.condition === 'New' && (
-            <span className="bg-green-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow-sm">
-              New
-            </span>
-          )}
+          {product.condition === "New" && <span className="bg-green-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow-sm">New</span>}
         </div>
-        {product.status === 'Sold' && (
+        {product.status === "Sold" && (
           <div className="absolute inset-0 bg-slate-900/50 flex items-center justify-center z-10 backdrop-blur-[2px]">
             <span className="bg-red-500 text-white font-black px-4 py-2 rounded-xl text-lg shadow-xl rotate-[-12deg] border-2 border-white">SOLD</span>
           </div>
         )}
         {/* Quick Actions (Hover) */}
         <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2">
-          <button 
-            onClick={(e) => { 
-              e.stopPropagation(); 
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
               toggleWishlist(product);
               if (onWishlist) onWishlist(product._id);
             }}
-            className={`p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:shadow-md transition-all ${wishlisted ? 'text-red-500 hover:text-red-600' : 'text-slate-400 hover:text-rose-500'}`}
-          >
+            className={`p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:shadow-md transition-all ${wishlisted ? "text-red-500 hover:text-red-600" : "text-slate-400 hover:text-rose-500"}`}>
             <Heart className="w-4 h-4" fill={wishlisted ? "currentColor" : "none"} />
           </button>
         </div>
@@ -56,11 +50,9 @@ const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
             <Eye className="w-3.5 h-3.5" /> {product.views}
           </div>
         </div>
-        
-        <h3 className="font-bold text-slate-900 text-base leading-tight mb-2 line-clamp-2 group-hover:text-theme-maroon transition-colors">
-          {product.title}
-        </h3>
-        
+
+        <h3 className="font-bold text-slate-900 text-base leading-tight mb-2 line-clamp-2 group-hover:text-theme-maroon transition-colors">{product.title}</h3>
+
         <div className="flex items-end gap-2 mb-4">
           <span className="text-xl font-black text-slate-900">₹{product.price}</span>
         </div>
@@ -68,11 +60,7 @@ const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
         {/* Seller Info */}
         <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img 
-              src={getSafeAvatarUrl(product.seller?.avatarUrl, product.seller?.name)} 
-              className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200" 
-              alt="" 
-            />
+            <img src={getSafeAvatarUrl(product.seller?.avatarUrl, product.seller?.name)} className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200" alt="" />
             <div className="flex flex-col">
               <span className="text-sm font-bold text-slate-900 flex items-center gap-1">
                 {product.seller?.name}
@@ -84,18 +72,22 @@ const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button 
-              onClick={(e) => { e.stopPropagation(); onViewDetails(product); }}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onViewDetails(product);
+              }}
               className="p-2 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition-colors"
-              title="Report Listing"
-            >
+              title="Report Listing">
               <Flag className="w-4 h-4" />
             </button>
-            <button 
-              onClick={(e) => { e.stopPropagation(); if (onMessage) onMessage(product); }}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onMessage) onMessage(product);
+              }}
               className="p-2 text-theme-maroon bg-theme-maroon/5 hover:bg-theme-maroon hover:text-white rounded-lg transition-colors"
-              title="Message Seller"
-            >
+              title="Message Seller">
               <MessageSquare className="w-4 h-4" />
             </button>
           </div>

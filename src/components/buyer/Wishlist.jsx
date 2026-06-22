@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Heart, TrendingDown, Clock, Tag, MessageSquare, Trash2, Share2, Eye, Users, ShieldCheck, Search, Activity, Sparkles } from 'lucide-react';
-import ProductCard from '../marketplace/ProductCard';
+import React, { useState } from "react";
+import { Heart, TrendingDown, Clock, Tag, MessageSquare, Trash2, Share2, Eye, Users, ShieldCheck, Search, Activity, Sparkles } from "lucide-react";
+import ProductCard from "../marketplace/ProductCard";
 
-import { useWishlist } from '../../context/WishlistContext';
-import { useAuth } from '../../context/AuthContext';
+import { useWishlist } from "../../context/WishlistContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Wishlist = ({ setActiveTab }) => {
   const { wishlist, removeFromWishlist } = useWishlist();
@@ -11,23 +11,23 @@ const Wishlist = ({ setActiveTab }) => {
 
   const handleMessageSeller = async (product) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/conversation`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/messages/conversation`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           buyerId: user._id,
           productId: product._id
         })
       });
       if (res.ok) {
-        if (setActiveTab) setActiveTab('messages');
+        if (setActiveTab) setActiveTab("messages");
       } else {
         const error = await res.json();
-        alert(error.message || 'Failed to initiate chat.');
+        alert(error.message || "Failed to initiate chat.");
       }
     } catch (err) {
       console.error(err);
-      alert('Network error.');
+      alert("Network error.");
     }
   };
 
@@ -42,7 +42,7 @@ const Wishlist = ({ setActiveTab }) => {
           <h1 className="text-2xl font-bold text-slate-900 mb-1">My Wishlist</h1>
           <p className="text-slate-500 font-medium">Keep track of products you're interested in.</p>
         </div>
-        
+
         <div className="bg-white rounded-3xl border border-slate-200 border-dashed p-16 text-center flex flex-col items-center justify-center min-h-[400px]">
           <div className="w-24 h-24 bg-rose-50 rounded-full flex items-center justify-center mb-6">
             <Heart className="w-12 h-12 text-rose-300" />
@@ -57,7 +57,7 @@ const Wishlist = ({ setActiveTab }) => {
     );
   }
 
-  const priceDrops = wishlist.filter(item => item.priceDrop);
+  const priceDrops = wishlist.filter((item) => item.priceDrop);
 
   return (
     <div className="max-w-7xl mx-auto space-y-10 pb-12">
@@ -67,10 +67,8 @@ const Wishlist = ({ setActiveTab }) => {
         <p className="text-slate-500 font-medium text-lg">Keep track of products you're interested in.</p>
       </div>
 
-
       {/* Main Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
         {/* Left/Main Column: Wishlist Items */}
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between mb-4">
@@ -80,7 +78,9 @@ const Wishlist = ({ setActiveTab }) => {
 
           <div className="space-y-4">
             {[...wishlist].reverse().map((item) => (
-              <div key={item._id} className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-theme-maroon/30 hover:shadow-lg transition-all flex flex-col sm:flex-row gap-5 group">
+              <div
+                key={item._id}
+                className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-theme-maroon/30 hover:shadow-lg transition-all flex flex-col sm:flex-row gap-5 group">
                 {/* Image */}
                 <div className="relative w-full sm:w-40 h-40 flex-shrink-0 bg-slate-100 rounded-xl overflow-hidden">
                   <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -120,22 +120,24 @@ const Wishlist = ({ setActiveTab }) => {
                   <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
-                        <span className="text-xs font-bold text-slate-600">{item.seller?.name ? item.seller.name.charAt(0) : 'U'}</span>
+                        <span className="text-xs font-bold text-slate-600">{item.seller?.name ? item.seller.name.charAt(0) : "U"}</span>
                       </div>
                       <span className="text-sm font-bold text-slate-900 flex items-center gap-1">
-                        {item.seller?.name || 'Unknown Seller'}
+                        {item.seller?.name || "Unknown Seller"}
                         {item.seller?.verified && <ShieldCheck className="w-3.5 h-3.5 text-blue-500" title="Verified Seller" />}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2 w-full sm:w-auto">
-                      <button 
+                      <button
                         onClick={() => handleMessageSeller(item)}
-                        className="flex-1 sm:flex-none p-2.5 bg-theme-maroon text-white hover:bg-theme-dark-maroon rounded-xl transition-colors font-bold text-sm shadow-sm flex items-center justify-center gap-1.5"
-                      >
+                        className="flex-1 sm:flex-none p-2.5 bg-theme-maroon text-white hover:bg-theme-dark-maroon rounded-xl transition-colors font-bold text-sm shadow-sm flex items-center justify-center gap-1.5">
                         <MessageSquare className="w-4 h-4" /> <span className="hidden sm:inline">Contact</span>
                       </button>
-                      <button className="p-2.5 bg-slate-50 text-slate-600 hover:text-red-500 hover:bg-red-50 border border-slate-200 hover:border-red-200 rounded-xl transition-colors shadow-sm" title="Remove from Wishlist" onClick={() => handleRemove(item._id)}>
+                      <button
+                        className="p-2.5 bg-slate-50 text-slate-600 hover:text-red-500 hover:bg-red-50 border border-slate-200 hover:border-red-200 rounded-xl transition-colors shadow-sm"
+                        title="Remove from Wishlist"
+                        onClick={() => handleRemove(item._id)}>
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -147,12 +149,7 @@ const Wishlist = ({ setActiveTab }) => {
         </div>
 
         {/* Right Column: Sidebar */}
-        <div className="space-y-8">
-          
-
-
-
-        </div>
+        <div className="space-y-8"></div>
       </div>
     </div>
   );

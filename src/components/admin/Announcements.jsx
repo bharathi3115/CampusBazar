@@ -1,11 +1,11 @@
-import React from 'react';
-import { Megaphone, Plus, Edit2, Trash2, Globe, EyeOff, Calendar } from 'lucide-react';
+import React from "react";
+import { Megaphone, Plus, Edit2, Trash2, Globe, EyeOff, Calendar } from "lucide-react";
 
 const Announcements = () => {
   const announcements = [
-    { id: 1, title: 'New Feature Released', message: 'You can now filter listings by specific college departments!', status: 'Published', date: 'Oct 15, 2023', type: 'Feature' },
-    { id: 2, title: 'Marketplace Rules Updated', message: 'Please review the updated guidelines regarding acceptable items for sale.', status: 'Published', date: 'Oct 10, 2023', type: 'Policy' },
-    { id: 3, title: 'Scheduled Maintenance Notice', message: 'The platform will be down for 2 hours on Sunday midnight for upgrades.', status: 'Draft', date: 'Oct 18, 2023', type: 'Maintenance' },
+    { id: 1, title: "New Feature Released", message: "You can now filter listings by specific college departments!", status: "Published", date: "Oct 15, 2023", type: "Feature" },
+    { id: 2, title: "Marketplace Rules Updated", message: "Please review the updated guidelines regarding acceptable items for sale.", status: "Published", date: "Oct 10, 2023", type: "Policy" },
+    { id: 3, title: "Scheduled Maintenance Notice", message: "The platform will be down for 2 hours on Sunday midnight for upgrades.", status: "Draft", date: "Oct 18, 2023", type: "Maintenance" }
   ];
 
   return (
@@ -44,13 +44,12 @@ const Announcements = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider">
-                      {ann.type}
-                    </span>
+                    <span className="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider">{ann.type}</span>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${ann.status === 'Published' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
-                      {ann.status === 'Published' ? <Globe className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${ann.status === "Published" ? "bg-emerald-50 text-emerald-600" : "bg-amber-50 text-amber-600"}`}>
+                      {ann.status === "Published" ? <Globe className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                       {ann.status}
                     </span>
                   </td>
@@ -59,7 +58,7 @@ const Announcements = () => {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {ann.status === 'Draft' && (
+                      {ann.status === "Draft" && (
                         <button className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Publish Announcement">
                           <Globe className="w-4 h-4" />
                         </button>

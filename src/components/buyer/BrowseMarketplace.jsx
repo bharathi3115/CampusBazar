@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Filter, SlidersHorizontal, X } from 'lucide-react';
-import ProductCard from '../marketplace/ProductCard';
-import ProductDetailsModal from '../marketplace/ProductDetailsModal';
-import { useAuth } from '../../context/AuthContext';
+import React, { useState, useEffect } from "react";
+import { Search, Filter, SlidersHorizontal, X } from "lucide-react";
+import ProductCard from "../marketplace/ProductCard";
+import ProductDetailsModal from "../marketplace/ProductDetailsModal";
+import { useAuth } from "../../context/AuthContext";
 
-const CATEGORIES = ['All Categories', 'Books', 'Calculators', 'Electronics', 'Bicycles', 'Lab Equipment', 'Hostel Essentials', 'Stationery', 'Furniture', 'Miscellaneous'];
-const CONDITIONS = ['All Conditions', 'New', 'Like New', 'Good', 'Fair'];
-const SORTS = ['Newest First', 'Oldest First', 'Price Low to High', 'Price High to Low', 'Most Wishlisted'];
+const CATEGORIES = ["All Categories", "Books", "Calculators", "Electronics", "Bicycles", "Lab Equipment", "Hostel Essentials", "Stationery", "Furniture", "Miscellaneous"];
+const CONDITIONS = ["All Conditions", "New", "Like New", "Good", "Fair"];
+const SORTS = ["Newest First", "Oldest First", "Price Low to High", "Price High to Low", "Most Wishlisted"];
 
 const BrowseMarketplace = ({ setActiveTab }) => {
   const [products, setProducts] = useState([]);
@@ -15,12 +15,12 @@ const BrowseMarketplace = ({ setActiveTab }) => {
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { user } = useAuth();
-  
+
   // Filters
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('All Categories');
-  const [condition, setCondition] = useState('All Conditions');
-  const [sort, setSort] = useState('Newest First');
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("All Categories");
+  const [condition, setCondition] = useState("All Conditions");
+  const [sort, setSort] = useState("Newest First");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -32,15 +32,15 @@ const BrowseMarketplace = ({ setActiveTab }) => {
         page,
         limit: 12,
         ...(search && { search }),
-        ...(category !== 'All Categories' && { category }),
-        ...(condition !== 'All Conditions' && { condition }),
+        ...(category !== "All Categories" && { category }),
+        ...(condition !== "All Conditions" && { condition }),
         ...(sort && { sort })
       }).toString();
 
       const [productsRes, statsRes, trendingRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/products?${query}`),
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/stats`),
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/trending-categories`)
+        fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/marketplace/products?${query}`),
+        fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/marketplace/stats`),
+        fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/marketplace/trending-categories`)
       ]);
 
       if (productsRes.ok) {
@@ -48,23 +48,22 @@ const BrowseMarketplace = ({ setActiveTab }) => {
         setProducts(data.products);
         setTotalPages(data.totalPages);
       } else {
-        throw new Error('Backend request failed');
+        throw new Error("Backend request failed");
       }
       if (statsRes.ok) setStats(await statsRes.json());
       if (trendingRes.ok) setTrending(await trendingRes.json());
-      
     } catch (error) {
-      console.error('Failed to fetch marketplace data:', error);
+      console.error("Failed to fetch marketplace data:", error);
       setProducts([]);
       setTotalPages(1);
-      
+
       setStats({
         activeListings: 0,
         studentsOnline: 0,
         verifiedSellers: 0,
         itemsSoldThisWeek: 0
       });
-      
+
       setTrending([]);
     } finally {
       setLoading(false);
@@ -85,18 +84,18 @@ const BrowseMarketplace = ({ setActiveTab }) => {
   };
 
   const clearFilters = () => {
-    setSearch('');
-    setCategory('All Categories');
-    setCondition('All Conditions');
-    setSort('Newest First');
+    setSearch("");
+    setCategory("All Categories");
+    setCondition("All Conditions");
+    setSort("Newest First");
     setPage(1);
   };
 
   const handleMessageSeller = async (product) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/messages/conversation`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/messages/conversation`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           buyerId: user._id,
           productId: product._id
@@ -104,14 +103,14 @@ const BrowseMarketplace = ({ setActiveTab }) => {
       });
       if (res.ok) {
         // Conversation created, switch to messages tab
-        setActiveTab('messages');
+        setActiveTab("messages");
       } else {
         const error = await res.json();
-        alert(error.message || 'Failed to initiate chat.');
+        alert(error.message || "Failed to initiate chat.");
       }
     } catch (err) {
       console.error(err);
-      alert('Network error.');
+      alert("Network error.");
     }
   };
 
@@ -122,48 +121,69 @@ const BrowseMarketplace = ({ setActiveTab }) => {
         <form onSubmit={handleSearchSubmit} className="flex flex-col lg:flex-row gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              placeholder="Search products, brands, or items..." 
+              placeholder="Search products, brands, or items..."
               className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-theme-maroon focus:ring-2 focus:ring-theme-maroon/20 outline-none transition-all font-medium"
             />
           </div>
-          
+
           <div className="flex flex-wrap sm:flex-nowrap gap-3">
-            <select 
-              value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }}
-              className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 outline-none focus:border-theme-maroon flex-1 sm:flex-none"
-            >
-              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
-            
-            <select 
-              value={condition} onChange={(e) => { setCondition(e.target.value); setPage(1); }}
-              className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 outline-none focus:border-theme-maroon flex-1 sm:flex-none hidden md:block"
-            >
-              {CONDITIONS.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
-
-            <select 
-              value={sort} onChange={(e) => { setSort(e.target.value); setPage(1); }}
-              className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 outline-none focus:border-theme-maroon flex-1 sm:flex-none"
-            >
-              {SORTS.map(s => <option key={s} value={s}>{s}</option>)}
+            <select
+              value={category}
+              onChange={(e) => {
+                setCategory(e.target.value);
+                setPage(1);
+              }}
+              className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 outline-none focus:border-theme-maroon flex-1 sm:flex-none">
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
             </select>
 
-            <button 
-              type="button" onClick={clearFilters}
+            <select
+              value={condition}
+              onChange={(e) => {
+                setCondition(e.target.value);
+                setPage(1);
+              }}
+              className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 outline-none focus:border-theme-maroon flex-1 sm:flex-none hidden md:block">
+              {CONDITIONS.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={sort}
+              onChange={(e) => {
+                setSort(e.target.value);
+                setPage(1);
+              }}
+              className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 outline-none focus:border-theme-maroon flex-1 sm:flex-none">
+              {SORTS.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+
+            <button
+              type="button"
+              onClick={clearFilters}
               className="px-4 py-2.5 text-slate-500 hover:text-red-500 hover:bg-red-50 font-bold rounded-xl transition-colors flex items-center justify-center"
-              title="Clear Filters"
-            >
+              title="Clear Filters">
               <X className="w-5 h-5" />
             </button>
-            
+
             <button type="submit" className="px-6 py-2.5 bg-theme-maroon text-white font-bold rounded-xl hover:bg-theme-dark-maroon shadow-md transition-colors hidden sm:block">
               Search
             </button>
@@ -182,7 +202,9 @@ const BrowseMarketplace = ({ setActiveTab }) => {
               </div>
               <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar">
                 {trending.map((t, i) => (
-                  <div key={i} className="flex-shrink-0 w-48 bg-blue-100 text-slate-800 border border-blue-200 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-300 hover:shadow-md transition-all group">
+                  <div
+                    key={i}
+                    className="flex-shrink-0 w-48 bg-blue-100 text-slate-800 border border-blue-200 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-300 hover:shadow-md transition-all group">
                     <h3 className="font-bold text-slate-900 text-center">{t.name}</h3>
                     <p className="text-xs text-slate-500 font-medium mt-1">{t.listings} Listings</p>
                   </div>
@@ -190,9 +212,6 @@ const BrowseMarketplace = ({ setActiveTab }) => {
               </div>
             </div>
           )}
-          
-
-
         </div>
       )}
 
@@ -200,7 +219,9 @@ const BrowseMarketplace = ({ setActiveTab }) => {
       <div className="mb-8 border-t border-slate-200 pt-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-black text-slate-900">All Products</h2>
-          <span className="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">Showing page {page} of {totalPages}</span>
+          <span className="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+            Showing page {page} of {totalPages}
+          </span>
         </div>
 
         {loading ? (
@@ -218,15 +239,15 @@ const BrowseMarketplace = ({ setActiveTab }) => {
           </div>
         ) : products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map(product => (
-              <ProductCard 
-                key={product._id} 
-                product={product} 
+            {products.map((product) => (
+              <ProductCard
+                key={product._id}
+                product={product}
                 onViewDetails={(p) => {
                   setSelectedProduct(p);
-                  fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/marketplace/products/${p._id}`).catch(e => console.error(e));
-                }} 
-                onWishlist={(id) => console.log('Wishlist', id)} 
+                  fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/marketplace/products/${p._id}`).catch((e) => console.error(e));
+                }}
+                onWishlist={(id) => console.log("Wishlist", id)}
                 onMessage={handleMessageSeller}
               />
             ))}
@@ -236,9 +257,7 @@ const BrowseMarketplace = ({ setActiveTab }) => {
             <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-4">
               <Search className="w-10 h-10 text-slate-400" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">
-              {category !== 'All Categories' ? `No ${category} found` : (search ? `No products found for "${search}"` : 'No products found')}
-            </h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-2">{category !== "All Categories" ? `No ${category} found` : search ? `No products found for "${search}"` : "No products found"}</h3>
             <p className="text-slate-500 max-w-md mx-auto mb-6">We couldn't find any items matching your current filters. Try broadening your search or clearing filters.</p>
             <button onClick={clearFilters} className="px-6 py-2.5 bg-theme-maroon text-white font-bold rounded-xl hover:bg-theme-dark-maroon transition-colors">
               Clear All Filters
@@ -249,11 +268,10 @@ const BrowseMarketplace = ({ setActiveTab }) => {
         {/* Pagination */}
         {totalPages > 1 && !loading && (
           <div className="flex justify-center items-center gap-2 mt-12">
-            <button 
+            <button
               disabled={page === 1}
-              onClick={() => setPage(p => p - 1)}
-              className="px-4 py-2 border border-slate-200 rounded-lg font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+              onClick={() => setPage((p) => p - 1)}
+              className="px-4 py-2 border border-slate-200 rounded-lg font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
               Previous
             </button>
             <div className="flex items-center gap-1">
@@ -261,17 +279,15 @@ const BrowseMarketplace = ({ setActiveTab }) => {
                 <button
                   key={i}
                   onClick={() => setPage(i + 1)}
-                  className={`w-10 h-10 rounded-lg font-bold transition-colors ${page === i + 1 ? 'bg-theme-maroon text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}
-                >
+                  className={`w-10 h-10 rounded-lg font-bold transition-colors ${page === i + 1 ? "bg-theme-maroon text-white shadow-md" : "text-slate-600 hover:bg-slate-100"}`}>
                   {i + 1}
                 </button>
               ))}
             </div>
-            <button 
+            <button
               disabled={page === totalPages}
-              onClick={() => setPage(p => p + 1)}
-              className="px-4 py-2 border border-slate-200 rounded-lg font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+              onClick={() => setPage((p) => p + 1)}
+              className="px-4 py-2 border border-slate-200 rounded-lg font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
               Next
             </button>
           </div>
@@ -279,13 +295,7 @@ const BrowseMarketplace = ({ setActiveTab }) => {
       </div>
 
       {selectedProduct && (
-        <ProductDetailsModal 
-          product={selectedProduct} 
-          isOpen={!!selectedProduct} 
-          onClose={() => setSelectedProduct(null)} 
-          setActiveTab={setActiveTab}
-          onMessage={handleMessageSeller}
-        />
+        <ProductDetailsModal product={selectedProduct} isOpen={!!selectedProduct} onClose={() => setSelectedProduct(null)} setActiveTab={setActiveTab} onMessage={handleMessageSeller} />
       )}
     </div>
   );

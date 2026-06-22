@@ -1,14 +1,14 @@
-import React from 'react';
-import { Layers, Plus, Edit2, Trash2, Search, BookOpen, Laptop, Calculator, Bike, FlaskConical, PenTool } from 'lucide-react';
+import React from "react";
+import { Layers, Plus, Edit2, Trash2, Search, BookOpen, Laptop, Calculator, Bike, FlaskConical, PenTool } from "lucide-react";
 
 const CategoryManagement = () => {
   const categories = [
-    { id: 1, name: 'Books', icon: BookOpen, listings: 245, active: 210, revenue: '₹45,000', status: 'Active' },
-    { id: 2, name: 'Electronics', icon: Laptop, listings: 124, active: 105, revenue: '₹120,000', status: 'Active' },
-    { id: 3, name: 'Calculators', icon: Calculator, listings: 85, active: 75, revenue: '₹42,500', status: 'Active' },
-    { id: 4, name: 'Cycles', icon: Bike, listings: 42, active: 38, revenue: '₹150,000', status: 'Active' },
-    { id: 5, name: 'Lab Equipment', icon: FlaskConical, listings: 28, active: 20, revenue: '₹14,000', status: 'Active' },
-    { id: 6, name: 'Stationery', icon: PenTool, listings: 18, active: 15, revenue: '₹3,500', status: 'Active' },
+    { id: 1, name: "Books", icon: BookOpen, listings: 245, active: 210, revenue: "₹45,000", status: "Active" },
+    { id: 2, name: "Electronics", icon: Laptop, listings: 124, active: 105, revenue: "₹120,000", status: "Active" },
+    { id: 3, name: "Calculators", icon: Calculator, listings: 85, active: 75, revenue: "₹42,500", status: "Active" },
+    { id: 4, name: "Cycles", icon: Bike, listings: 42, active: 38, revenue: "₹150,000", status: "Active" },
+    { id: 5, name: "Lab Equipment", icon: FlaskConical, listings: 28, active: 20, revenue: "₹14,000", status: "Active" },
+    { id: 6, name: "Stationery", icon: PenTool, listings: 18, active: 15, revenue: "₹3,500", status: "Active" }
   ];
 
   return (
@@ -27,9 +27,9 @@ const CategoryManagement = () => {
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
           <div className="relative max-w-sm w-full">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input 
-              type="text" 
-              placeholder="Search categories..." 
+            <input
+              type="text"
+              placeholder="Search categories..."
               className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-theme-maroon/20 focus:border-theme-maroon transition-all outline-none"
             />
           </div>
@@ -62,9 +62,7 @@ const CategoryManagement = () => {
                   <td className="px-6 py-4 text-center font-bold text-slate-700">{cat.active}</td>
                   <td className="px-6 py-4 text-center font-black text-emerald-600">{cat.revenue}</td>
                   <td className="px-6 py-4 text-center">
-                    <span className="inline-flex px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-50 text-emerald-600">
-                      {cat.status}
-                    </span>
+                    <span className="inline-flex px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-50 text-emerald-600">{cat.status}</span>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
