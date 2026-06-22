@@ -8,7 +8,7 @@ const SellerProfile = () => {
     department: 'Computer Science',
     college: 'Campus University',
     joined: 'Jan 2025',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=JohnDoe',
+    avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=random&color=fff',
     bio: 'Hi, I am a 3rd-year CS student. I sell textbooks and electronics in good condition. Open to negotiations but please be reasonable. Meetups usually near the central library.',
     stats: {
       rating: 4.8,

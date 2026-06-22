@@ -138,22 +138,73 @@ const Profile = () => {
     }
   };
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       setAvatarFile(file);
       const url = URL.createObjectURL(file);
       setProfileData(prev => ({ ...prev, avatarUrl: url }));
+      
+      if (user?._id) {
+        try {
+          const fd = new FormData();
+          fd.append('avatar', file);
+          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/${user._id}`, {
+            method: 'PUT',
+            body: fd
+          });
+          if (res.ok) {
+            const updatedUser = await res.json();
+            setProfileData(prev => ({ ...prev, ...updatedUser }));
+            updateUser({ ...user, ...updatedUser });
+          }
+        } catch (err) {
+          console.error('Failed to upload avatar', err);
+        }
+      }
     }
   };
 
-  const handleCoverChange = (e) => {
+  const handleCoverChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       setCoverFile(file);
       const url = URL.createObjectURL(file);
       setProfileData(prev => ({ ...prev, coverUrl: url }));
+      
+      if (user?._id) {
+        try {
+          const fd = new FormData();
+          fd.append('cover', file);
+          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/${user._id}`, {
+            method: 'PUT',
+            body: fd
+          });
+          if (res.ok) {
+            const updatedUser = await res.json();
+            setProfileData(prev => ({ ...prev, ...updatedUser }));
+            updateUser({ ...user, ...updatedUser });
+          }
+        } catch (err) {
+          console.error('Failed to upload cover', err);
+        }
+      }
     }
+  };
+
+  const getAvatarUrl = () => {
+    if (!profileData.avatarUrl || profileData.avatarUrl === 'null' || profileData.avatarUrl === 'undefined') {
+      const nameStr = encodeURIComponent(profileData.name || profileData.email || 'User');
+      return `https://ui-avatars.com/api/?name=${nameStr}&background=random&color=fff&size=200`;
+    }
+    return profileData.avatarUrl;
+  };
+
+  const getCoverUrl = () => {
+    if (!profileData.coverUrl || profileData.coverUrl === 'null' || profileData.coverUrl === 'undefined') {
+      return null;
+    }
+    return profileData.coverUrl;
   };
 
   return (
@@ -165,13 +216,13 @@ const Profile = () => {
         <div 
           className="h-32 sm:h-48 w-full relative overflow-hidden"
           style={{ 
-            backgroundColor: profileData.coverUrl ? 'transparent' : '#8B0000', // theme-maroon hex approx
-            backgroundImage: profileData.coverUrl ? `url(${profileData.coverUrl})` : 'none',
+            backgroundColor: getCoverUrl() ? 'transparent' : '#8B0000', // theme-maroon hex approx
+            backgroundImage: getCoverUrl() ? `url(${getCoverUrl()})` : 'none',
             backgroundSize: 'cover',
             backgroundPosition: 'center'
           }}
         >
-          {!profileData.coverUrl && <div className="absolute inset-0 bg-theme-maroon"></div>}
+          {!getCoverUrl() && <div className="absolute inset-0 bg-theme-maroon"></div>}
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay"></div>
           
           <input 
@@ -194,7 +245,7 @@ const Profile = () => {
           <div className="flex flex-col sm:flex-row sm:items-end gap-6 sm:gap-8 -mt-16 sm:-mt-20 mb-6">
             <div className="relative inline-block group">
               <img 
-                src={profileData.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profileData.email}`} 
+                src={getAvatarUrl()} 
                 alt="Profile" 
                 className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-white border-4 border-white shadow-xl object-cover"
               />

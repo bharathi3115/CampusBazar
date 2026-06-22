@@ -52,7 +52,7 @@ const InterestedBuyers = ({ setActiveTab, setSelectedConversationId }) => {
             name: b?.name || 'Unknown Buyer',
             product: conv.productId?.title || 'Unknown Product',
             lastContact: lastContactStr,
-            avatar: b?.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${b?.email || 'Buyer'}`,
+            avatar: (!b?.avatarUrl || b.avatarUrl === 'null' || b.avatarUrl === 'undefined') ? `https://ui-avatars.com/api/?name=${encodeURIComponent(b?.name || b?.email || 'Buyer')}&background=random&color=fff` : b.avatarUrl,
             isRepeat,
             profile: b // store full buyer object for modal
           };

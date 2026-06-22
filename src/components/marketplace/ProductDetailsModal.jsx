@@ -137,7 +137,7 @@ const ProductDetailsModal = ({ product, isOpen, onClose, setActiveTab, onMessage
             <div className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl mb-8 hover:border-theme-maroon/30 transition-colors cursor-pointer group">
               <div className="flex items-center gap-3">
                 <img 
-                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${product.seller?.name}`} 
+                  src={(!product.seller?.avatarUrl || product.seller.avatarUrl === 'null' || product.seller.avatarUrl === 'undefined') ? `https://ui-avatars.com/api/?name=${encodeURIComponent(product.seller?.name || 'Seller')}&background=random&color=fff` : product.seller.avatarUrl} 
                   alt={product.seller?.name}
                   className="w-12 h-12 rounded-full bg-slate-100 border border-slate-200"
                 />

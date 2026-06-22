@@ -68,7 +68,7 @@ const ProductCard = ({ product, onViewDetails, onWishlist, onMessage }) => {
         <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img 
-              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${product.seller?.name}`} 
+              src={(!product.seller?.avatarUrl || product.seller.avatarUrl === 'null' || product.seller.avatarUrl === 'undefined') ? `https://ui-avatars.com/api/?name=${encodeURIComponent(product.seller?.name || 'Seller')}&background=random&color=fff` : product.seller.avatarUrl} 
               className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200" 
               alt="" 
             />

@@ -140,7 +140,7 @@ const SellerDashboard = () => {
                 onClick={() => setShowRoleMenu(!showRoleMenu)}
               >
                 <img 
-                  src={user?.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email || 'John'}`} 
+                  src={(!user?.avatarUrl || user.avatarUrl === 'null' || user.avatarUrl === 'undefined') ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || user?.email || 'User')}&background=random&color=fff` : user.avatarUrl} 
                   alt="Profile" 
                   className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 object-cover"
                 />
