@@ -103,7 +103,7 @@ const SellerMessages = ({ initialChatId }) => {
 
   const activeChat = conversations.find(c => c._id === activeChatId);
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !activeChat || !socket) return;
     
